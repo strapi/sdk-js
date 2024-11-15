@@ -73,6 +73,9 @@ $RECYCLE.BIN/
 *#
 .idea
 nbproject
+.tsbuildinfo
+.eslintcache
+.env
 
 ############################
 # Node.js

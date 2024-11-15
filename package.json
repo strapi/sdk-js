@@ -1,0 +1,54 @@
+{
+  "name": "@strapi/sdk-js",
+  "version": "0.0.0",
+  "description": "An SDK you can use the easily interface with Strapi from your javascript project",
+  "keywords": [
+    "strapi",
+    "sdk",
+    "js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/strapi/sdk-js.git"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "author": {
+    "name": "Strapi Solutions SAS",
+    "email": "hi@strapi.io",
+    "url": "https://strapi.io"
+  },
+  "maintainers": [
+    {
+      "name": "Strapi Solutions SAS",
+      "email": "hi@strapi.io",
+      "url": "https://strapi.io"
+    }
+  ],
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "files": [],
+  "scripts": {
+    "lint": "eslint .",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "prettier": "2.8.8",
+    "typescript": "5.4.4"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.2.1",
+    "@commitlint/config-conventional": "^19.1.0",
+    "@strapi/eslint-config": "^0.2.1",
+    "@types/prettier": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.6.0",
+    "@typescript-eslint/parser": "^7.6.0",
+    "eslint": "^8.56.0",
+    "husky": "^9.0.11"
+  },
+  "packageManager": "yarn@4.5.0",
+  "engines": {
+    "node": ">=18.0.0 <=20.x.x",
+    "npm": ">=6.0.0"
+  }
+}
