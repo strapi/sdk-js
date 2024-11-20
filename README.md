@@ -1,5 +1,5 @@
 <h1 align="center">sdk-js</h1>
-<h3 align="center">An SDK you can use the easily interface with Strapi from your javascript project</h3>
+<h3 align="center">An SDK you can use to easily interface with Strapi from your javascript project</h3>
 
 <br />
 
@@ -18,7 +18,7 @@
 
 <br />
 
-sdk-js is an SDK you can use the easily interface with Strapi from your javascript project
+sdk-js is an SDK you can use to easily interface with Strapi from your javascript project
 
 ## Getting Started With Strapi
 
@@ -64,7 +64,7 @@ const strapiSDK = createSDK({
 
 ## Generate the SDK based on your content type schema
 
-sdk-js becomes most powerful when you generate the SDK based on your content type schema. This allows you access to strongly typed methods for creating, reading, updating, and deleting content.
+sdk-js becomes most powerful when you generate the SDK based on your content type schema. This allows you access to strongly typed methods for creating, reading, updating and deleting content.
 
 There are multiple ways to do this:
 
@@ -120,9 +120,42 @@ const response = await strapiSDK.fetch('/articles', {
 });
 ```
 
-<!-- TODO strapiSDK.uidQuery('collectionTypeUid') add docs on this if provided in the MVP -->
+### Query
 
-### Query API
+The SDK also allows you to query your content types based on their UID via the `strapiSdk.query` method.
+
+`strapiSdk.query` provides a few different use cases:
+
+```js
+query<T = AnySchema>(uid: string): T {
+  return result as T;
+}
+```
+
+#### Usage as a javascript developer
+
+```js
+// Here the developer will get basic intellisense based on the AnySchema type.
+const jsResult = jsSdk.query('uid');
+```
+
+#### Usage as a TypeScript developer without a generated SDK
+
+The developer will manually provide a content type schema to correctly type the inputs and outputs of `sdk.query`.
+
+```js
+const tsResult = tsSdk.query < ManuallyProvidedSchema > 'uid';
+```
+
+#### Usage in TypeScript with generated SDK
+
+Assuming the SDK is generated with full type information, the developer will get full autocomplete for the returned data.
+
+```js
+const generatedResult = generatedSdk.query('uid'); // Full autocomplete
+```
+
+### Generated Query API's
 
 When you generate the SDK based on your Strapi app schema, the SDK will also generate methods for querying your content types.
 
@@ -130,7 +163,7 @@ These methods are strongly typed and allow you to query your content types based
 
 They are available on the SDK instance as `sdk.queries[contentTypePluralName][method]`.
 
-For example, if you have a content type with the plural name of `articles`, the available methods will be `find`, `findMany`, `count`, `create`, `update`, and `delete`.
+For example, if you have a content type with the plural name of `articles`, the available methods will be `find`, `findOne`, `create`, `update`, and `delete`.
 
 ```js
 // Find all articles
