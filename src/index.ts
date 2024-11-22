@@ -1,1 +1,1 @@
-console.log('Hello World!');
+export * as math from './math';
