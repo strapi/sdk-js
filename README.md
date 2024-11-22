@@ -35,7 +35,7 @@ If working with javascript, sdk-js can still help to ease your development workf
 
 ## Getting Started With "@strapi/sdk-js"
 
-In it's simplest form, "@strapi/sdk-js" works by being connected to the URL of your Strapi instance and provided auth if required.
+In its simplest form, "@strapi/sdk-js" works by being connected to the URL of your Strapi instance and provided auth if required.
 
 <!-- TODO confirm examples -->
 
