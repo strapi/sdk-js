@@ -5,11 +5,10 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@strapi/sdk-js" target="_blank">
-  <!-- TODO add npm badge -->
-
+   <img src="https://img.shields.io/npm/v/@strapi/sdk-js" alt="NPM version" />
   </a>
-  <a href="https://www.npmjs.com/package/@strapi/sdk-plugin" target="_blank">
-    <!-- TODO add npm downloads badge -->
+  <a href="https://www.npmjs.com/package/@strapi/sdk-js" target="_blank">
+   <img src="https://img.shields.io/npm/dm/@strapi/sdk-js" alt="NPM downloads" />
   </a>
   <a href="https://discord.gg/strapi" target="_blank">
     <img src="https://img.shields.io/discord/811989166782021633?style=flat&colorA=4945ff&colorB=4945ff&label=discord&logo=discord&logoColor=f0f0ff" alt="Chat on Discord" />
@@ -18,7 +17,7 @@
 
 <br />
 
-sdk-js is an SDK you can use to easily interface with Strapi from your javascript project
+sdk-js is an SDK you can use to easily interface with Strapi from your JavaScript or TypeScript project.
 
 ## Getting Started With Strapi
 
