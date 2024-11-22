@@ -25,14 +25,25 @@
     }
   ],
   "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/bundle.cjs.js",
+      "import": "./dist/bundle.esm.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [],
   "scripts": {
+    "build": "rollup --config rollup.config.mjs --failAfterWarnings",
+    "build:clean": "rollup --config rollup.config.mjs --failAfterWarnings",
+    "clean": "pnpm exec rimraf ./dist",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "prepare": "husky",
     "prettier:check": "prettier --check .",
-    "prettier:write": "prettier --write ."
+    "prettier:write": "prettier --write .",
+    "ts:check": "tsc -p tsconfig.build.json --noEmit",
+    "watch": "rollup --config rollup.config.mjs --watch --failAfterWarnings"
   },
   "devDependencies": {
     "@commitlint/cli": "19.6.0",
