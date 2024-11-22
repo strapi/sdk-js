@@ -1,1 +1,3 @@
-export * as math from './math';
+export function greetings() {
+  return 'Hello World!';
+}
