@@ -25,29 +25,42 @@
     }
   ],
   "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/bundle.cjs.js",
+      "import": "./dist/bundle.esm.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [],
   "scripts": {
+    "build": "rollup --config rollup.config.mjs --failAfterWarnings",
+    "build:clean": "rollup --config rollup.config.mjs --failAfterWarnings",
+    "clean": "pnpm exec rimraf ./dist",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "prepare": "husky",
     "prettier:check": "prettier --check .",
-    "prettier:write": "prettier --write ."
-  },
-  "dependencies": {
-    "prettier": "2.8.8",
-    "typescript": "5.4.4"
+    "prettier:write": "prettier --write .",
+    "ts:check": "tsc -p tsconfig.build.json --noEmit",
+    "watch": "rollup --config rollup.config.mjs --watch --failAfterWarnings"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.2.1",
-    "@commitlint/config-conventional": "^19.1.0",
-    "@strapi/eslint-config": "^0.2.1",
-    "@types/prettier": "^2.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.6.0",
-    "@typescript-eslint/parser": "^7.6.0",
-    "eslint": "^8.56.0",
-    "husky": "^9.1.6",
-    "lint-staged": "^15.2.2"
+    "@commitlint/cli": "19.6.0",
+    "@commitlint/config-conventional": "19.6.0",
+    "@commitlint/types": "19.5.0",
+    "@rollup/plugin-typescript": "12.1.1",
+    "@strapi/eslint-config": "0.2.1",
+    "@typescript-eslint/eslint-plugin": "8.15.0",
+    "@typescript-eslint/parser": "8.15.0",
+    "eslint": "8.57.1",
+    "eslint-plugin-import": "2.31.0",
+    "husky": "9.1.7",
+    "lint-staged": "15.2.10",
+    "prettier": "3.3.3",
+    "rimraf": "6.0.1",
+    "rollup": "4.27.3",
+    "typescript": "5.6.3"
   },
   "packageManager": "pnpm@9.1.0",
   "engines": {
