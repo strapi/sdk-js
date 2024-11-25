@@ -81,12 +81,13 @@ nbproject
 # Node.js
 ############################
 
-lib-cov
-lcov.info
-pids
-logs
-results
-dist
-node_modules
+.coverage
 .node_history
+dist
+lcov.info
+lib-cov
+logs
+node_modules
 package-lock.json
+pids
+results

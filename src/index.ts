@@ -1,1 +1,3 @@
-console.log('Hello World!');
+export function greetings() {
+  return 'Hello World!';
+}
