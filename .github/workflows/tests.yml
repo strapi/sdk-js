@@ -62,7 +62,6 @@ jobs:
         run: pnpm run build:clean
 
   unit_back:
-    if: needs.changes.outputs.backend == 'true'
     name: 'unit_back (node: ${{ matrix.node }})'
     needs: [ cache-and-install, build ]
     runs-on: ubuntu-latest
