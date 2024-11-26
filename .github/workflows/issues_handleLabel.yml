@@ -2,7 +2,7 @@ name: Issue Labeled
 
 on:
   issues:
-    types: [labeled]
+    types: [ labeled ]
 
 permissions:
   issues: write
@@ -65,3 +65,32 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           close-reason: 'not_planned'
+      # Redirect questions to community sources
+      - name: 'Comment: redirect question to community'
+        if: "${{ github.event.label.name == 'flag: question' }}"
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            > This is a templated message
+
+            Hello @${{ github.event.issue.user.login }},
+
+            I see you are wanting to ask a question that is not really a bug report,
+
+            - questions should be directed to [our forum](https://forum.strapi.io) or our [Discord](https://discord.strapi.io)
+            - feature requests should be directed to our [feedback and feature request database](https://feedback.strapi.io)
+
+            Please see the following contributing guidelines for asking a question [here](https://github.com/strapi/strapi/blob/master/CONTRIBUTING.md#reporting-an-issue).
+
+            Thank you.
+      - name: 'Close: redirect question to community'
+        if: "${{ github.event.label.name == 'flag: question' }}"
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issue'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          close-reason: 'complete'
