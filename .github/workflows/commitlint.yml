@@ -24,7 +24,7 @@ jobs:
         name: Install pnpm
         with:
           version: 9.1.0
-          run_install: false
+          run_install: true
       - name: Validate PR commits with commitlint
         if: github.event_name == 'pull_request'
         run: pnpx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
