@@ -51,6 +51,7 @@ jobs:
 
   build:
     name: 'build (node: ${{ matrix.node }})'
+    needs: [cache-and-install]
     runs-on: ubuntu-latest
     strategy:
       matrix:
