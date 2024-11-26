@@ -49,7 +49,7 @@ jobs:
   unit_back:
     if: needs.changes.outputs.backend == 'true'
     name: 'unit_back (node: ${{ matrix.node }})'
-    needs: [ build ]
+    needs: [ cache-and-install, build ]
     runs-on: ubuntu-latest
     env:
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
