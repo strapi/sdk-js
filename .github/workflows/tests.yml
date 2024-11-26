@@ -66,8 +66,6 @@ jobs:
     name: 'unit_back (node: ${{ matrix.node }})'
     needs: [ cache-and-install, build ]
     runs-on: ubuntu-latest
-    env:
-      YARN_ENABLE_IMMUTABLE_INSTALLS: false
     strategy:
       matrix:
         node: [ 20, 22 ]
@@ -88,4 +86,4 @@ jobs:
           cache: 'pnpm'
 
       - name: Run tests
-        run: yarn nx affected --target=test:unit --nx-ignore-cycles
+        run: pnpm run test
