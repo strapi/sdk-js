@@ -1,0 +1,87 @@
+name: 'Tests'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
+  actions: read
+
+jobs:
+  cache-and-install:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node: [20, 22]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9.1.0
+          run_install: true
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+  build:
+    name: 'build (node: ${{ matrix.node }})'
+    needs: [cache-and-install]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9.1.0
+          run_install: true
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+
+      - name: Project build
+        shell: bash
+        run: pnpm run build:clean
+
+  unit_back:
+    name: 'unit_back (node: ${{ matrix.node }})'
+    needs: [ cache-and-install, build ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ 20, 22 ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9.1.0
+          run_install: true
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+
+      - name: Run tests
+        run: pnpm run test
