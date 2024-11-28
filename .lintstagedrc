@@ -1,0 +1,3 @@
+{
+  "src/*.{js,ts,jsx,tsx,yml,yaml}": ["pnpm run prettier:write", "pnpm run lint"]
+}

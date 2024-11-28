@@ -1,0 +1,75 @@
+{
+  "name": "@strapi/sdk-js",
+  "version": "0.0.0",
+  "description": "An SDK you can use the easily interface with Strapi from your javascript project",
+  "keywords": [
+    "strapi",
+    "sdk",
+    "js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/strapi/sdk-js.git"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "author": {
+    "name": "Strapi Solutions SAS",
+    "email": "hi@strapi.io",
+    "url": "https://strapi.io"
+  },
+  "maintainers": [
+    {
+      "name": "Strapi Solutions SAS",
+      "email": "hi@strapi.io",
+      "url": "https://strapi.io"
+    }
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/bundle.cjs.js",
+      "import": "./dist/bundle.esm.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [],
+  "scripts": {
+    "build": "rollup --config rollup.config.mjs --failAfterWarnings",
+    "build:clean": "rollup --config rollup.config.mjs --failAfterWarnings",
+    "clean": "pnpm exec rimraf ./dist",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky",
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write .",
+    "test": "jest --verbose",
+    "test:cov": "jest --verbose --coverage",
+    "ts:check": "tsc -p tsconfig.build.json --noEmit",
+    "watch": "rollup --config rollup.config.mjs --watch --failAfterWarnings"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "19.6.0",
+    "@commitlint/config-conventional": "19.6.0",
+    "@commitlint/types": "19.5.0",
+    "@rollup/plugin-typescript": "12.1.1",
+    "@strapi/eslint-config": "0.2.1",
+    "@types/jest": "^29.5.14",
+    "@typescript-eslint/eslint-plugin": "8.15.0",
+    "@typescript-eslint/parser": "8.15.0",
+    "eslint": "8.57.1",
+    "eslint-plugin-import": "2.31.0",
+    "husky": "9.1.7",
+    "jest": "^29.7.0",
+    "lint-staged": "15.2.10",
+    "prettier": "3.3.3",
+    "rimraf": "6.0.1",
+    "rollup": "4.27.3",
+    "ts-jest": "^29.2.5",
+    "typescript": "5.6.3"
+  },
+  "packageManager": "pnpm@9.1.0",
+  "engines": {
+    "node": ">=18.0.0 <=22.x.x",
+    "npm": ">=6.0.0"
+  }
+}
