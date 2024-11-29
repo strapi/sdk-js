@@ -1,5 +1,5 @@
 <h1 align="center">sdk-js</h1>
-<h3 align="center">An SDK you can use to easily interface with Strapi from your javascript project</h3>
+<h3 align="center">An SDK you can use to easily interface with Strapi from your JavaScript and TypeScript projects</h3>
 
 <br />
 
@@ -21,13 +21,14 @@ sdk-js is an SDK you can use to easily interface with Strapi from your JavaScrip
 
 ## Getting Started With Strapi
 
-If you're brand new to Strapi development, we recommend you follow the [Strapi Quick Start Guide](https://docs.strapi.io/dev-docs/quick-start)
+If you're brand new to Strapi development, it is recommended to follow the [Strapi Quick Start Guide](https://docs.strapi.io/dev-docs/quick-start)
 
 sdk-js is compatible with Strapi v5+ and interfaces with Strapi's REST API. You can read the API docs [here](https://docs.strapi.io/dev-docs/api/rest)
 
 ## SDK Purpose
 
-sdk-js is the recommended and easiest way to interface with Strapi from your javascript project. It allows you to easily create, read, update, and delete Strapi content through strongly typed methods.
+sdk-js is the recommended and easiest way to interface with Strapi from your JavaScript and TypeScript projects.
+It allows you to easily create, read, update, and delete Strapi content through strongly typed methods.
 
 <!-- TODO confirm whether this is done in MVP -->
 
@@ -42,11 +43,11 @@ In its simplest form, "@strapi/sdk-js" works by being connected to the URL of yo
 ### Importing the SDK
 
 ```js
-import { createSDK } from '@strapi/sdk-js'; // ES Modules
-// const { createSDK } = require("@strapi/sdk-js"); CommonJS
+import { createStrapiSDK } from '@strapi/sdk-js'; // ES Modules
+// const { createStrapiSDK } = require("@strapi/sdk-js"); CommonJS
 
-const strapiSDK = createSDK({
-  url: 'http://localhost:1337',
+const strapiSDK = createStrapiSDK({
+  baseURL: 'http://localhost:1337',
 });
 ```
 
@@ -55,8 +56,8 @@ const strapiSDK = createSDK({
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@strapi/sdk-js"></script>
 <script>
-  const strapiSDK = createSDK({
-    url: 'http://localhost:1337',
+  const strapiSDK = createStrapiSDK({
+    baseURL: 'http://localhost:1337',
   });
 </script>
 ```
@@ -89,12 +90,12 @@ As opposed to importing the SDK from a CDN or NPM, the generated asset can then 
 Alternatively, you can use the SDK from a CDN or NPM, but provide the SDK with a Strapi schema.
 
 ```js
-import { createSDK } from '@strapi/sdk-js';
+import { createStrapiSDK } from '@strapi/sdk-js';
 // TODO clarify where this comes from and how to generate it
 import strapiAppSchema from '../path/to/strapi-app-schema.json';
 
-const strapiSDK = createSDK({
-  url: 'http://localhost:1337',
+const strapiSDK = createStrapiSDK({
+  baseURL: 'http://localhost:1337',
   schema: strapiAppSchema,
 });
 ```
