@@ -1,0 +1,14 @@
+{
+  "impossibleToParse": [
+    ["", "empty string"],
+    ["foobar", "regular string"],
+    ["example.com", "missing protocol"]
+  ],
+  "unsupportedProtocols": [
+    ["ftp://example.com", "ftp"],
+    ["ftps://example.com", "ftps"],
+    ["ws://example.com", "websocket"],
+    ["wss://example.com", "secure websocket"],
+    ["file://example.com", "file"]
+  ]
+}
