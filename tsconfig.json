@@ -3,6 +3,7 @@
   "include": ["src"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
+    "sourceMap": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "ES2022",
@@ -14,7 +15,6 @@
     "noUncheckedIndexedAccess": true,
     "declaration": true,
     "module": "preserve",
-    "noEmit": true,
     "lib": ["ESNext", "DOM"]
   }
 }
