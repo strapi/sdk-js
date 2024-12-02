@@ -1,5 +1,5 @@
 import { StrapiSDK } from './sdk';
-import { StrapiSDKValidator, URLValidator } from './validators';
+import { StrapiSDKValidator } from './validators';
 
 import type { StrapiSDKConfig } from './sdk';
 
@@ -43,9 +43,7 @@ import type { StrapiSDKConfig } from './sdk';
  *                                        or if the auth configuration is invalid.
  */
 export const createStrapiSDK = (config: StrapiSDKConfig) => {
-  // TODO allow setting custom url validation rules from the configuration
-  const urlValidator = new URLValidator({ allowedProtocols: ['http:', 'https:'] });
-  const sdkValidator = new StrapiSDKValidator(urlValidator);
+  const sdkValidator = new StrapiSDKValidator();
 
   return new StrapiSDK<typeof config>(
     // Properties

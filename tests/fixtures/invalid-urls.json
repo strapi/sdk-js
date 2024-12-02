@@ -8,12 +8,5 @@
     [true, "boolean"],
     [{}, "empty object"],
     [[], "empty array"]
-  ],
-  "unsupportedProtocols": [
-    ["ftp://example.com", "ftp"],
-    ["ftps://example.com", "ftps"],
-    ["ws://example.com", "websocket"],
-    ["wss://example.com", "secure websocket"],
-    ["file://example.com", "file"]
   ]
 }
