@@ -62,11 +62,11 @@ jobs:
 
   unit_back:
     name: 'unit_back (node: ${{ matrix.node }})'
-    needs: [ cache-and-install, build ]
+    needs: [cache-and-install, build]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [ 20, 22 ]
+        node: [20, 22]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
