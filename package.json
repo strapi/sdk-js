@@ -35,7 +35,7 @@
   "files": [],
   "scripts": {
     "build": "rollup --config rollup.config.mjs --failAfterWarnings",
-    "build:clean": "rollup --config rollup.config.mjs --failAfterWarnings",
+    "build:clean": "pnpm run clean && pnpm run build",
     "clean": "pnpm exec rimraf ./dist",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
