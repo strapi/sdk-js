@@ -2,7 +2,12 @@
   "impossibleToParse": [
     ["", "empty string"],
     ["foobar", "regular string"],
-    ["example.com", "missing protocol"]
+    ["example.com", "missing protocol"],
+    [123, "number"],
+    [null, "null"],
+    [true, "boolean"],
+    [{}, "empty object"],
+    [[], "empty array"]
   ],
   "unsupportedProtocols": [
     ["ftp://example.com", "ftp"],

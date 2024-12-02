@@ -114,7 +114,7 @@ export class URLValidator {
    */
   private preValidation(url: unknown): asserts url is string {
     if (typeof url !== 'string') {
-      throw new URLParsingError(`The provided URL is not a string. Got "${typeof url}"`);
+      throw new URLParsingError(url);
     }
 
     const canParse = this.canParse(url);

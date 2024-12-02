@@ -1,5 +1,6 @@
 import { URLParsingError, URLProtocolValidationError } from '../../../src/errors';
 import { URLValidator } from '../../../src/validators';
+import invalidURLs from '../../fixtures/invalid-urls.json';
 
 import type { URLProtocol } from '../../../src/validators/url';
 
@@ -29,15 +30,15 @@ describe('URLValidator', () => {
       expect(() => urlValidator.validate(url)).not.toThrow();
     });
 
-    it('should throw an error for a URL with an invalid protocol', () => {
-      // Arrange
-      const url = 'ftp://example.com';
-
-      // Act & Assert
-      expect(() => urlValidator.validate(url)).toThrow(
-        new URLProtocolValidationError(url, ALLOWED_PROTOCOLS)
-      );
-    });
+    it.each(invalidURLs.unsupportedProtocols)(
+      'should throw an error for a URL with an invalid protocol: %s',
+      (url) => {
+        // Act & Assert
+        expect(() => urlValidator.validate(url)).toThrow(
+          new URLProtocolValidationError(url, ALLOWED_PROTOCOLS)
+        );
+      }
+    );
 
     it('should allow custom configuration to validate different protocols', () => {
       // Arrange
@@ -59,13 +60,11 @@ describe('URLValidator', () => {
       expect(() => urlValidator.validate(url)).not.toThrow();
     });
 
-    it.each([123, null, undefined, true, {}, []])(
-      'should throw an error for a non-string input: %s',
-      (url: unknown) => {
+    it.each<unknown>(invalidURLs.impossibleToParse)(
+      'should throw an error for a non-string input: %s (%s)',
+      (url) => {
         // Act & Assert
-        expect(() => urlValidator.validate(url)).toThrow(
-          new URLParsingError(`The provided URL is not a string. Got "${typeof url}"`)
-        );
+        expect(() => urlValidator.validate(url)).toThrow(new URLParsingError(url));
       }
     );
   });

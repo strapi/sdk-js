@@ -1,7 +1,21 @@
 import { StrapiSDKInitializationError } from '../../src/errors';
 import { StrapiSDK } from '../../src/sdk';
+import { StrapiSDKValidator, URLValidator } from '../../src/validators';
 
 import { MockAuthProvider, MockHttpClient, MockStrapiSDKValidator } from './mocks';
+
+import type { StrapiSDKConfig } from '../../src/sdk';
+
+/**
+ * Class representing a FlakyURLValidator which extends URLValidator.
+ *
+ * This validator is designed to throw an error unexpectedly upon validation and should only be used in test suites.
+ */
+class FlakyURLValidator extends URLValidator {
+  validate() {
+    throw new Error('Unexpected error');
+  }
+}
 
 describe('StrapiSDK', () => {
   const mockHttpClientFactory = (url: string) => new MockHttpClient(url);
@@ -43,6 +57,30 @@ describe('StrapiSDK', () => {
       // Act & Assert
       expect(() => new StrapiSDK(config, mockValidator)).toThrow(StrapiSDKInitializationError);
       expect(validateConfigSpy).toHaveBeenCalledWith(config);
+    });
+
+    it('should fail to create and SDK instance if there is an unexpected error', () => {
+      // Arrange
+      let sdk!: StrapiSDK;
+
+      const baseURL = 'http://example.com';
+      const config: StrapiSDKConfig = { baseURL };
+      const expectedError = new StrapiSDKInitializationError(new Error('Unexpected error'));
+
+      const validateSpy = jest.spyOn(FlakyURLValidator.prototype, 'validate');
+
+      // Act
+      const createSDK = () => {
+        sdk = new StrapiSDK(config, new StrapiSDKValidator(new FlakyURLValidator()));
+      };
+
+      // Assert
+      expect(createSDK).toThrow(expectedError);
+
+      expect(sdk).toBeUndefined();
+
+      expect(validateSpy).toHaveBeenCalledTimes(1);
+      expect(validateSpy).toHaveBeenCalledWith(baseURL);
     });
 
     it('should initialize correctly with the default validator', () => {
