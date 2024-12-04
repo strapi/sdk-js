@@ -85,7 +85,7 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
   async authenticate(httpClient: HttpClient): Promise<void> {
     try {
       const { baseURL } = httpClient;
-      const localAuthURL = `${baseURL}/api/auth/local`;
+      const localAuthURL = `${baseURL}/auth/local`;
 
       const request = new Request(localAuthURL, {
         method: 'POST',

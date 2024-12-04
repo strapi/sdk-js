@@ -49,7 +49,7 @@ describe('AuthManager', () => {
     expect(authManager.strategy).toBe(MockAuthProvider.identifier);
   });
 
-  it('should not authenticated when strategy is not set', async () => {
+  it('should not be authenticated when strategy is not set', async () => {
     // Arrange
     const authManager = new AuthManager(new MockAuthProviderFactory());
 

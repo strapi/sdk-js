@@ -47,7 +47,7 @@ describe('HttpClient', () => {
 
     // Assert
     expect(spy).toHaveBeenCalledWith(newBaseURL);
-    expect(httpClient.baseURL).toBe(newBaseURL);
+    expect(httpClient.baseURL).toBe(`${newBaseURL}/api`);
   });
 
   it('setAuthStrategy should configure the authentication strategy', () => {

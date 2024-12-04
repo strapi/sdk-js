@@ -62,7 +62,7 @@ export class HttpClient {
   setBaseURL(url: string): this {
     this._urlValidator.validate(url);
 
-    this._baseURL = url;
+    this._baseURL = `${url}/api`;
 
     return this;
   }
