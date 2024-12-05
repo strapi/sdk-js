@@ -7,7 +7,6 @@
     "sdk",
     "js"
   ],
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/strapi/sdk-js.git"
