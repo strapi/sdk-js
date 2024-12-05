@@ -160,7 +160,7 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    * const sdk = createStrapiSDK({ baseURL: 'http://localhost:1337' );
    *
    * // Perform a custom fetch query
-   * const response = await sdk.fetch('/api/categories');
+   * const response = await sdk.fetch('/categories');
    *
    * // Parse the categories into a readable JSON object
    * const categories = await response.json();

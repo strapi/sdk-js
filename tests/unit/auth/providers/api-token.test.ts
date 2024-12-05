@@ -56,7 +56,7 @@ describe('ApiTokenAuthProvider', () => {
   });
 
   describe('Authenticate', () => {
-    it('should doe nothing when authenticate is called', async () => {
+    it('should do nothing when authenticate is called', async () => {
       // Arrange
       const token = 'abc-xyz';
       const provider = new ApiTokenAuthProvider({ token });

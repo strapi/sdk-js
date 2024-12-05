@@ -105,10 +105,10 @@ describe('StrapiSDK', () => {
     const sdk = new StrapiSDK(config, mockValidator, mockHttpClientFactory);
 
     // Act
-    const response = await sdk.fetch('/api/data');
+    const response = await sdk.fetch('/data');
 
     // Assert
-    expect(fetchSpy).toHaveBeenCalledWith('/api/data', undefined);
+    expect(fetchSpy).toHaveBeenCalledWith('/data', undefined);
     await expect(response.json()).resolves.toEqual({ ok: true });
   });
 
