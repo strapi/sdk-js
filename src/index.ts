@@ -12,7 +12,7 @@ import type { StrapiSDKConfig } from './sdk';
  * request dispatch, and response parsing for content management.
  *
  * @param config - The configuration for initializing the SDK. This should include the base URL
- *                 of the Strapi backend instance that the SDK communicates with. The baseURL
+ *                 of the Strapi content API that the SDK communicates with. The baseURL
  *                 must be formatted with one of the supported protocols: `http` or `https`.
  *                 Additionally, optional authentication details can be specified within the config.
  *
