@@ -32,7 +32,10 @@
     },
     "./package.json": "./package.json"
   },
-  "files": [],
+  "files": [
+    "./package.json",
+    "dist/"
+  ],
   "scripts": {
     "build": "rollup --config rollup.config.mjs --failAfterWarnings",
     "build:clean": "pnpm run clean && pnpm run build",
@@ -45,7 +48,8 @@
     "test": "jest --verbose",
     "test:cov": "jest --verbose --coverage",
     "ts:check": "tsc -p tsconfig.build.json --noEmit",
-    "watch": "rollup --config rollup.config.mjs --watch --failAfterWarnings"
+    "watch": "rollup --config rollup.config.mjs --watch --failAfterWarnings",
+    "prepack": "pnpm exec ./scripts/pre-pack.sh"
   },
   "devDependencies": {
     "@commitlint/cli": "19.6.0",
