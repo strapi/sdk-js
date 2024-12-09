@@ -14,10 +14,10 @@ export const mockRequest = (method: string, url: string): Request => ({
   referrer: '',
   referrerPolicy: 'no-referrer',
   destination: '',
-  signal: AbortSignal.any([]), // Mocked property
-  arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(0)), // Mocked function
-  blob: jest.fn().mockResolvedValue(new Blob()), // Mocked function
-  formData: jest.fn().mockResolvedValue(new FormData()), // Mocked function
-  text: jest.fn().mockResolvedValue(''), // Mocked function
-  json: jest.fn().mockResolvedValue({}), // Mocked function
+  signal: AbortSignal.any([]),
+  arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(0)),
+  blob: jest.fn().mockResolvedValue(new Blob()),
+  formData: jest.fn().mockResolvedValue(new FormData()),
+  text: jest.fn().mockResolvedValue(''),
+  json: jest.fn().mockResolvedValue({}),
 });
