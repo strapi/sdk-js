@@ -1,4 +1,4 @@
-import { StrapiSDKError, StrapiSDKValidationError } from '../../errors';
+import { StrapiSDKValidationError } from '../../errors';
 import { HttpClient } from '../../http';
 
 import { AbstractAuthProvider } from './abstract';
@@ -88,29 +88,19 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
   }
 
   async authenticate(httpClient: HttpClient): Promise<void> {
-    try {
-      const { baseURL } = httpClient;
-      const localAuthURL = `${baseURL}/auth/local`;
+    const { baseURL } = httpClient;
+    const localAuthURL = `${baseURL}/auth/local`;
 
-      const request = new Request(localAuthURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.credentials),
-      });
+    const request = new Request(localAuthURL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(this.credentials),
+    });
 
-      // Make sure to use the HttpClient's "_fetch" method to not perform authentication in an infinite loop.
-      const response = await httpClient._fetch(request);
+    // Make sure to use the HttpClient's "_fetch" method to not perform authentication in an infinite loop.
+    const response = await httpClient._fetch(request);
+    const data = await response.json();
 
-      if (!response.ok) {
-        // TODO: use dedicated exceptions
-        throw new Error(response.statusText);
-      }
-
-      const data = await response.json();
-      this._token = data.jwt;
-    } catch (error) {
-      // TODO: use dedicated exceptions
-      throw new StrapiSDKError(error, 'Failed to authenticate with Strapi server.');
-    }
+    this._token = data.jwt;
   }
 }

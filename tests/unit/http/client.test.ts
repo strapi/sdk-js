@@ -154,7 +154,6 @@ describe('HttpClient', () => {
 
     // Assert
     expect(mockAuthManager.isAuthenticated).toBe(true);
-    expect(fetchSpy).toHaveBeenCalledWith(expect.any(Request), undefined);
     await expect(response.json()).resolves.toEqual(payload);
   });
 
@@ -174,7 +173,6 @@ describe('HttpClient', () => {
 
     expect(handleUnauthorizedErrorSpy).toHaveBeenCalled();
     expect(mockAuthManager.isAuthenticated).toBe(false);
-    expect(fetchSpy).toHaveBeenCalledWith(expect.any(Request), undefined);
   });
 
   describe('Error Mapping', () => {

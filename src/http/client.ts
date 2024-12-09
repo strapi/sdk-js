@@ -125,13 +125,13 @@ export class HttpClient {
 
     this.attachHeaders(request);
 
-    const response = await this._fetch(request);
+    try {
+      return await this._fetch(request);
+    } catch (e) {
+      this.handleFetchError(e);
 
-    if (!response.ok) {
-      this.handleFetchError(request, response);
+      throw e;
     }
-
-    return response;
   }
 
   /**
@@ -139,10 +139,7 @@ export class HttpClient {
    *
    * It deals with unauthorized responses by delegating the handling of the error to the authentication manager.
    *
-   * It then maps other statuses to their corresponding HTTP errors and throws them.
-   *
-   * @param request - The original HTTP request object that encountered an error. Used for error handling.
-   * @param response - The HTTP response object that contains the status and any other error-related information.
+   * @param error - The original HTTP request object that encountered an error. Used for error handling.
    *
    * @throws {HTTPError} or any of its subclasses
    *
@@ -160,29 +157,36 @@ export class HttpClient {
    * @see {@link HttpClient#mapResponseToHTTPError} for the mapping logic between response status codes and thrown errors.
    * @see {@link AuthManager#handleUnauthorizedError} for handling unauthorized responses.
    */
-  private handleFetchError(request: Request, response: Response): never {
-    if (response.status === StatusCode.UNAUTHORIZED) {
+  private handleFetchError(error: unknown) {
+    if (error instanceof HTTPAuthorizationError) {
       this._authManager.handleUnauthorizedError();
     }
-
-    throw this.mapResponseToHTTPError(response, request);
   }
 
   /**
    * Executes an HTTP fetch request using the Fetch API.
    *
-   * @param url - The target URL of the HTTP request which can be a string URL or a `Request` object.
+   * @param input - The target of the HTTP request which can be a string URL or a `Request` object.
    * @param [init] - An optional `RequestInit` object that contains any custom settings that you want to apply to the request.
    *
    * @returns A promise that resolves to the `Response` object representing the complete HTTP response.
+   *
+   * @throws {HTTPError} if the request fails
    *
    * @additionalInfo
    * - This method doesn't perform any authentication or header customization.
    *   It directly passes the parameters to the global `fetch` function.
    * - To include authentication, consider using the `fetch` method from the `HttpClient` class, which handles headers and authentication.
    */
-  async _fetch(url: RequestInfo, init?: RequestInit): Promise<Response> {
-    return globalThis.fetch(url, init);
+  async _fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
+    const request = new Request(input, init);
+    const response = await globalThis.fetch(request);
+
+    if (!response.ok) {
+      throw this.mapResponseToHTTPError(response, request);
+    }
+
+    return response;
   }
 
   /**
