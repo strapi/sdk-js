@@ -1,5 +1,16 @@
 import { AuthManager } from '../auth';
+import {
+  HTTPAuthorizationError,
+  HTTPBadRequestError,
+  HTTPError,
+  HTTPForbiddenError,
+  HTTPInternalServerError,
+  HTTPNotFoundError,
+  HTTPTimeoutError,
+} from '../errors';
 import { URLValidator } from '../validators';
+
+import { StatusCode } from './constants';
 
 export type Fetch = typeof globalThis.fetch;
 
@@ -116,17 +127,51 @@ export class HttpClient {
 
     const response = await this._fetch(request);
 
-    if (response.status === 401) {
-      this._authManager.handleUnauthorizedError();
+    if (!response.ok) {
+      this.handleFetchError(request, response);
     }
 
     return response;
   }
 
   /**
+   * Handles HTTP fetch error logic.
+   *
+   * It deals with unauthorized responses by delegating the handling of the error to the authentication manager.
+   *
+   * It then maps other statuses to their corresponding HTTP errors and throws them.
+   *
+   * @param request - The original HTTP request object that encountered an error. Used for error handling.
+   * @param response - The HTTP response object that contains the status and any other error-related information.
+   *
+   * @throws {HTTPError} or any of its subclasses
+   *
+   * @example
+   * ```typescript
+   * try {
+   *   client.fetch('/data');
+   * } catch (error) {
+   *   if (error instanceof HTTPAuthorizationError) {
+   *     console.log('Unauthorized access, please login again.');
+   *   }
+   * }
+   * ```
+   *
+   * @see {@link HttpClient#mapResponseToHTTPError} for the mapping logic between response status codes and thrown errors.
+   * @see {@link AuthManager#handleUnauthorizedError} for handling unauthorized responses.
+   */
+  private handleFetchError(request: Request, response: Response): never {
+    if (response.status === StatusCode.UNAUTHORIZED) {
+      this._authManager.handleUnauthorizedError();
+    }
+
+    throw this.mapResponseToHTTPError(response, request);
+  }
+
+  /**
    * Executes an HTTP fetch request using the Fetch API.
    *
-   * @param url - The target URL for the HTTP request which can be a string URL or a `Request` object.
+   * @param url - The target URL of the HTTP request which can be a string URL or a `Request` object.
    * @param [init] - An optional `RequestInit` object that contains any custom settings that you want to apply to the request.
    *
    * @returns A promise that resolves to the `Response` object representing the complete HTTP response.
@@ -158,5 +203,37 @@ export class HttpClient {
 
     // Set auth headers if available, potentially overwrite manually set auth headers
     this._authManager.authenticateRequest(request);
+  }
+
+  /**
+   * Maps an HTTP response's status code to a specific HTTP error class.
+   *
+   * @param response - The HTTP response object obtained from a failed HTTP request,
+   *                   which contains the status code and reason for failure.
+   * @param request - The original HTTP request object that resulted in the error response.
+   *
+   * @returns A specific subclass instance of HTTPError based on the response status code.
+   *
+   * @throws {HTTPError} or any of its subclass.
+   *
+   * @see {@link StatusCode} for all possible HTTP status codes and their meanings.
+   */
+  private mapResponseToHTTPError(response: Response, request: Request): HTTPError {
+    switch (response.status) {
+      case StatusCode.BAD_REQUEST:
+        return new HTTPBadRequestError(response, request);
+      case StatusCode.UNAUTHORIZED:
+        return new HTTPAuthorizationError(response, request);
+      case StatusCode.FORBIDDEN:
+        return new HTTPForbiddenError(response, request);
+      case StatusCode.NOT_FOUND:
+        return new HTTPNotFoundError(response, request);
+      case StatusCode.TIMEOUT:
+        return new HTTPTimeoutError(response, request);
+      case StatusCode.INTERNAL_SERVER_ERROR:
+        return new HTTPInternalServerError(response, request);
+    }
+
+    return new HTTPError(response, request);
   }
 }

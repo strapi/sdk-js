@@ -1,4 +1,13 @@
-import { HttpClient } from '../../../src/http';
+import {
+  HTTPAuthorizationError,
+  HTTPBadRequestError,
+  HTTPError,
+  HTTPForbiddenError,
+  HTTPInternalServerError,
+  HTTPNotFoundError,
+  HTTPTimeoutError,
+} from '../../../src/errors';
+import { HttpClient, StatusCode } from '../../../src/http';
 import { MockAuthManager, MockAuthProvider, MockURLValidator } from '../mocks';
 
 describe('HttpClient', () => {
@@ -146,7 +155,6 @@ describe('HttpClient', () => {
     // Assert
     expect(mockAuthManager.isAuthenticated).toBe(true);
     expect(fetchSpy).toHaveBeenCalledWith(expect.any(Request), undefined);
-    expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual(payload);
   });
 
@@ -161,13 +169,30 @@ describe('HttpClient', () => {
     const httpClient = new HttpClient('https://example.com', mockAuthManager, mockURLValidator);
     httpClient.setAuthStrategy(MockAuthProvider.identifier, {});
 
-    // Act
-    const response = await httpClient.fetch('/');
+    // Act & Assert
+    await expect(httpClient.fetch('/')).rejects.toThrow(HTTPAuthorizationError);
 
-    // Assert
     expect(handleUnauthorizedErrorSpy).toHaveBeenCalled();
     expect(mockAuthManager.isAuthenticated).toBe(false);
     expect(fetchSpy).toHaveBeenCalledWith(expect.any(Request), undefined);
-    expect(response.status).toBe(401);
+  });
+
+  describe('Error Mapping', () => {
+    it.each([
+      ['Bad Request', StatusCode.BAD_REQUEST, HTTPBadRequestError],
+      ['Unauthorized', StatusCode.UNAUTHORIZED, HTTPAuthorizationError],
+      ['Forbidden', StatusCode.FORBIDDEN, HTTPForbiddenError],
+      ['Not Found', StatusCode.NOT_FOUND, HTTPNotFoundError],
+      ['Timeout', StatusCode.TIMEOUT, HTTPTimeoutError],
+      ['Internal Server', StatusCode.INTERNAL_SERVER_ERROR, HTTPInternalServerError],
+      ['Unknown', 504, HTTPError],
+    ])('should throw on %s error', async (_name, status, error) => {
+      // Arrange
+      fetchSpy.mockImplementationOnce(() => Promise.resolve(new Response('', { status })));
+      const httpClient = new HttpClient('https://example.com', mockAuthManager, mockURLValidator);
+
+      // Act & Assert
+      await expect(httpClient.fetch('/foo')).rejects.toThrow(error);
+    });
   });
 });
