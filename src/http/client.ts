@@ -63,7 +63,6 @@ export class HttpClient {
    * @returns The HttpClient instance for chaining.
    *
    * @throws {URLParsingError} If the URL cannot be parsed.
-   * @throws {URLProtocolValidationError} If the URL uses an unsupported protocol.
    *
    * @example
    * const client = new HttpClient('http://example.com');
