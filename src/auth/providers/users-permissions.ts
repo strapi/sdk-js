@@ -28,11 +28,11 @@ export type UsersPermissionsAuthPayload = Pick<
   'identifier' | 'password'
 >;
 
-  /**
-   * @experimental
-   * Authentication through users and permissions is experimental for the MVP of
-   * the Strapi SDK.
-   */
+/**
+ * @experimental
+ * Authentication through users and permissions is experimental for the MVP of
+ * the Strapi SDK.
+ */
 export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPermissionsAuthProviderOptions> {
   public static readonly identifier = USERS_PERMISSIONS_AUTH_STRATEGY_IDENTIFIER;
 
