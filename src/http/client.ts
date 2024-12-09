@@ -140,20 +140,6 @@ export class HttpClient {
    *
    * @param error - The original HTTP request object that encountered an error. Used for error handling.
    *
-   * @throws {HTTPError} or any of its subclasses
-   *
-   * @example
-   * ```typescript
-   * try {
-   *   client.fetch('/data');
-   * } catch (error) {
-   *   if (error instanceof HTTPAuthorizationError) {
-   *     console.log('Unauthorized access, please login again.');
-   *   }
-   * }
-   * ```
-   *
-   * @see {@link HttpClient#mapResponseToHTTPError} for the mapping logic between response status codes and thrown errors.
    * @see {@link AuthManager#handleUnauthorizedError} for handling unauthorized responses.
    */
   private handleFetchError(error: unknown) {
