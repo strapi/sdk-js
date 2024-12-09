@@ -1,0 +1,17 @@
+export const mockResponse = (status: number, statusText: string): Response => ({
+  status,
+  statusText,
+  headers: new Headers(),
+  ok: status >= 200 && status < 300,
+  redirected: false,
+  type: 'basic',
+  url: 'https://example.com',
+  clone: jest.fn(),
+  body: null,
+  bodyUsed: false,
+  text: jest.fn().mockResolvedValue(''),
+  json: jest.fn().mockResolvedValue({}),
+  blob: jest.fn().mockResolvedValue(new Blob()),
+  formData: jest.fn().mockResolvedValue(new FormData()),
+  arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(0)),
+});
