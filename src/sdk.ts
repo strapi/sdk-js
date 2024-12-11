@@ -2,6 +2,47 @@ import { StrapiSDKInitializationError } from './errors';
 import { HttpClient } from './http';
 import { StrapiSDKValidator } from './validators';
 
+import type { BaseQueryParams, GenericDocumentResponse } from './types/content-api';
+
+/**
+ * Utility function to append query parameters to a URL.
+ *
+ * @param url - The base URL to which query parameters will be appended.
+ * @param queryParams - An optional object representing query parameters as key-value pairs.
+ *
+ * @returns The URL with appended query parameters if any are provided.
+ */
+export function appendQueryParams(url: string, queryParams?: BaseQueryParams): string {
+  if (!queryParams) {
+    return url;
+  }
+
+  const params = new URLSearchParams();
+
+  const appendParam = (key: string, value: any) => {
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        params.append(`${key}[${index}]`, String(item));
+      });
+    } else if (typeof value === 'object' && value !== null) {
+      for (const [subKey, subValue] of Object.entries(value)) {
+        appendParam(`${key}[${subKey}]`, subValue);
+      }
+    } else {
+      params.append(key, String(value));
+    }
+  };
+
+  for (const [key, value] of Object.entries(queryParams)) {
+    if (value !== undefined) {
+      appendParam(key, value);
+    }
+  }
+
+  const queryString = params.toString();
+  return queryString ? `${url}?${queryString}` : url;
+}
+
 export interface StrapiSDKConfig {
   baseURL: string;
   auth?: AuthConfig;
@@ -175,5 +216,171 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    */
   fetch(url: string, init?: RequestInit) {
     return this._httpClient.fetch(url, init);
+  }
+
+  /**
+   * Provides methods to interact with a collection-type route in the Strapi application.
+   *
+   * This method returns an object with methods to perform CRUD operations on a collection.
+   *
+   * @param pluralName - The pluralName of the collection to interact with.
+   *
+   * @returns An object with methods to `find`, `findOne`, `create`, `update`, and `delete` documents in the collection.
+   *
+   * @example
+   * ```typescript
+   * const sdk = createStrapiSDK({ baseURL: 'http://localhost:1337' });
+   * const articles = sdk.collection('articles');
+   *
+   * // Find all articles
+   * const allArticles = await articles.find();
+   *
+   * // Find a single article by ID
+   * const singleArticle = await articles.findOne('1');
+   *
+   * // Create a new article
+   * const newArticle = await articles.create({ title: 'New Article' });
+   *
+   * // Update an existing article
+   * const updatedArticle = await articles.update('1', { title: 'Updated Title' });
+   *
+   * // Delete an article
+   * await articles.delete('1');
+   * ```
+   */
+  collection(pluralName: string) {
+    this._validator.validatePluralName(pluralName);
+
+    return {
+      find: async (queryParams?: BaseQueryParams): Promise<GenericDocumentResponse> => {
+        const response = await this.fetch(appendQueryParams(`/${pluralName}`, queryParams), {
+          method: 'GET',
+        });
+
+        return this._validator.parseDocumentResponse(response);
+      },
+      findOne: async (
+        documentID: string,
+        queryParams?: BaseQueryParams
+      ): Promise<GenericDocumentResponse> => {
+        const response = await this.fetch(
+          appendQueryParams(`/${pluralName}/${documentID}`, queryParams),
+          {
+            method: 'GET',
+          }
+        );
+
+        return this._validator.parseDocumentResponse(response);
+      },
+      create: async (
+        body: Record<string, any>,
+        queryParams?: BaseQueryParams
+      ): Promise<GenericDocumentResponse> => {
+        const response = await this.fetch(appendQueryParams(`/${pluralName}`, queryParams), {
+          method: 'POST',
+          body: JSON.stringify(body),
+        });
+
+        return this._validator.parseDocumentResponse(response);
+      },
+      update: async (
+        documentID: string,
+        body: Record<string, any>,
+        queryParams?: BaseQueryParams
+      ): Promise<GenericDocumentResponse> => {
+        const response = await this.fetch(
+          appendQueryParams(`/${pluralName}/${documentID}`, queryParams),
+          {
+            method: 'PUT',
+            body: JSON.stringify(body),
+          }
+        );
+
+        return this._validator.parseDocumentResponse(response);
+      },
+      delete: async (
+        documentID: string,
+        queryParams?: BaseQueryParams
+      ): Promise<GenericDocumentResponse> => {
+        const response = await this.fetch(
+          appendQueryParams(`/${pluralName}/${documentID}`, queryParams),
+          {
+            method: 'DELETE',
+          }
+        );
+
+        return this._validator.parseDocumentResponse(response);
+      },
+    };
+  }
+
+  /**
+   * Provides methods to interact with a single-type route in the Strapi application.
+   *
+   * This method returns an object with methods to perform CRUD operations on a single-type route.
+   *
+   * @param pluralName - The pluralName of the single-type to interact with.
+   *
+   * @returns An object with methods to `findOne`, `create`, `update`, and `delete` the single-type document.
+   *
+   * @example
+   * ```typescript
+   * const sdk = createStrapiSDK({ baseURL: 'http://localhost:1337' });
+   * const homepage = sdk.single('homepage');
+   *
+   * // Find the homepage document
+   * const homepageData = await homepage.findOne();
+   *
+   * // Create the homepage document
+   * const newHomepage = await homepage.create({ title: 'Welcome to our site' });
+   *
+   * // Update the homepage document
+   * const updatedHomepage = await homepage.update({ title: 'Updated Title' });
+   *
+   * // Delete the homepage document
+   * await homepage.delete();
+   * ```
+   */
+  single(pluralName: string) {
+    this._validator.validatePluralName(pluralName);
+
+    return {
+      findOne: async (queryParams?: BaseQueryParams): Promise<GenericDocumentResponse> => {
+        const response = await this.fetch(appendQueryParams(`/${pluralName}`, queryParams), {
+          method: 'GET',
+        });
+
+        return this._validator.parseDocumentResponse(response);
+      },
+      create: async (
+        body: Record<string, any>,
+        queryParams?: BaseQueryParams
+      ): Promise<GenericDocumentResponse> => {
+        const response = await this.fetch(appendQueryParams(`/${pluralName}`, queryParams), {
+          method: 'POST',
+          body: JSON.stringify(body),
+        });
+
+        return this._validator.parseDocumentResponse(response);
+      },
+      update: async (
+        body: Record<string, any>,
+        queryParams?: BaseQueryParams
+      ): Promise<GenericDocumentResponse> => {
+        const response = await this.fetch(appendQueryParams(`/${pluralName}`, queryParams), {
+          method: 'PUT',
+          body: JSON.stringify(body),
+        });
+
+        return this._validator.parseDocumentResponse(response);
+      },
+      delete: async (queryParams?: BaseQueryParams): Promise<GenericDocumentResponse> => {
+        const response = await this.fetch(appendQueryParams(`/${pluralName}`, queryParams), {
+          method: 'DELETE',
+        });
+
+        return this._validator.parseDocumentResponse(response);
+      },
+    };
   }
 }

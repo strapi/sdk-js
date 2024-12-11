@@ -1,4 +1,7 @@
+import * as yup from 'yup';
+
 import { StrapiSDKValidationError, URLValidationError } from '../errors';
+import { GenericDocumentResponse } from '../types/content-api';
 
 import { URLValidator } from './url';
 
@@ -59,5 +62,36 @@ export class StrapiSDKValidator {
 
       throw e;
     }
+  }
+
+  pluralNameSchema = yup
+    .string()
+    .min(1)
+    .matches(/^[a-z]+(-[a-z]+)*$/, 'pluralName must be in kebab-case')
+    .required();
+
+  /**
+   * Validates the plural name to ensure it is a valid Strapi collection name.
+   *
+   * @param pluralName - The name to validate.
+   * @throws {Error} If the plural name is invalid.
+   */
+  validatePluralName(pluralName: string) {
+    try {
+      this.pluralNameSchema.validateSync(pluralName);
+    } catch (e) {
+      throw new StrapiSDKValidationError(e);
+    }
+  }
+
+  async parseDocumentResponse(response: Response): Promise<GenericDocumentResponse> {
+    const json = await response.json();
+
+    // Perform validation to ensure the JSON matches the DocumentResponse structure
+    if (!json.data || !json.meta) {
+      throw new StrapiSDKValidationError('Invalid response structure');
+    }
+
+    return json as GenericDocumentResponse;
   }
 }
