@@ -2,9 +2,9 @@ import {
   UsersPermissionsAuthProvider,
   UsersPermissionsAuthProviderOptions,
 } from '../../../../src/auth';
-import { StrapiSDKError, StrapiSDKValidationError } from '../../../../src/errors';
+import { HTTPBadRequestError, StrapiSDKValidationError } from '../../../../src/errors';
 import { HttpClient } from '../../../../src/http';
-import { MockHttpClient } from '../../mocks';
+import { MockHttpClient, mockRequest, mockResponse } from '../../mocks';
 
 const FAKE_TOKEN = '<token>';
 const FAKE_VALID_CONFIG: UsersPermissionsAuthProviderOptions = {
@@ -19,8 +19,11 @@ class ValidFakeHttpClient extends MockHttpClient {
 }
 
 class FaultyFakeHttpClient extends HttpClient {
-  async _fetch() {
-    return new Response('Bad request', { status: 400 });
+  async _fetch(): Promise<Response> {
+    const response = mockResponse(400, 'Bad Request');
+    const request = mockRequest('GET', 'https://example.com');
+
+    throw new HTTPBadRequestError(response, request);
   }
 }
 
@@ -111,7 +114,7 @@ describe('UsersPermissionsAuthProvider', () => {
       const provider = new UsersPermissionsAuthProvider(FAKE_VALID_CONFIG);
 
       // Act & Assert
-      await expect(provider.authenticate(faultyHttpClient)).rejects.toThrow(StrapiSDKError);
+      await expect(provider.authenticate(faultyHttpClient)).rejects.toThrow(HTTPBadRequestError);
     });
   });
 
