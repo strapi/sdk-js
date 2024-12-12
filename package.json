@@ -78,7 +78,5 @@
     "node": ">=18.0.0 <=22.x.x",
     "npm": ">=6.0.0"
   },
-  "dependencies": {
-    "yup": "^1.5.0"
-  }
+  "dependencies": {}
 }

@@ -1,7 +1,5 @@
-import * as yup from 'yup';
-
 import { StrapiSDKValidationError, URLValidationError } from '../errors';
-import { GenericDocumentResponse } from '../types/content-api';
+import { GenericDocumentResponse, GenericMultiDocumentResponse } from '../types/content-api';
 
 import { URLValidator } from './url';
 
@@ -64,32 +62,22 @@ export class StrapiSDKValidator {
     }
   }
 
-  pluralNameSchema = yup
-    .string()
-    .min(1)
-    .matches(/^[a-z]+(-[a-z]+)*$/, 'pluralName must be in kebab-case')
-    .required();
+  async parseMultiDocumentResponse(response: Response): Promise<GenericMultiDocumentResponse> {
+    const json = await response.json();
 
-  /**
-   * Validates the plural name to ensure it is a valid Strapi collection name.
-   *
-   * @param pluralName - The name to validate.
-   * @throws {Error} If the plural name is invalid.
-   */
-  validatePluralName(pluralName: string) {
-    try {
-      this.pluralNameSchema.validateSync(pluralName);
-    } catch (e) {
-      throw new StrapiSDKValidationError(e);
+    if (!json.data || !json.meta || !Array.isArray(json.data)) {
+      throw new StrapiSDKValidationError('Invalid response structure for multiple documents');
     }
+
+    return json as GenericMultiDocumentResponse;
   }
 
-  async parseDocumentResponse(response: Response): Promise<GenericDocumentResponse> {
+  async parseSingleDocumentResponse(response: Response): Promise<GenericDocumentResponse> {
     const json = await response.json();
 
     // Perform validation to ensure the JSON matches the DocumentResponse structure
     if (!json.data || !json.meta) {
-      throw new StrapiSDKValidationError('Invalid response structure');
+      throw new StrapiSDKValidationError('Invalid response structure for a single document');
     }
 
     return json as GenericDocumentResponse;

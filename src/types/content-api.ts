@@ -24,6 +24,7 @@ interface GenericResponse<T> {
 }
 
 export type GenericDocumentResponse = GenericResponse<DocumentData>;
+export type GenericMultiDocumentResponse = GenericResponse<DocumentData[]>;
 
 // This interface outlines the query parameters available for requests to the Strapi content API,
 // without requiring specific knowledge about the structure of the content types being queried.
