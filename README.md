@@ -38,7 +38,6 @@
    - [Basic Configuration](#basic-configuration)
    - [Authentication](#authentication)
      - [API Token Authentication](#api-token-authentication)
-     - [Users & Permissions Authentication](#users--permissions-authentication)
 3. [API Reference](#-api-reference)
 4. [Resource Managers](#-resource-managers)
    - [`.collection()`](#collectionresource)
@@ -105,23 +104,6 @@ const sdk = createStrapiSDK({
   auth: {
     strategy: 'api-token',
     options: { token: 'your-api-token-here' },
-  },
-});
-```
-
-#### Users & Permissions Authentication
-
-For login-based authentication using the "Users & Permissions" plugin, configure the SDK as follows:
-
-``` javascript
-const sdk = createStrapiSDK({
-  baseURL: 'http://localhost:1337/api',
-  auth: {
-    strategy: 'users-permissions',
-    options: {
-      identifier: 'user-email',
-      password: 'user-password',
-    },
   },
 });
 ```
