@@ -47,7 +47,7 @@ import { createStrapiSDK } from '@strapi/sdk-js'; // ES Modules
 // const { createStrapiSDK } = require("@strapi/sdk-js"); CommonJS
 
 const strapiSDK = createStrapiSDK({
-  baseURL: 'http://localhost:1337',
+  baseURL: 'http://localhost:1337/api',
 });
 ```
 
@@ -57,7 +57,7 @@ const strapiSDK = createStrapiSDK({
 <script src="https://cdn.jsdelivr.net/npm/@strapi/sdk-js"></script>
 <script>
   const strapiSDK = createStrapiSDK({
-    baseURL: 'http://localhost:1337',
+    baseURL: 'http://localhost:1337/api',
   });
 </script>
 ```
@@ -95,7 +95,7 @@ import { createStrapiSDK } from '@strapi/sdk-js';
 import strapiAppSchema from '../path/to/strapi-app-schema.json';
 
 const strapiSDK = createStrapiSDK({
-  baseURL: 'http://localhost:1337',
+  baseURL: 'http://localhost:1337/api',
   schema: strapiAppSchema,
 });
 ```
