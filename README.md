@@ -7,7 +7,7 @@
   </a>
 </p>
 
-<h2 align="center">Manage Your Strapi Content From Anywhere 🚀</h2>
+<h2 style="text-align: center">Manage Your Strapi Content From Anywhere 🚀</h2>
 <p style="text-align: center">Connect your JavaScript/TypeScript apps to a flexible and fully customizable Strapi backend with ease.</p>
 <p style="text-align: center"><a href="https://github.com/strapi/strapi">CMS Repository</a> - <a href="https://strapi.io">Website</a></p>
 <br />
