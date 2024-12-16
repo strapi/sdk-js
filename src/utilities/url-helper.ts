@@ -51,9 +51,9 @@ export class URLHelper {
     const appendParam = (key: string, value: unknown) => {
       // vals=[1, 2, 3] -> vals[0]='1', vals[1]='2', vals[3]='2'
       if (Array.isArray(value)) {
-        value.forEach((item, index) => {
-          params.append(`${key}[${index}]`, String(item));
-        });
+        value
+          .filter((item) => typeof item !== 'undefined')
+          .forEach((item, index) => params.append(`${key}[${index}]`, String(item)));
       }
 
       // vals={ foo: 'bar', bar: 40 } -> vals[foo]='bar', vals[bar]='40'
@@ -64,7 +64,7 @@ export class URLHelper {
       }
 
       // val=40 -> val='40'
-      else {
+      else if (typeof value !== 'undefined') {
         params.append(key, String(value));
       }
     };

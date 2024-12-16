@@ -130,4 +130,20 @@ describe('URLHelper.appendQueryParams', () => {
       'http://example.com?locale=en&sort%5B0%5D=createdAt%3Adesc&sort%5B1%5D=title%3Aasc&filters%5Bpublished%5D=true&pagination%5Bpage%5D=1&pagination%5BpageSize%5D=10'
     );
   });
+
+  it('should ignore undefined values at every nesting level', () => {
+    // Arrange
+    const url = 'http://example.com';
+    const queryParams = {
+      sort: [undefined] as unknown as string[],
+      filters: { published: undefined },
+      locale: undefined,
+    };
+
+    // Act
+    const result = URLHelper.appendQueryParams(url, queryParams);
+
+    // Assert
+    expect(result).toBe('http://example.com');
+  });
 });
