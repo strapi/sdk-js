@@ -50,7 +50,6 @@
 Before you begin, ensure you have the following:
 - A Strapi backend up and running: [quick start guide](https://docs.strapi.io/dev-docs/quick-start).
 - The API URL of your Strapi instance: for example, `http://localhost:1337/api`.
-- A recent version of [Node.js]() installed.
 - A recent version of [Node.js](https://nodejs.org/en/download/package-manager) installed.
 
 ### Installation
