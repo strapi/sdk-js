@@ -1,138 +1,237 @@
-<h1 align="center">sdk-js</h1>
-<h3 align="center">An SDK you can use to easily interface with Strapi from your JavaScript and TypeScript projects</h3>
+<p style="text-align: center">
+  <a href="https://strapi.io/#gh-light-mode-only">
+    <img src="https://strapi.io/assets/strapi-logo-dark.svg" width="318px" alt="Strapi logo" />
+  </a>
+  <a href="https://strapi.io/#gh-dark-mode-only">
+    <img src="https://strapi.io/assets/strapi-logo-light.svg" width="318px" alt="Strapi logo" />
+  </a>
+</p>
 
+<h2 align="center">Manage Your Strapi Content From Anywhere 🚀</h2>
+<p style="text-align: center">Connect your JavaScript/TypeScript apps to a flexible and fully customizable Strapi backend with ease.</p>
+<p style="text-align: center"><a href="https://github.com/strapi/strapi">CMS Repository</a> - <a href="https://strapi.io">Website</a></p>
 <br />
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/@strapi/sdk-js" target="_blank">
-   <img src="https://img.shields.io/npm/v/@strapi/sdk-js" alt="NPM version" />
+<p style="text-align: center">
+  <a href="https://www.npmjs.org/package/@strapi/sdk-js">
+    <img src="https://img.shields.io/npm/v/@strapi/sdk-js/latest.svg" alt="NPM Version" />
   </a>
   <a href="https://www.npmjs.com/package/@strapi/sdk-js" target="_blank">
    <img src="https://img.shields.io/npm/dm/@strapi/sdk-js" alt="NPM downloads" />
   </a>
-  <a href="https://discord.gg/strapi" target="_blank">
-    <img src="https://img.shields.io/discord/811989166782021633?style=flat&colorA=4945ff&colorB=4945ff&label=discord&logo=discord&logoColor=f0f0ff" alt="Chat on Discord" />
+  <a href="https://github.com/strapi/sdk-js/actions/workflows/tests.yml">
+    <img src="https://github.com/strapi/sdk-js/actions/workflows/tests.yml/badge.svg?branch=main" alt="Tests" />
+  </a>
+  <a href="https://discord.strapi.io">
+    <img src="https://img.shields.io/discord/811989166782021633?label=Discord" alt="Strapi on Discord" />
   </a>
 </p>
 
-<br />
+<br>
 
-sdk-js is an SDK you can use to easily interface with Strapi from your JavaScript or TypeScript project.
+## 📖 Table of contents
 
-## Getting Started With Strapi
+1. [Getting Started](#-getting-started)
+   - [Prerequisites](#pre-requisites)
+   - [Installation](#installation)
+2. [Creating and Configuring an SDK Instance](#-creating-and-configuring-the-sdk-instance)
+   - [Basic Configuration](#basic-configuration)
+   - [Authentication](#authentication)
+     - [API Token Authentication](#api-token-authentication)
+     - [Users & Permissions Authentication](#users--permissions-authentication)
+3. [API Reference](#-api-reference)
+4. [Resource Managers](#-resource-managers)
+   - [`.collection()`](#collectionresource)
+   - [`.single()`](#singleresource)
+5. [Examples](#-examples)
 
-If you're brand new to Strapi development, it is recommended to follow the [Strapi Quick Start Guide](https://docs.strapi.io/dev-docs/quick-start)
+## 🛠 Getting started
+### Pre-Requisites
+Before you begin, ensure you have the following:
+- A Strapi backend up and running: [quick start guide](https://docs.strapi.io/dev-docs/quick-start).
+- The API URL of your Strapi instance: for example, `http://localhost:1337/api`.
+- A recent version of [Node.js]() installed.
+- A recent version of [Node.js](https://nodejs.org/en/download/package-manager) installed.
 
-sdk-js is compatible with Strapi v5+ and interfaces with Strapi's REST API. You can read the API docs [here](https://docs.strapi.io/dev-docs/api/rest)
+### Installation
+Install the SDK as a dependency in your project:
 
-## SDK Purpose
-
-sdk-js is the recommended and easiest way to interface with Strapi from your JavaScript and TypeScript projects.
-It allows you to easily create, read, update, and delete Strapi content through strongly typed methods.
-
-<!-- TODO confirm whether this is done in MVP -->
-
-If working with javascript, sdk-js can still help to ease your development workflow through queries based on content type UID's.
-
-## Getting Started With "@strapi/sdk-js"
-
-In its simplest form, "@strapi/sdk-js" works by being connected to the URL of your Strapi instance and provided auth if required.
-
-<!-- TODO confirm examples -->
-
-### Importing the SDK
-
-```js
-import { createStrapiSDK } from '@strapi/sdk-js'; // ES Modules
-// const { createStrapiSDK } = require("@strapi/sdk-js"); CommonJS
-
-const strapiSDK = createStrapiSDK({
-  baseURL: 'http://localhost:1337/api',
-});
+**NPM**
+```bash
+npm install @strapi/sdk-js
 ```
 
-### Script tag example
+**Yarn**
+```bash
+yarn add @strapi/sdk-js
+```
 
-```html
+**pnpm**
+```bash
+pnpm add @strapi/sdk-js
+```
+
+## ⚙️ Creating and configuring the SDK Instance
+### Basic configuration
+
+To interact with your Strapi backend, initialize the SDK with your Strapi API base URL:
+
+``` typescript
+import { createStrapiSDK } from '@strapi/sdk-js';
+
+const sdk = createStrapiSDK({ baseURL: 'http://localhost:1337/api' });
+```
+
+Alternatively, use a `<script>` tag in a browser environment:
+
+``` html
 <script src="https://cdn.jsdelivr.net/npm/@strapi/sdk-js"></script>
+
 <script>
-  const strapiSDK = createStrapiSDK({
-    baseURL: 'http://localhost:1337/api',
-  });
+  const sdk = createStrapiSDK({ baseURL: 'http://localhost:1337/api' });
 </script>
 ```
 
-## Generate the SDK based on your content type schema
+### Authentication
+The SDK supports multiple authentication strategies for accessing authenticated content in your Strapi backend.
 
-sdk-js becomes most powerful when you generate the SDK based on your content type schema. This allows you access to strongly typed methods for creating, reading, updating and deleting content.
+#### API-Token authentication
 
-There are multiple ways to do this:
+If your Strapi instance uses API tokens, configure the SDK like this:
 
-### Using the CLI
-
-sdk-js provides a CLI command to generate the SDK based on your Strapi app content schema.
-
-<!-- TODO should we provide an output path option to the CLI? -->
-
-```sh
-# Run this in the root of your Strapi app
-npx @strapi/sdk-js@latest generate
-
-# You can optionally provide the path to strapi app and run the command from elsewhere
-npx @strapi/sdk-js@latest generate --path ../strapi-app
-
-```
-
-As opposed to importing the SDK from a CDN or NPM, the generated asset can then be imported and used as per the examples above.
-
-### Providing the SDK with a Strapi Schema
-
-Alternatively, you can use the SDK from a CDN or NPM, but provide the SDK with a Strapi schema.
-
-```js
-import { createStrapiSDK } from '@strapi/sdk-js';
-// TODO clarify where this comes from and how to generate it
-import strapiAppSchema from '../path/to/strapi-app-schema.json';
-
-const strapiSDK = createStrapiSDK({
+``` typescript
+const sdk = createStrapiSDK({
   baseURL: 'http://localhost:1337/api',
-  schema: strapiAppSchema,
-});
-```
-
-## Interacting with Strapi
-
-### Fetch
-
-The SDK provides a `fetch` method that allows you to make requests relative to the Strapi Content API.
-
-The params accepted by the `fetch` method are the same as those accepted by the native `fetch` [API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch). With the first param being a relative path to the Strapi Content API.
-
-You can refer to the documentation for the [Strapi Content API](https://docs.strapi.io/dev-docs/api/rest) for more information on the available endpoints and their required params.
-
-```js
-// Create a new article
-const response = await strapiSDK.fetch('/articles', {
-  method: 'POST',
-  body: {
-    title: 'My first article',
+  auth: {
+    strategy: 'api-token',
+    options: { token: 'your-api-token-here' },
   },
 });
 ```
 
-### Generated Query API's
+#### Users & Permissions Authentication
 
-When you generate the SDK based on your Strapi app schema, the SDK will also generate methods for querying your content types.
+For login-based authentication using the "Users & Permissions" plugin, configure the SDK as follows:
 
-These methods are strongly typed and allow you to query your content types based on their UID.
-
-They are available on the SDK instance as `sdk.queries[contentTypePluralName][method]`.
-
-For example, if you have a content type with the plural name of `articles`, the available methods will be `find`, `findOne`, `create`, `update`, and `delete`.
-
-```js
-// Find all articles
-const articles = await strapiSDK.queries.articles.findMany();
+``` javascript
+const sdk = createStrapiSDK({
+  baseURL: 'http://localhost:1337/api',
+  auth: {
+    strategy: 'users-permissions',
+    options: {
+      identifier: 'user-email',
+      password: 'user-password',
+    },
+  },
+});
 ```
 
-<!-- TODO refer to docs elsewhere for params accepted for filtering and sorting etc -->
+## 📚 API Reference
+
+The Strapi SDK instance provides key properties and utility methods for content and API interaction:
+- **`baseURL`**: base URL of your Strapi backend.
+- **`fetch`**: perform generic requests to the Strapi Content API using fetch-like syntax.
+- **`.collection(resource: string)`**: get a manager instance for handling collection-type resources.
+- **`.single(resource: string)`**: get a manager instance for handling single-type resources.
+
+## 📁 Resource Managers
+### `.collection(resource)`
+
+The `.collection()` method provides a manager for working with collection-type resources,
+which can have multiple entries.
+
+**Note**: the `resource` corresponds to the plural name of your collection type, as defined in the Strapi model.
+
+#### Available Methods:
+
+1. **`find(queryParams?)`**: fetch multiple entries.
+2. **`findOne(documentID, queryParams?)`**: fetch a single entry by its ID.
+3. **`create(data, queryParams?)`**: create a new entry.
+4. **`update(documentID, data, queryParams?)`**: update an existing entry.
+5. **`delete(documentID, queryParams?)`**: remove an entry.
+
+#### Examples:
+
+``` typescript
+const articles = sdk.collection('articles');
+
+// Fetch all english articles sorted by title
+const allArticles = await articles.find({
+  locale: 'en',
+  sort: 'title',
+});
+
+// Fetch a single article
+const singleArticle = await articles.findOne('article-document-id');
+
+// Create a new article
+const newArticle = await articles.create({ title: 'New Article', content: '...' });
+
+// Update an existing article
+const updatedArticle = await articles.update('article-document-id', { title: 'Updated Title' });
+
+// Delete an article
+await articles.delete('article-id');
+```
+### `.single(resource)`
+
+The `.single()` method provides a manager for working with collection-type resources, which have only one entry.
+
+**Note**: the `resource` corresponds to the singular name of your collection type, as defined in the Strapi model.
+
+#### Available Methods:
+
+1. **`find(queryParams?)`**: fetch the document.
+2. **`update(data, queryParams?)`**: update the document.
+3. **`delete(queryParams?)`**: remove the document.
+
+#### Examples:
+``` typescript
+const homepage = sdk.single('homepage');
+
+// Fetch the default version of the homepage
+const homepageContent = await homepage.find();
+
+// Fetch the spanish version of the homepage
+const homepageContent = await homepage.find({ locale: 'es' });
+
+// Update the homepage draft content
+const updatedHomepage = await homepage.update({ title: 'Updated Homepage Title' }, { status: 'draft' });
+
+// Delete the homepage content
+await homepage.delete();
+```
+
+## 💡 Examples
+
+Here’s how to combine `.collection()` and `.single()` methods in a real-world scenario:
+
+``` typescript
+const sdk = createStrapiSDK({
+  baseURL: 'http://localhost:1337/api',
+  auth: {
+    strategy: 'api-token',
+    options: { token: 'your-api-token-here' },
+  },
+});
+
+async function main() {
+  // Work with collections
+  const articles = sdk.collection('articles');
+  const newArticle = await articles.create({ title: 'Hello World', content: '...' });
+  console.log('Created Article:', newArticle);
+
+  const allArticles = await articles.find({ sort: 'createdAt:desc' });
+  console.log('All Articles:', allArticles);
+
+  // Work with single types
+  const homepage = sdk.single('homepage');
+  const homepageContent = await homepage.find();
+  console.log('Homepage Content:', homepageContent);
+
+  const updatedHomepage = await homepage.update({ title: 'Welcome to the New Homepage' });
+  console.log('Updated Homepage:', updatedHomepage);
+}
+
+main();
+```
