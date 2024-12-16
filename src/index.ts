@@ -3,6 +3,8 @@ import { StrapiSDKValidator } from './validators';
 
 import type { StrapiSDKConfig } from './sdk';
 
+export * from './errors';
+
 /**
  * Creates a new instance of the Strapi SDK with a specified configuration.
  *
