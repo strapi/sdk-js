@@ -165,6 +165,7 @@ export class HttpClient {
    */
   async _fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
     const request = new Request(input, init);
+
     const response = await globalThis.fetch(request);
 
     if (!response.ok) {
@@ -185,10 +186,8 @@ export class HttpClient {
    * @param request - The HTTP request object to which headers are added.
    */
   private attachHeaders(request: Request) {
-    // Set the default content-type header if it hasn't been defined already
-    if (!request.headers.has('Content-Type')) {
-      request.headers.set('Content-Type', 'application/json');
-    }
+    // Set the content-type header to JSON
+    request.headers.set('Content-Type', 'application/json');
 
     // Set auth headers if available, potentially overwrite manually set auth headers
     this._authManager.authenticateRequest(request);

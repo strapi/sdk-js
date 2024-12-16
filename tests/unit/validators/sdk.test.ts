@@ -1,4 +1,4 @@
-import { StrapiSDKValidationError, URLValidationError } from '../../../src/errors';
+import { StrapiSDKValidationError, URLValidationError } from '../../../src';
 import { StrapiSDKValidator, URLValidator } from '../../../src/validators';
 
 import type { StrapiSDKConfig } from '../../../src/sdk';

@@ -1,4 +1,5 @@
-import { StrapiSDKInitializationError } from '../../src/errors';
+import { StrapiSDKInitializationError } from '../../src';
+import { CollectionTypeManager, SingleTypeManager } from '../../src/content-types';
 import { StrapiSDK } from '../../src/sdk';
 import { StrapiSDKValidator, URLValidator } from '../../src/validators';
 
@@ -20,11 +21,21 @@ class FlakyURLValidator extends URLValidator {
 describe('StrapiSDK', () => {
   const mockHttpClientFactory = (url: string) => new MockHttpClient(url);
 
+  beforeEach(() => {
+    jest
+      .spyOn(MockHttpClient.prototype, '_fetch')
+      .mockImplementation(() =>
+        Promise.resolve(
+          new Response(JSON.stringify({ data: { id: 1 }, meta: {} }), { status: 200 })
+        )
+      );
+  });
+
   describe('Initialization', () => {
     it('should initialize with valid config', () => {
       // Arrange
       const config = {
-        baseURL: 'http://localhost:1337',
+        baseURL: 'http://localhost:1337/api',
         auth: { strategy: MockAuthProvider.identifier, options: {} },
       };
 
@@ -85,10 +96,46 @@ describe('StrapiSDK', () => {
 
     it('should initialize correctly with the default validator', () => {
       // Arrange
-      const sdk = new StrapiSDK({ baseURL: 'http://localhost:1337' });
+      const sdk = new StrapiSDK({ baseURL: 'http://localhost:1337/api' });
 
       // Act & Assert
       expect(sdk).toBeInstanceOf(StrapiSDK);
+    });
+  });
+
+  describe('Collection', () => {
+    it('should return a new CollectionTypeManager instance when given a resource name', () => {
+      // Arrange
+      const resource = 'articles';
+      const config = { baseURL: 'http://localhost:1337/api' };
+
+      const mockValidator = new MockStrapiSDKValidator();
+      const sdk = new StrapiSDK(config, mockValidator, mockHttpClientFactory);
+
+      // Act
+      const collection = sdk.collection(resource);
+
+      // Assert
+      expect(collection).toBeInstanceOf(CollectionTypeManager);
+      expect(collection).toHaveProperty('_pluralName', resource);
+    });
+  });
+
+  describe('Single', () => {
+    it('should return a new SingleTypeManager instance when given a resource name', () => {
+      // Arrange
+      const resource = 'homepage';
+      const config = { baseURL: 'http://localhost:1337/api' };
+
+      const mockValidator = new MockStrapiSDKValidator();
+      const sdk = new StrapiSDK(config, mockValidator, mockHttpClientFactory);
+
+      // Act
+      const single = sdk.single(resource);
+
+      // Assert
+      expect(single).toBeInstanceOf(SingleTypeManager);
+      expect(single).toHaveProperty('_singularName', resource);
     });
   });
 
@@ -97,7 +144,7 @@ describe('StrapiSDK', () => {
 
   it('should fetch data correctly with fetch method', async () => {
     // Arrange
-    const config = { baseURL: 'http://localhost:1337' };
+    const config = { baseURL: 'http://localhost:1337/api' };
 
     const fetchSpy = jest.spyOn(MockHttpClient.prototype, 'fetch');
 
@@ -109,12 +156,12 @@ describe('StrapiSDK', () => {
 
     // Assert
     expect(fetchSpy).toHaveBeenCalledWith('/data', undefined);
-    await expect(response.json()).resolves.toEqual({ ok: true });
+    await expect(response.json()).resolves.toEqual({ data: { id: 1 }, meta: {} });
   });
 
   it('should retrieve baseURL correctly from config', () => {
     // Arrange
-    const config = { baseURL: 'http://localhost:1337' };
+    const config = { baseURL: 'http://localhost:1337/api' };
 
     const mockValidator = new MockStrapiSDKValidator();
 
