@@ -120,41 +120,6 @@ const response = await strapiSDK.fetch('/articles', {
 });
 ```
 
-### Query
-
-The SDK also allows you to query your content types based on their UID via the `strapiSdk.query` method.
-
-`strapiSdk.query` provides a few different use cases:
-
-```js
-query<T = AnySchema>(uid: string): T {
-  return result as T;
-}
-```
-
-#### Usage as a javascript developer
-
-```js
-// Here the developer will get basic intellisense based on the AnySchema type.
-const jsResult = jsSdk.query('uid');
-```
-
-#### Usage as a TypeScript developer without a generated SDK
-
-The developer will manually provide a content type schema to correctly type the inputs and outputs of `sdk.query`.
-
-```js
-const tsResult = tsSdk.query < ManuallyProvidedSchema > 'uid';
-```
-
-#### Usage in TypeScript with generated SDK
-
-Assuming the SDK is generated with full type information, the developer will get full autocomplete for the returned data.
-
-```js
-const generatedResult = generatedSdk.query('uid'); // Full autocomplete
-```
-
 ### Generated Query API's
 
 When you generate the SDK based on your Strapi app schema, the SDK will also generate methods for querying your content types.
