@@ -168,7 +168,7 @@ await articles.delete('article-id');
 
 ### `.single(resource)`
 
-The `.single()` method provides a manager for working with collection-type resources, which have only one entry.
+The `.single()` method provides a manager for working with single-type resources, which have only one entry.
 
 **Note**: the `resource` corresponds to the singular name of your collection type, as defined in the Strapi model.
 
