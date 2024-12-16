@@ -1,5 +1,4 @@
 import { StrapiSDKValidationError, URLValidationError } from '../errors';
-import { GenericDocumentResponse, GenericMultiDocumentResponse } from '../types/content-api';
 
 import { URLValidator } from './url';
 
@@ -60,26 +59,5 @@ export class StrapiSDKValidator {
 
       throw e;
     }
-  }
-
-  async parseMultiDocumentResponse(response: Response): Promise<GenericMultiDocumentResponse> {
-    const json = await response.json();
-
-    if (!json.data || !json.meta || !Array.isArray(json.data)) {
-      throw new StrapiSDKValidationError('Invalid response structure for multiple documents');
-    }
-
-    return json as GenericMultiDocumentResponse;
-  }
-
-  async parseSingleDocumentResponse(response: Response): Promise<GenericDocumentResponse> {
-    const json = await response.json();
-
-    // Perform validation to ensure the JSON matches the DocumentResponse structure
-    if (!json.data || !json.meta) {
-      throw new StrapiSDKValidationError('Invalid response structure for a single document');
-    }
-
-    return json as GenericDocumentResponse;
   }
 }
