@@ -45,36 +45,44 @@
 5. [Examples](#-examples)
 
 ## 🛠 Getting started
+
 ### Pre-Requisites
+
 Before you begin, ensure you have the following:
+
 - A Strapi backend up and running: [quick start guide](https://docs.strapi.io/dev-docs/quick-start).
 - The API URL of your Strapi instance: for example, `http://localhost:1337/api`.
 - A recent version of [Node.js](https://nodejs.org/en/download/package-manager) installed.
 
 ### Installation
+
 Install the SDK as a dependency in your project:
 
 **NPM**
+
 ```bash
 npm install @strapi/sdk-js
 ```
 
 **Yarn**
+
 ```bash
 yarn add @strapi/sdk-js
 ```
 
 **pnpm**
+
 ```bash
 pnpm add @strapi/sdk-js
 ```
 
 ## ⚙️ Creating and configuring the SDK Instance
+
 ### Basic configuration
 
 To interact with your Strapi backend, initialize the SDK with your Strapi API base URL:
 
-``` typescript
+```typescript
 import { createStrapiSDK } from '@strapi/sdk-js';
 
 const sdk = createStrapiSDK({ baseURL: 'http://localhost:1337/api' });
@@ -82,7 +90,7 @@ const sdk = createStrapiSDK({ baseURL: 'http://localhost:1337/api' });
 
 Alternatively, use a `<script>` tag in a browser environment:
 
-``` html
+```html
 <script src="https://cdn.jsdelivr.net/npm/@strapi/sdk-js"></script>
 
 <script>
@@ -91,13 +99,14 @@ Alternatively, use a `<script>` tag in a browser environment:
 ```
 
 ### Authentication
+
 The SDK supports multiple authentication strategies for accessing authenticated content in your Strapi backend.
 
 #### API-Token authentication
 
 If your Strapi instance uses API tokens, configure the SDK like this:
 
-``` typescript
+```typescript
 const sdk = createStrapiSDK({
   baseURL: 'http://localhost:1337/api',
   auth: {
@@ -110,12 +119,14 @@ const sdk = createStrapiSDK({
 ## 📚 API Reference
 
 The Strapi SDK instance provides key properties and utility methods for content and API interaction:
+
 - **`baseURL`**: base URL of your Strapi backend.
 - **`fetch`**: perform generic requests to the Strapi Content API using fetch-like syntax.
 - **`.collection(resource: string)`**: get a manager instance for handling collection-type resources.
 - **`.single(resource: string)`**: get a manager instance for handling single-type resources.
 
 ## 📁 Resource Managers
+
 ### `.collection(resource)`
 
 The `.collection()` method provides a manager for working with collection-type resources,
@@ -133,7 +144,7 @@ which can have multiple entries.
 
 #### Examples:
 
-``` typescript
+```typescript
 const articles = sdk.collection('articles');
 
 // Fetch all english articles sorted by title
@@ -154,6 +165,7 @@ const updatedArticle = await articles.update('article-document-id', { title: 'Up
 // Delete an article
 await articles.delete('article-id');
 ```
+
 ### `.single(resource)`
 
 The `.single()` method provides a manager for working with collection-type resources, which have only one entry.
@@ -167,7 +179,8 @@ The `.single()` method provides a manager for working with collection-type resou
 3. **`delete(queryParams?)`**: remove the document.
 
 #### Examples:
-``` typescript
+
+```typescript
 const homepage = sdk.single('homepage');
 
 // Fetch the default version of the homepage
@@ -177,7 +190,10 @@ const homepageContent = await homepage.find();
 const homepageContent = await homepage.find({ locale: 'es' });
 
 // Update the homepage draft content
-const updatedHomepage = await homepage.update({ title: 'Updated Homepage Title' }, { status: 'draft' });
+const updatedHomepage = await homepage.update(
+  { title: 'Updated Homepage Title' },
+  { status: 'draft' }
+);
 
 // Delete the homepage content
 await homepage.delete();
@@ -187,7 +203,7 @@ await homepage.delete();
 
 Here’s how to combine `.collection()` and `.single()` methods in a real-world scenario:
 
-``` typescript
+```typescript
 const sdk = createStrapiSDK({
   baseURL: 'http://localhost:1337/api',
   auth: {
