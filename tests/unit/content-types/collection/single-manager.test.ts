@@ -27,7 +27,7 @@ describe('SingleTypeManager CRUD Methods', () => {
     expect(singleTypeManager).toHaveProperty('delete', expect.any(Function));
   });
 
-  it('should fetch a single document with complex query params in findOne method', async () => {
+  it('should fetch a single document with complex query params in find method', async () => {
     // Arrange
     const expected =
       '/homepage?locale=en&populate=sections&fields%5B0%5D=title&fields%5B1%5D=content';
