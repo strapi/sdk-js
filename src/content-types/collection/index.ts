@@ -1,0 +1,1 @@
+export { CollectionTypeManager } from './manager';
