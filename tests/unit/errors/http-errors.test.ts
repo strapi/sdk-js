@@ -31,7 +31,7 @@ describe('HTTP Errors', () => {
 
     it('should handle status code without status text', () => {
       // Arrange
-      const response = mockResponse(500, '');
+      const response = mockResponse(500, undefined as unknown as string);
       const request = mockRequest('POST', 'https://example.com/update');
 
       // Act

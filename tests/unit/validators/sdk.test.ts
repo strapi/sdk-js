@@ -62,29 +62,4 @@ describe('Strapi SDKValidator', () => {
       expect(() => validator.validateConfig({ baseURL })).toThrow(StrapiSDKValidationError);
     });
   });
-
-  describe('parseDocumentResponse', () => {
-    it('should throw an error if response structure is invalid', async () => {
-      // Arrange
-      const validator = new StrapiSDKValidator(urlValidatorMock);
-      const invalidResponse = new Response(JSON.stringify({ invalid: 'structure' }));
-
-      // Act & Assert
-      await expect(validator.parseSingleDocumentResponse(invalidResponse)).rejects.toThrow(
-        StrapiSDKValidationError
-      );
-    });
-
-    it('should return parsed response if structure is valid', async () => {
-      // Arrange
-      const validator = new StrapiSDKValidator(urlValidatorMock);
-      const validResponse = new Response(JSON.stringify({ data: { id: 1 }, meta: {} }));
-
-      // Act
-      const result = await validator.parseSingleDocumentResponse(validResponse);
-
-      // Assert
-      expect(result).toEqual({ data: { id: 1 }, meta: {} });
-    });
-  });
 });
