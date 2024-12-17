@@ -83,9 +83,9 @@ pnpm add @strapi/sdk-js
 To interact with your Strapi backend, initialize the SDK with your Strapi API base URL:
 
 ```typescript
-import { createStrapiSDK } from '@strapi/sdk-js';
+import { strapiSDK } from '@strapi/sdk-js';
 
-const sdk = createStrapiSDK({ baseURL: 'http://localhost:1337/api' });
+const sdk = strapiSDK({ baseURL: 'http://localhost:1337/api' });
 ```
 
 Alternatively, use a `<script>` tag in a browser environment:
@@ -94,7 +94,7 @@ Alternatively, use a `<script>` tag in a browser environment:
 <script src="https://cdn.jsdelivr.net/npm/@strapi/sdk-js"></script>
 
 <script>
-  const sdk = createStrapiSDK({ baseURL: 'http://localhost:1337/api' });
+  const sdk = strapiSDK({ baseURL: 'http://localhost:1337/api' });
 </script>
 ```
 
@@ -107,7 +107,7 @@ The SDK supports multiple authentication strategies for accessing authenticated 
 If your Strapi instance uses API tokens, configure the SDK like this:
 
 ```typescript
-const sdk = createStrapiSDK({
+const sdk = strapiSDK({
   baseURL: 'http://localhost:1337/api',
   auth: {
     strategy: 'api-token',
@@ -184,10 +184,10 @@ The `.single()` method provides a manager for working with single-type resources
 const homepage = sdk.single('homepage');
 
 // Fetch the default version of the homepage
-const homepageContent = await homepage.find();
+const defaultHomepage = await homepage.find();
 
 // Fetch the spanish version of the homepage
-const homepageContent = await homepage.find({ locale: 'es' });
+const spanishHomepage = await homepage.find({ locale: 'es' });
 
 // Update the homepage draft content
 const updatedHomepage = await homepage.update(
@@ -204,7 +204,7 @@ await homepage.delete();
 Here’s how to combine `.collection()` and `.single()` methods in a real-world scenario:
 
 ```typescript
-const sdk = createStrapiSDK({
+const sdk = strapiSDK({
   baseURL: 'http://localhost:1337/api',
   auth: {
     strategy: 'api-token',

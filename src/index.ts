@@ -32,7 +32,7 @@ export * from './errors';
  * };
  *
  * // Create the SDK instance
- * const strapiSDK = createStrapiSDK(sdkConfig);
+ * const strapiSDK = strapiSDK(sdkConfig);
  *
  * // Using the SDK to fetch content from a custom endpoint
  * const response = await strapiSDK.fetch('/content-endpoint');
@@ -44,7 +44,7 @@ export * from './errors';
  * @throws {StrapiSDKInitializationError} If the provided baseURL does not conform to a valid HTTP or HTTPS URL,
  *                                        or if the auth configuration is invalid.
  */
-export const createStrapiSDK = (config: StrapiSDKConfig) => {
+export const strapiSDK = (config: StrapiSDKConfig) => {
   const sdkValidator = new StrapiSDKValidator();
 
   return new StrapiSDK<typeof config>(
