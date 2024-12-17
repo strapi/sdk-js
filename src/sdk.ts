@@ -158,7 +158,7 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    * @example
    * ```typescript
    * // Create the SDK instance
-   * const sdk = createStrapiSDK({ baseURL: 'http://localhost:1337/api' );
+   * const sdk = strapiSDK({ baseURL: 'http://localhost:1337/api' );
    *
    * // Perform a custom fetch query
    * const response = await sdk.fetch('/categories');
