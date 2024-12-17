@@ -184,10 +184,10 @@ The `.single()` method provides a manager for working with single-type resources
 const homepage = sdk.single('homepage');
 
 // Fetch the default version of the homepage
-const homepageContent = await homepage.find();
+const defaultHomepage = await homepage.find();
 
 // Fetch the spanish version of the homepage
-const homepageContent = await homepage.find({ locale: 'es' });
+const spanishHomepage = await homepage.find({ locale: 'es' });
 
 // Update the homepage draft content
 const updatedHomepage = await homepage.update(
