@@ -91,11 +91,10 @@ const sdk = strapiSDK({ baseURL: 'http://localhost:1337/api' });
 Alternatively, use a `<script>` tag in a browser environment:
 
 ```html
-
 <script src="https://cdn.jsdelivr.net/npm/@strapi/sdk-js"></script>
 
 <script>
-    const sdk = strapiSDK({baseURL: 'http://localhost:1337/api'});
+  const sdk = strapiSDK({ baseURL: 'http://localhost:1337/api' });
 </script>
 ```
 
