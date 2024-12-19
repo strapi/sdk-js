@@ -6,46 +6,45 @@ body:
   - type: textarea
     attributes:
       label: Bug Description
-      description: A clear and concise description of the problem or unexpected behavior (attach screenshots/gifs if appropriate).
-      placeholder: Clicking on the "Save" button doesn’t save the form data.
-      render: markdown
+      description: Provide a clear and concise description of the issue or unexpected behavior related to the Strapi SDK client.
+      placeholder: Using the SDK client to fetch data from the "articles" collection does not return the expected results.
     validations:
       required: true
 
   - type: textarea
     attributes:
       label: Steps to Reproduce
-      description: Provide a step-by-step description of how to reproduce the issue. Include code snippets or links to repositories when applicable.
+      description: Provide a detailed, step-by-step guide on how to reproduce the issue. Include code snippets or links to repositories if applicable.
       placeholder: |
         Example:
-          1. Create an Article collection type in your Strapi app
-          2. Export the API schema
-          3. Make the following query: `...`
-          4. See the error in the console
-      render: markdown
+          1. Initialize a new Strapi project with an "article" collection type defined as "...".
+          2. Configure the SDK client with your Strapi API URL and authentication token.
+          3. Perform a query to fetch entries from a collection: `sdk.collection('articles').find()`.
+          4. Observe the unexpected behavior or error in the response/output.
     validations:
       required: true
 
   - type: textarea
     attributes:
       label: Expected Behavior
-      description: Describe what you expected to happen instead of the bug. Be as specific as possible.
-      render: markdown
+      description: Provide a detailed explanation of what you expected to happen instead of the observed issue. Be as specific as possible.
     validations:
       required: true
 
   - type: input
+    id: version
     attributes:
       label: Version
-      description: The SDK version used
+      description: The version of the SDK that was used.
       placeholder: 1.0.0
     validations:
       required: true
 
   - type: dropdown
+    id: os
     attributes:
       label: Operating System
-      description: Select the operating system you are experiencing the issue on.
+      description: Select the operating system where you are experiencing the issue.
       multiple: false
       options:
         - MacOS
@@ -56,26 +55,42 @@ body:
       required: true
 
   - type: dropdown
+    id: runtime
     attributes:
       label: Runtime Environment
-      description: Select the environment where this issue occurs.
-      multiple: false
+      description: Select all runtime environments where the issue has occurred.
+      multiple: true
       options:
         - Browser
         - Node.js
-        - Other (bun, deno, ...)
+        - Bun
+        - Deno
+        - Other
     validations:
       required: true
 
   - type: textarea
+    id: logs
     attributes:
       label: Logs
-      description: If applicable, the logs you got from using the SDK
+      description: If available, please provide the logs generated while using the SDK.
       render: shell
 
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Media
+      description: If available, please upload screenshots or videos to illustrate the issue.
+
   - type: checkboxes
+    id: checklist
     attributes:
       label: Confirmation Checklist
       options:
-        - label: I have searched for duplicates and couldn’t find a similar issue.
-        - label: I have provided all necessary details to reproduce the issue.
+        - label: I have checked the existing [issues](https://github.com/strapi/sdk-js/issues)
+          required: true
+
+        - label: I agree to follow this project's [Code of Conduct](https://github.com/strapi/sdk-js/blob/main/CODE_OF_CONDUCT.md)
+          required: true
+
+        - label: I would like to work on this issue
