@@ -3,28 +3,37 @@ description: Help us improve this repository by filing a detailed bug report.
 title: '[bug]: '
 labels: [ 'issue: bug', 'status: to be confirmed' ]
 body:
-  - type: markdown
+  - type: textarea
     attributes:
-      value: |
-        Bug Description |
-        A clear and concise description of the problem or unexpected behavior (attach screenshots/gifs if appropriate). |
-        Clicking on the "Save" button doesn’t save the form data. |
-  - type: markdown
+      label: Bug Description
+      description: A clear and concise description of the problem or unexpected behavior (attach screenshots/gifs if appropriate).
+      placeholder: Clicking on the "Save" button doesn’t save the form data.
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
     attributes:
-      value: |
-         Steps to Reproduce |
-         Provide a step-by-step description of how to reproduce the issue. Include code snippets or links to repositories when applicable.|
-         label: |
-           Example: |
-             1. Go to '...' |
-             2. Click on '...' |
-             3. Scroll down to '...' |
-             4. See error |
-  - type: markdown
+      label: Steps to Reproduce
+      description: Provide a step-by-step description of how to reproduce the issue. Include code snippets or links to repositories when applicable.
+      placeholder: |
+        Example:
+          1. Create an Article collection type in your Strapi app
+          2. Export the API schema
+          3. Make the following query: `...`
+          4. See the error in the console
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
     attributes:
-      value: |
-        Expected Behavior |
-        Describe what you expected to happen instead of the bug. Be as specific as possible. |
+      label: Expected Behavior
+      description: Describe what you expected to happen instead of the bug. Be as specific as possible.
+      render: markdown
+    validations:
+      required: true
+
   - type: input
     attributes:
       label: Version
@@ -32,6 +41,7 @@ body:
       placeholder: 1.0.0
     validations:
       required: true
+
   - type: dropdown
     attributes:
       label: Operating System
@@ -44,6 +54,7 @@ body:
         - Other
     validations:
       required: true
+
   - type: dropdown
     attributes:
       label: Runtime Environment
@@ -55,6 +66,13 @@ body:
         - Other (bun, deno, ...)
     validations:
       required: true
+
+  - type: textarea
+    attributes:
+      label: Logs
+      description: If applicable, the logs you got from using the SDK
+      render: shell
+
   - type: checkboxes
     attributes:
       label: Confirmation Checklist
