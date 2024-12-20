@@ -1,5 +1,5 @@
+import { StrapiSDKValidationError } from '../../../../src';
 import { ApiTokenAuthProvider, ApiTokenAuthProviderOptions } from '../../../../src/auth';
-import { StrapiSDKValidationError } from '../../../../src/errors';
 
 describe('ApiTokenAuthProvider', () => {
   describe('Name', () => {

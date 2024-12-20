@@ -1,4 +1,8 @@
+import createDebug from 'debug';
+
 import type { BaseQueryParams } from '../types/content-api';
+
+const debug = createDebug('sdk:utils:url-helper');
 
 export class URLHelper {
   /**
@@ -42,7 +46,10 @@ export class URLHelper {
    *
    */
   static appendQueryParams(url: string, queryParams?: BaseQueryParams): string {
+    debug('appending query params to %o: %o', url, queryParams);
+
     if (!queryParams) {
+      debug('no query params provided, returning original URL: %o', url);
       return url;
     }
 
@@ -77,6 +84,41 @@ export class URLHelper {
 
     const queryString = params.toString();
 
-    return queryString ? `${url}?${queryString}` : url;
+    const qs = queryString ? `${url}?${queryString}` : url;
+
+    debug('query params appended to url: %o', qs);
+
+    return qs;
+  }
+
+  /**
+   * Converts a given string or URL instance into a human-readable URL path without query parameters.
+   *
+   * Normalizes to include only the origin and path while excluding any query strings or fragments.
+   *
+   * @param input - The input to be converted.
+   *                Can be a string representing the URL or a URL object.
+   *                If it is a string, it should be a valid absolute URL.
+   *                If it is a `URL` instance, the method processes it directly.
+   *
+   * @returns A string representing the origin and path of the provided URL.
+   *          Query parameters and fragments are removed.
+   *
+   * @example
+   * // Using a string URL
+   * const url = 'https://example.com/articles/1?param1=a&param2=b';
+   * const readablePath = URLHelper.toReadablePath(url);
+   * // 'https://example.com/articles/1'
+   *
+   * @example
+   * // Using a URL instance
+   * const url = new URL('https://example.com/articles/1?param1=a&param2=b');
+   * const readablePath = URLHelper.toReadablePath(url);
+   * // 'https://example.com/articles/1'
+   */
+  public static toReadablePath(input: string | URL) {
+    const url = input instanceof URL ? input : new URL(input);
+
+    return `${url.origin}${url.pathname}`;
   }
 }
