@@ -42,6 +42,7 @@
     "clean": "pnpm exec rimraf ./dist",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "lint:fix:dry": "eslint . --fix-dry-run",
     "prepare": "husky",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
