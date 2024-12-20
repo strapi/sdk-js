@@ -1,6 +1,10 @@
+import createDebug from 'debug';
+
 import { HttpClient } from '../../http';
 import { BaseQueryParams, GenericDocumentResponse } from '../../types/content-api';
 import { URLHelper } from '../../utilities';
+
+const debug = createDebug('sdk:ct:single');
 
 /**
  * A service class designed for interacting with a single-type resource in a Strapi app.
@@ -31,6 +35,8 @@ export class SingleTypeManager {
   constructor(singularName: string, httpClient: HttpClient) {
     this._singularName = singularName;
     this._httpClient = httpClient;
+
+    debug('initialized manager for %o', singularName);
   }
 
   /**
@@ -55,10 +61,17 @@ export class SingleTypeManager {
    * ```
    */
   async find(queryParams?: BaseQueryParams): Promise<GenericDocumentResponse> {
-    const response = await this._httpClient.fetch(
-      URLHelper.appendQueryParams(`/${this._singularName}`, queryParams),
-      { method: 'GET' }
-    );
+    debug('finding document for %o', this._singularName);
+
+    let path = `/${this._singularName}`;
+
+    if (queryParams) {
+      path = URLHelper.appendQueryParams(path, queryParams);
+    }
+
+    const response = await this._httpClient.fetch(path, { method: 'GET' });
+
+    debug('the %o document has been fetched', this._singularName);
 
     return response.json();
   }
@@ -92,13 +105,20 @@ export class SingleTypeManager {
     data: Record<string, any>,
     queryParams?: BaseQueryParams
   ): Promise<GenericDocumentResponse> {
-    const response = await this._httpClient.fetch(
-      URLHelper.appendQueryParams(`/${this._singularName}`, queryParams),
-      {
-        method: 'PUT',
-        body: JSON.stringify({ data }),
-      }
-    );
+    debug('updating document for %o', this._singularName);
+
+    let url = `/${this._singularName}`;
+
+    if (queryParams) {
+      url = URLHelper.appendQueryParams(url, queryParams);
+    }
+
+    const response = await this._httpClient.fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify({ data }),
+    });
+
+    debug('the %o document has been updated', this._singularName);
 
     return response.json();
   }
@@ -128,9 +148,16 @@ export class SingleTypeManager {
    * @see URLHelper.appendQueryParams
    */
   async delete(queryParams?: BaseQueryParams): Promise<void> {
-    await this._httpClient.fetch(
-      URLHelper.appendQueryParams(`/${this._singularName}`, queryParams),
-      { method: 'DELETE' }
-    );
+    debug('deleting document for %o', this._singularName);
+
+    let url = `/${this._singularName}`;
+
+    if (queryParams) {
+      url = URLHelper.appendQueryParams(url, queryParams);
+    }
+
+    await this._httpClient.fetch(url, { method: 'DELETE' });
+
+    debug('the %o document has been deleted', this._singularName);
   }
 }

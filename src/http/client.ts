@@ -1,3 +1,5 @@
+import createDebug from 'debug';
+
 import { AuthManager } from '../auth';
 import {
   HTTPAuthorizationError,
@@ -8,11 +10,12 @@ import {
   HTTPNotFoundError,
   HTTPTimeoutError,
 } from '../errors';
+import { URLHelper } from '../utilities';
 import { URLValidator } from '../validators';
 
 import { StatusCode } from './constants';
 
-export type Fetch = typeof globalThis.fetch;
+const debug = createDebug('sdk:http');
 
 /**
  * Strapi SDK's HTTP Client
@@ -36,6 +39,8 @@ export class HttpClient {
     authManager = new AuthManager(),
     urlValidator: URLValidator = new URLValidator()
   ) {
+    debug('initializing new client with base url: %o', baseURL);
+
     // Initialization
     this._baseURL = baseURL;
 
@@ -70,6 +75,8 @@ export class HttpClient {
    * client.setBaseURL('http://newexample.com');
    */
   setBaseURL(url: string): this {
+    debug('setting new base url: %o', url);
+
     this._urlValidator.validate(url);
 
     this._baseURL = url;
@@ -93,6 +100,8 @@ export class HttpClient {
    * client.setAuthStrategy('api-token', { token: 'abc123' });
    */
   setAuthStrategy(strategy: string, options: unknown): this {
+    debug('setting auth strategy to %o', strategy);
+
     this._authManager.setStrategy(strategy, options);
 
     return this;
@@ -103,7 +112,7 @@ export class HttpClient {
    *
    * Attaches the necessary headers, authenticates if required, and handles unauthorized errors.
    *
-   * @param url - The URL to which the request is made, appended to the base URL.
+   * @param path - The path to which the request is made, appended to the base URL.
    * @param [init] - Optional object containing any custom settings to apply to the fetch request.
    *
    * @returns A promise that resolves to the HTTP response.
@@ -115,12 +124,21 @@ export class HttpClient {
    *  .then(response => response.json())
    *  .then(data => console.log(data));
    */
-  async fetch(url: string, init?: RequestInit): Promise<Response> {
-    if (!this._authManager.isAuthenticated) {
+  async fetch(path: string, init?: RequestInit): Promise<Response> {
+    const url = new URL(`${this._baseURL}${path}`);
+    const request = new Request(url, init);
+
+    debug('performing a fetch request to %o', HttpClient.formatRequest(request));
+
+    const { strategy, isAuthenticated } = this._authManager;
+
+    if (strategy && !isAuthenticated) {
+      debug(
+        'an auth strategy is set (%o), but the client is not authenticated, trying to authenticate now',
+        strategy
+      );
       await this._authManager.authenticate(this);
     }
-
-    const request = new Request(`${this._baseURL}${url}`, init);
 
     this.attachHeaders(request);
 
@@ -144,6 +162,7 @@ export class HttpClient {
    */
   private handleFetchError(error: unknown) {
     if (error instanceof HTTPAuthorizationError) {
+      debug('received an authorization error, delegating to the auth manager for handling');
       this._authManager.handleUnauthorizedError();
     }
   }
@@ -166,9 +185,20 @@ export class HttpClient {
   async _fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
     const request = new Request(input, init);
 
+    debug('performing an internal fetch request to %o', HttpClient.formatRequest(request));
+
     const response = await globalThis.fetch(request);
 
     if (!response.ok) {
+      const { status, statusText } = response;
+
+      debug(
+        'server responded to %o with an error status: %o, reason: %o',
+        HttpClient.formatRequest(request),
+        status,
+        statusText
+      );
+
       throw this.mapResponseToHTTPError(response, request);
     }
 
@@ -186,11 +216,18 @@ export class HttpClient {
    * @param request - The HTTP request object to which headers are added.
    */
   private attachHeaders(request: Request) {
-    // Set the content-type header to JSON
-    request.headers.set('Content-Type', 'application/json');
+    this.setContentTypeHeader(request);
 
     // Set auth headers if available, potentially overwrite manually set auth headers
     this._authManager.authenticateRequest(request);
+  }
+
+  private setContentTypeHeader(request: Request) {
+    const [key, value] = ['Content-Type', 'application/json'];
+
+    request.headers.set(key, value);
+
+    debug('%o header set to %o for %o', key, value, HttpClient.formatRequest(request));
   }
 
   /**
@@ -223,5 +260,34 @@ export class HttpClient {
     }
 
     return new HTTPError(response, request);
+  }
+
+  /**
+   * Formats an HTTP request into a concise, human-readable string.
+   *
+   * Extracts the HTTP method and URL from the given `Request` object
+   * and formats them into a readable format for logging or debugging purposes.
+   *
+   * @param request - The HTTP request to format.
+   *                  This parameter must be a valid `Request` object that includes
+   *                  the method and URL fields.
+   *
+   * @returns A formatted string representing the HTTP request in the form `<method> - <URL>`.
+   *          The URL included in the formatted output contains only the origin and path,
+   *          excluding any query parameters or fragments.
+   *
+   * @example
+   * // Example usage of the `formatRequest` method:
+   * const request = new Request('https://example.com/api/items?filter=active', { method: 'POST' });
+   *
+   * const formattedRequest = HttpClient.formatRequest(request);
+   * // Output: "POST - https://example.com/api/items"
+   *
+   * @see {@link URLHelper.toReadablePath}
+   */
+  private static formatRequest(request: Request): string {
+    const { method, url } = request;
+
+    return `${method} - ${URLHelper.toReadablePath(url)}`;
   }
 }

@@ -1,7 +1,11 @@
+import createDebug from 'debug';
+
 import { CollectionTypeManager, SingleTypeManager } from './content-types';
 import { StrapiSDKInitializationError } from './errors';
 import { HttpClient } from './http';
 import { StrapiSDKValidator } from './validators';
+
+const debug = createDebug('sdk:core');
 
 export interface StrapiSDKConfig {
   baseURL: string;
@@ -47,8 +51,12 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
     this._config = config;
     this._validator = validator;
 
+    debug('started the initialization process');
+
     // Validation
     this.preflightValidation();
+
+    debug('user config passed the preflight validation');
 
     // The HTTP client depends on the preflightValidation for the baseURL validity.
     // It could be instantiated before but would throw an invalid URL error
@@ -56,6 +64,8 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
     this._httpClient = httpClientFactory?.(config.baseURL) ?? new HttpClient(config.baseURL);
 
     this.init();
+
+    debug('finished the sdk initialization process');
   }
 
   /**
@@ -87,6 +97,7 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    */
   private preflightValidation() {
     try {
+      debug('validating the configuration');
       this._validator.validateConfig(this._config);
     } catch (e) {
       throw new StrapiSDKInitializationError(e);
@@ -111,6 +122,8 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
   private init() {
     if (this.auth) {
       const { strategy, options } = this.auth;
+
+      debug('setting up the http auth strategy using %o', strategy);
 
       this._httpClient.setAuthStrategy(strategy, options);
     }
