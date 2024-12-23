@@ -1,3 +1,5 @@
+import createDebug from 'debug';
+
 import { HttpClient } from '../../http';
 import {
   GenericDocumentResponse,
@@ -5,6 +7,8 @@ import {
   BaseQueryParams,
 } from '../../types/content-api';
 import { URLHelper } from '../../utilities';
+
+const debug = createDebug('sdk:ct:collection');
 
 /**
  * A service class designed for interacting with a collection-type resource in a Strapi app.
@@ -35,6 +39,8 @@ export class CollectionTypeManager {
   constructor(pluralName: string, httpClient: HttpClient) {
     this._pluralName = pluralName;
     this._httpClient = httpClient;
+
+    debug('initialized manager for %o', pluralName);
   }
 
   /**
@@ -59,12 +65,20 @@ export class CollectionTypeManager {
    * ```
    */
   async find(queryParams?: BaseQueryParams): Promise<GenericMultiDocumentResponse> {
-    const response = await this._httpClient.fetch(
-      URLHelper.appendQueryParams(`/${this._pluralName}`, queryParams),
-      { method: 'GET' }
-    );
+    debug('finding documents for %o', this._pluralName);
 
-    return response.json();
+    let url = `/${this._pluralName}`;
+
+    if (queryParams) {
+      url = URLHelper.appendQueryParams(url, queryParams);
+    }
+
+    const response = await this._httpClient.fetch(url, { method: 'GET' });
+    const json = await response.json();
+
+    debug('found %o %o documents', Number(json?.data?.length), this._pluralName);
+
+    return json;
   }
 
   /**
@@ -93,10 +107,17 @@ export class CollectionTypeManager {
     documentID: string,
     queryParams?: BaseQueryParams
   ): Promise<GenericDocumentResponse> {
-    const response = await this._httpClient.fetch(
-      URLHelper.appendQueryParams(`/${this._pluralName}/${documentID}`, queryParams),
-      { method: 'GET' }
-    );
+    debug('finding a document for %o with id: %o', this._pluralName, documentID);
+
+    let url = `/${this._pluralName}/${documentID}`;
+
+    if (queryParams) {
+      url = URLHelper.appendQueryParams(url, queryParams);
+    }
+
+    const response = await this._httpClient.fetch(url, { method: 'GET' });
+
+    debug('found the %o document with document id %o', this._pluralName, documentID);
 
     return response.json();
   }
@@ -123,13 +144,20 @@ export class CollectionTypeManager {
     data: Record<string, any>,
     queryParams?: BaseQueryParams
   ): Promise<GenericDocumentResponse> {
-    const response = await this._httpClient.fetch(
-      URLHelper.appendQueryParams(`/${this._pluralName}`, queryParams),
-      {
-        method: 'POST',
-        body: JSON.stringify({ data }),
-      }
-    );
+    debug('creating a document for %o', this._pluralName);
+
+    let url = `/${this._pluralName}`;
+
+    if (queryParams) {
+      url = URLHelper.appendQueryParams(url, queryParams);
+    }
+
+    const response = await this._httpClient.fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ data }),
+    });
+
+    debug('created the %o document', this._pluralName);
 
     return response.json();
   }
@@ -162,16 +190,23 @@ export class CollectionTypeManager {
    */
   async update(
     documentID: string,
-    data: Record<string, any>,
+    data: Record<string, unknown>,
     queryParams?: BaseQueryParams
   ): Promise<GenericDocumentResponse> {
-    const response = await this._httpClient.fetch(
-      URLHelper.appendQueryParams(`/${this._pluralName}/${documentID}`, queryParams),
-      {
-        method: 'PUT',
-        body: JSON.stringify({ data }),
-      }
-    );
+    debug('updating a document for %o with id: %o', this._pluralName, documentID);
+
+    let url = `/${this._pluralName}/${documentID}`;
+
+    if (queryParams) {
+      url = URLHelper.appendQueryParams(url, queryParams);
+    }
+
+    const response = await this._httpClient.fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify({ data }),
+    });
+
+    debug('updated the %o document with id %o', this._pluralName, documentID);
 
     return response.json();
   }
@@ -200,9 +235,16 @@ export class CollectionTypeManager {
    * ```
    */
   async delete(documentID: string, queryParams?: BaseQueryParams): Promise<void> {
-    await this._httpClient.fetch(
-      URLHelper.appendQueryParams(`/${this._pluralName}/${documentID}`, queryParams),
-      { method: 'DELETE' }
-    );
+    debug('deleting a document for %o with id: %o', this._pluralName, documentID);
+
+    let url = `/${this._pluralName}/${documentID}`;
+
+    if (queryParams) {
+      url = URLHelper.appendQueryParams(url, queryParams);
+    }
+
+    await this._httpClient.fetch(url, { method: 'DELETE' });
+
+    debug('deleted the %o document with id %o', this._pluralName, documentID);
   }
 }

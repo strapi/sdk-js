@@ -12,5 +12,5 @@ pnpm ts:check &&
 # Run tests with coverage
 pnpm test:cov &&
 
-# Run the clean build
-pnpm build:clean
+# Run the production build
+NODE_ENV=production pnpm build:clean

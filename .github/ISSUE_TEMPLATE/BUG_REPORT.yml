@@ -1,7 +1,7 @@
 name: 🐛 Bug Report
 description: Help us improve this repository by filing a detailed bug report.
 title: '[bug]: '
-labels: [ 'issue: bug', 'status: to be confirmed' ]
+labels: ['issue: bug', 'status: to be confirmed']
 body:
   - type: textarea
     attributes:

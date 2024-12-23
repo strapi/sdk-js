@@ -1,4 +1,8 @@
+import createDebug from 'debug';
+
 import { URLParsingError } from '../errors';
+
+const debug = createDebug('sdk:validators:url');
 
 /**
  * Class representing a URLValidator.
@@ -37,14 +41,18 @@ export class URLValidator {
    */
   validate(url: unknown) {
     if (typeof url !== 'string') {
+      debug('url must be a string, received: %o (%s)', url, typeof url);
       throw new URLParsingError(url);
     }
 
     const canParse = this.canParse(url);
 
     if (!canParse) {
+      debug('url could not be parsed: %o (%s)', url, typeof url);
       throw new URLParsingError(url);
     }
+
+    debug('validated url successfully: %o', url);
   }
 
   /**
