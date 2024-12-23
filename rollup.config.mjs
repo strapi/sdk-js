@@ -67,7 +67,7 @@ const node_build = {
     // Only minify in production
     isProduction && terser(),
     // Analysis and visualization artifacts
-    visualizer({ filename: '.stats/bundle.node.html', template: 'raw-data' }),
+    visualizer({ filename: '.stats/bundle.node.json', template: 'raw-data' }),
   ],
 };
 
@@ -126,7 +126,7 @@ const browser_build = {
     // Minify the code
     terser(),
     // Analysis and visualization artifacts
-    visualizer({ filename: '.stats/bundle.browser.html', template: 'raw-data' }),
+    visualizer({ filename: '.stats/bundle.browser.json', template: 'raw-data' }),
   ],
 };
 

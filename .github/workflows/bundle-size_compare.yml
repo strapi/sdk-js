@@ -1,0 +1,77 @@
+name: 'Bundle Sizes'
+
+on:
+  pull_request:
+  pull_request_target:
+
+jobs:
+  # Build and upload stats for `head`
+  build:
+    name: 'Upload ${{ matrix.target }} stats for ${{ github.event.pull_request.head.ref }}'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        target: [browser, node] # Runs for both browser and node bundles
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup
+
+      - name: Upload stats.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: head-stats-${{ matrix.target }}
+          path: .stats/bundle.${{ matrix.target }}.json
+
+  # Build base stats for comparison
+  build-base:
+    name: 'Upload ${{ matrix.target }} stats for ${{ github.base_ref }}'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        target: [browser, node]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup
+
+      - name: Upload stats.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: base-stats-${{ matrix.target }}
+          path: .stats/bundle.${{ matrix.target }}.json
+
+  # Compare base and head stats.json files
+  compare:
+    name: 'Bundle sizes comparison for ${{ matrix.target }}'
+    runs-on: ubuntu-latest
+    needs: [build, build-base]
+    permissions:
+      pull-requests: write
+    strategy:
+      matrix:
+        target: [browser, node]
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: head-stats-${{ matrix.target }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: base-stats-${{ matrix.target }}
+
+      - uses: twk3/rollup-size-compare-action@v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          current-stats-json-path: ./head-stats-${{ matrix.target }}/bundle.${{ matrix.target }}.json
+          base-stats-json-path: ./base-stats-${{ matrix.target }}/bundle.${{ matrix.target }}.json

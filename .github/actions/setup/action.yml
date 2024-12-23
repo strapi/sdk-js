@@ -1,0 +1,36 @@
+name: "Setup"
+description: "Install Node.js and pnpm and set up caching"
+inputs:
+  node-version:
+    description: "Version of Node.js to use"
+    required: false
+    default: "22"
+  pnpm-version:
+    description: "Version of pnpm to install"
+    required: false
+    default: "9.1.0"
+  env:
+    description: "Build Environment"
+    required: false
+    default: "production"
+runs:
+  using: "composite"
+  steps:
+    - uses: pnpm/action-setup@v4
+      name: Install pnpm
+      with:
+        version: ${{ inputs.pnpm-version }}
+        run_install: true
+
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'pnpm'
+
+    # Build the SDK
+    - name: Project build
+      shell: bash
+      run: pnpm build:clean
+      env:
+        NODE_ENV: ${{ inputs.node_env }}
