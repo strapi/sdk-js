@@ -24,11 +24,16 @@
       "url": "https://strapi.io"
     }
   ],
+  "browser": "./dist/bundle.browser.min.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "require": "./dist/bundle.cjs.js",
-      "import": "./dist/bundle.esm.js"
+      "import": "./dist/bundle.esm.js",
+      "browser": {
+        "import": "./dist/bundle.browser.min.js",
+        "require": "./dist/bundle.browser.min.js"
+      }
     },
     "./package.json": "./package.json"
   },
@@ -58,6 +63,8 @@
     "@commitlint/types": "19.5.0",
     "@rollup/plugin-commonjs": "28.0.1",
     "@rollup/plugin-node-resolve": "15.3.0",
+    "@rollup/plugin-replace": "^6.0.2",
+    "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "12.1.1",
     "@strapi/eslint-config": "0.2.1",
     "@types/debug": "^4.1.12",
@@ -81,7 +88,6 @@
     "npm": ">=6.0.0"
   },
   "dependencies": {
-    "debug": "4.4.0",
-    "supports-color": "10.0.0"
+    "debug": "4.4.0"
   }
 }
