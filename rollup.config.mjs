@@ -71,10 +71,11 @@ const node_build = {
 /**
  * This configuration is designed to bundle the Strapi SDK for browser environments.
  *
- * It produces two outputs in the IIFE format, which are suitable for use in web browsers.
+ * It an output using the IIFE format, which is suitable for use in web browsers.
  *
  * The bundle provides a globally available `strapi` variable and includes source maps for debugging.
- * In production, the bundle is minified for better performance.
+ *
+ * The bundle is minified for better performance.
  *
  * Outputs:
  * - IIFE Minified (dist/bundle.browser.min.js): a minified browser build, optimized for performance, with source maps.
@@ -97,7 +98,6 @@ const browser_build = {
       format: 'iife',
       name: 'strapi',
       sourcemap: true,
-      plugins: [terser()],
       globals: {
         debug: () => () => {}, // Override debug to a no-op function
       },
@@ -120,6 +120,7 @@ const browser_build = {
       'process.browser': true,
       preventAssignment: true,
     }),
+    terser(),
   ],
 };
 
