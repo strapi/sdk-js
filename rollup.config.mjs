@@ -3,6 +3,7 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -65,6 +66,8 @@ const node_build = {
     }),
     // Only minify in production
     isProduction && terser(),
+    // Analysis and visualization artifacts
+    visualizer({ filename: '.stats/bundle.node.html', template: 'raw-data' }),
   ],
 };
 
@@ -120,7 +123,10 @@ const browser_build = {
       'process.browser': true,
       preventAssignment: true,
     }),
+    // Minify the code
     terser(),
+    // Analysis and visualization artifacts
+    visualizer({ filename: '.stats/bundle.browser.html', template: 'raw-data' }),
   ],
 };
 

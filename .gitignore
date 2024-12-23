@@ -84,6 +84,7 @@ nbproject
 
 .coverage
 .node_history
+.stats
 dist
 lcov.info
 lib-cov
