@@ -1,20 +1,20 @@
-name: "Setup"
-description: "Install Node.js and pnpm and set up caching"
+name: 'Setup'
+description: 'Install Node.js and pnpm and set up caching'
 inputs:
   node-version:
-    description: "Version of Node.js to use"
+    description: 'Version of Node.js to use'
     required: false
-    default: "22"
+    default: '22'
   pnpm-version:
-    description: "Version of pnpm to install"
+    description: 'Version of pnpm to install'
     required: false
-    default: "9.1.0"
+    default: '9.1.0'
   env:
-    description: "Build Environment"
+    description: 'Build Environment'
     required: false
-    default: "production"
+    default: 'production'
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - uses: pnpm/action-setup@v4
       name: Install pnpm
