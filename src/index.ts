@@ -3,6 +3,8 @@ import { StrapiSDKValidator } from './validators';
 
 import type { StrapiSDKConfig } from './sdk';
 
+// @ts-ignore
+export * as React from 'react';
 export * from './errors';
 
 /**

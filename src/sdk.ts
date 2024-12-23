@@ -268,3 +268,58 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
     return new SingleTypeManager(resource, this._httpClient);
   }
 }
+
+/**
+ * A manager class to handle generic operations within the SDK.
+ *
+ * This class provides utility functions or shared logic that can be reused across different components.
+ *
+ * @example
+ * ```typescript
+ * const genericManager = new GenericManager();
+ * genericManager.performOperation();
+ * ```
+ */
+export class GenericManager {
+  private readonly _httpClient: HttpClient;
+
+  /**
+   * Initializes the `GenericManager` with the HTTP client for making requests.
+   *
+   * @param httpClient - The HTTP client instance to use for requests.
+   */
+  constructor(httpClient: HttpClient) {
+    this._httpClient = httpClient;
+  }
+
+  /**
+   * Performs a generic operation using the provided endpoint and payload.
+   *
+   * This method demonstrates how shared logic can be implemented.
+   *
+   * @param endpoint - The specific endpoint to interact with.
+   * @param payload - The data to send with the request.
+   *
+   * @returns A promise resolving to the server's response.
+   *
+   * @example
+   * ```typescript
+   * const response = await genericManager.performOperation('/custom-endpoint', { key: 'value' });
+   * console.log(response);
+   * ```
+   */
+  async performOperation(endpoint: string, payload: Record<string, any>): Promise<any> {
+    try {
+      const response = await this._httpClient.fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      return response.json();
+    } catch (error) {
+      throw new Error(`Failed to perform operation on ${endpoint}: ${error}`);
+    }
+  }
+}
