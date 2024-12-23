@@ -72,6 +72,7 @@ jobs:
 
       - uses: twk3/rollup-size-compare-action@v1.0.0
         with:
+          title: ${{ matrix.target }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           current-stats-json-path: ./head-stats-${{ matrix.target }}/bundle.${{ matrix.target }}.json
           base-stats-json-path: ./base-stats-${{ matrix.target }}/bundle.${{ matrix.target }}.json
