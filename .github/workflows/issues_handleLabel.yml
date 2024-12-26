@@ -50,7 +50,7 @@ jobs:
 
             Hello @${{ github.event.issue.user.login }},
 
-            We ask that you please follow the [issue template](https://raw.githubusercontent.com/strapi/strapi/master/.github/ISSUE_TEMPLATE/BUG_REPORT.md).
+            We ask that you please follow the [issue template](https://github.com/strapi/sdk-js/issues/new/choose).
             A proper issue submission let's us better understand the origin of your bug and therefore help you. We will reopen your issue when we receive the issue following the template guidelines and properly fill out the template. You can see the template guidelines for bug reports [here](https://github.com/strapi/strapi/blob/master/CONTRIBUTING.md#reporting-an-issue).
 
             Please update the issue with the template and we can reopen this report.
@@ -82,8 +82,6 @@ jobs:
 
             - questions should be directed to [our forum](https://forum.strapi.io) or our [Discord](https://discord.strapi.io)
             - feature requests should be directed to our [feedback and feature request database](https://feedback.strapi.io)
-
-            Please see the following contributing guidelines for asking a question [here](https://github.com/strapi/strapi/blob/master/CONTRIBUTING.md#reporting-an-issue).
 
             Thank you.
       - name: 'Close: redirect question to community'
