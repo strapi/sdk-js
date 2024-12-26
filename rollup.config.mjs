@@ -71,7 +71,7 @@ const node_build = {
 /**
  * This configuration is designed to bundle the Strapi SDK for browser environments.
  *
- * It an output using the IIFE format, which is suitable for use in web browsers.
+ * It outputs using the IIFE format, which is suitable for use in web browsers.
  *
  * The bundle provides a globally available `strapi` variable and includes source maps for debugging.
  *
