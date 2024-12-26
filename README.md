@@ -1,4 +1,4 @@
-<p style="text-align: center">
+<p align="center">
   <a href="https://strapi.io/#gh-light-mode-only">
     <img src="https://strapi.io/assets/strapi-logo-dark.svg" width="318px" alt="Strapi logo" />
   </a>
@@ -7,12 +7,12 @@
   </a>
 </p>
 
-<h2 style="text-align: center">Manage Your Strapi Content From Anywhere 🚀</h2>
-<p style="text-align: center">Connect your JavaScript/TypeScript apps to a flexible and fully customizable Strapi backend with ease.</p>
-<p style="text-align: center"><a href="https://github.com/strapi/strapi">CMS Repository</a> - <a href="https://strapi.io">Website</a></p>
+<h2 align="center">Manage Your Strapi Content From Anywhere 🚀</h2>
+<p align="center">Connect your JavaScript/TypeScript apps to a flexible and fully customizable Strapi backend with ease.</p>
+<p align="center"><a href="https://github.com/strapi/strapi">CMS Repository</a> - <a href="https://strapi.io">Website</a></p>
 <br />
 
-<p style="text-align: center">
+<p align="center">
   <a href="https://www.npmjs.org/package/@strapi/sdk-js">
     <img src="https://img.shields.io/npm/v/@strapi/sdk-js/latest.svg" alt="NPM Version" />
   </a>
@@ -42,7 +42,7 @@
 4. [Resource Managers](#-resource-managers)
    - [`.collection()`](#collectionresource)
    - [`.single()`](#singleresource)
-5. [Examples](#-examples)
+5. [Debug](#-debug)
 
 ## 🛠 Getting started
 
@@ -94,7 +94,7 @@ Alternatively, use a `<script>` tag in a browser environment:
 <script src="https://cdn.jsdelivr.net/npm/@strapi/sdk-js"></script>
 
 <script>
-  const sdk = strapiSDK({ baseURL: 'http://localhost:1337/api' });
+  const sdk = strapi.strapiSDK({ baseURL: 'http://localhost:1337/api' });
 </script>
 ```
 
@@ -199,36 +199,56 @@ const updatedHomepage = await homepage.update(
 await homepage.delete();
 ```
 
-## 💡 Examples
+## 🐛 Debug
 
-Here’s how to combine `.collection()` and `.single()` methods in a real-world scenario:
+This section provides guidance on enabling and managing debug logs for the SDK,
+powered by [debug](https://github.com/debug-js/debug/).
 
-```typescript
-const sdk = strapiSDK({
-  baseURL: 'http://localhost:1337/api',
-  auth: {
-    strategy: 'api-token',
-    options: { token: 'your-api-token-here' },
-  },
-});
+### Node.js Debugging
 
-async function main() {
-  // Work with collections
-  const articles = sdk.collection('articles');
-  const newArticle = await articles.create({ title: 'Hello World', content: '...' });
-  console.log('Created Article:', newArticle);
+In **Node.js bundles** (`cjs`, `esm`), debugging capabilities are always available to use.
 
-  const allArticles = await articles.find({ sort: 'createdAt:desc' });
-  console.log('All Articles:', allArticles);
+You can turn on or off debug logs using the `DEBUG` environment variable:
 
-  // Work with single types
-  const homepage = sdk.single('homepage');
-  const homepageContent = await homepage.find();
-  console.log('Homepage Content:', homepageContent);
+```bash
+# Enable logs for all namespaces
+DEBUG=*
 
-  const updatedHomepage = await homepage.update({ title: 'Welcome to the New Homepage' });
-  console.log('Updated Homepage:', updatedHomepage);
-}
+# Enable logs for a specific namespace
+DEBUG=sdk:http
 
-main();
+# Turn off logs
+unset DEBUG
 ```
+
+### Browser Debugging
+
+For **browser environments**, debug capabilities are intentionally turned off to optimize the bundle size.
+
+### Usage Overview
+
+The `debug` tool allows you to control logs using wildcard patterns (`*`):
+
+- `*`: enable all logs.
+- `sdk:module`: enable logs for a specific module.
+- `sdk:module1,sdk:module2`: enable logs for multiple modules.
+- `sdk:*`: match all namespaces under `sdk`.
+- `sdk:*,-sdk:module2`: enable all logs except those from `sdk:module2`.
+
+### Namespaces
+
+Below is a list of available namespaces to use:
+
+| Namespace                             | Description                                                                               |
+|---------------------------------------|-------------------------------------------------------------------------------------------|
+| `sdk:core`                            | Logs SDK initialization, configuration validation, and HTTP client setup.                 |
+| `sdk:validators:sdk`                  | Logs details related to SDK configuration validation.                                     |
+| `sdk:validators:url`                  | Logs URL validation processes.                                                            |
+| `sdk:http`                            | Logs HTTP client setup, request processing, and response/error handling.                  |
+| `sdk:auth:factory`                    | Logs the registration and creation of authentication providers.                           |
+| `sdk:auth:manager`                    | Logs authentication lifecycle management.                                                 |
+| `sdk:auth:provider:api-token`         | Logs operations related to API token authentication.                                      |
+| `sdk:auth:provider:users-permissions` | Logs operations related to user and permissions-based authentication.                     |
+| `sdk:ct:collection`                   | Logs interactions with collection-type content managers.                                  |
+| `sdk:ct:single`                       | Logs interactions with single-type content managers.                                      |
+| `sdk:utils:url-helper`                | Logs URL helper utility operations (e.g., appending query parameters or formatting URLs). |
