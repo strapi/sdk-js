@@ -1,8 +1,12 @@
+import createDebug from 'debug';
+
 import { StrapiSDKValidationError, URLValidationError } from '../errors';
 
 import { URLValidator } from './url';
 
 import type { StrapiSDKConfig } from '../sdk';
+
+const debug = createDebug('sdk:validators:sdk');
 
 /**
  * Provides the ability to validate the configuration used for initializing the Strapi SDK.
@@ -28,18 +32,24 @@ export class StrapiSDKValidator {
    * @throws {StrapiSDKValidationError} If the configuration is invalid, or if the baseURL is invalid.
    */
   validateConfig(config: StrapiSDKConfig) {
+    debug('validating sdk config');
+
     if (
       config === undefined ||
       config === null ||
       Array.isArray(config) ||
       typeof config !== 'object'
     ) {
+      debug(`provided sdk configuration is not a valid object: %o (%s)`, config, typeof config);
+
       throw new StrapiSDKValidationError(
         new TypeError('The provided configuration is not a valid object.')
       );
     }
 
     this.validateBaseURL(config.baseURL);
+
+    debug('validated sdk config successfully');
   }
 
   /**
@@ -51,9 +61,11 @@ export class StrapiSDKValidator {
    */
   private validateBaseURL(url: unknown) {
     try {
+      debug('validating base url');
       this._urlValidator.validate(url);
     } catch (e) {
       if (e instanceof URLValidationError) {
+        debug('failed to validate sdk config, invalid base url %o', url);
         throw new StrapiSDKValidationError(e);
       }
 

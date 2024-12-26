@@ -37,7 +37,7 @@ describe('StrapiSDK', () => {
       const config = {
         baseURL: 'http://localhost:1337/api',
         auth: { strategy: MockAuthProvider.identifier, options: {} },
-      };
+      } satisfies StrapiSDKConfig;
 
       const mockValidator = new MockStrapiSDKValidator();
 
@@ -59,7 +59,7 @@ describe('StrapiSDK', () => {
 
     it('should throw an error on invalid baseURL', () => {
       // Arrange
-      const config = { baseURL: 'invalid-url' };
+      const config = { baseURL: 'invalid-url' } satisfies StrapiSDKConfig;
 
       const mockValidator = new MockStrapiSDKValidator();
 
@@ -75,7 +75,7 @@ describe('StrapiSDK', () => {
       let sdk!: StrapiSDK;
 
       const baseURL = 'http://example.com';
-      const config: StrapiSDKConfig = { baseURL };
+      const config: StrapiSDKConfig = { baseURL } satisfies StrapiSDKConfig;
       const expectedError = new StrapiSDKInitializationError(new Error('Unexpected error'));
 
       const validateSpy = jest.spyOn(FlakyURLValidator.prototype, 'validate');
@@ -107,7 +107,7 @@ describe('StrapiSDK', () => {
     it('should return a new CollectionTypeManager instance when given a resource name', () => {
       // Arrange
       const resource = 'articles';
-      const config = { baseURL: 'http://localhost:1337/api' };
+      const config = { baseURL: 'http://localhost:1337/api' } satisfies StrapiSDKConfig;
 
       const mockValidator = new MockStrapiSDKValidator();
       const sdk = new StrapiSDK(config, mockValidator, mockHttpClientFactory);
@@ -125,7 +125,7 @@ describe('StrapiSDK', () => {
     it('should return a new SingleTypeManager instance when given a resource name', () => {
       // Arrange
       const resource = 'homepage';
-      const config = { baseURL: 'http://localhost:1337/api' };
+      const config = { baseURL: 'http://localhost:1337/api' } satisfies StrapiSDKConfig;
 
       const mockValidator = new MockStrapiSDKValidator();
       const sdk = new StrapiSDK(config, mockValidator, mockHttpClientFactory);
@@ -144,7 +144,7 @@ describe('StrapiSDK', () => {
 
   it('should fetch data correctly with fetch method', async () => {
     // Arrange
-    const config = { baseURL: 'http://localhost:1337/api' };
+    const config = { baseURL: 'http://localhost:1337/api' } satisfies StrapiSDKConfig;
 
     const fetchSpy = jest.spyOn(MockHttpClient.prototype, 'fetch');
 
@@ -161,7 +161,7 @@ describe('StrapiSDK', () => {
 
   it('should retrieve baseURL correctly from config', () => {
     // Arrange
-    const config = { baseURL: 'http://localhost:1337/api' };
+    const config = { baseURL: 'http://localhost:1337/api' } satisfies StrapiSDKConfig;
 
     const mockValidator = new MockStrapiSDKValidator();
 

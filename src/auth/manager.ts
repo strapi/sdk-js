@@ -1,4 +1,7 @@
+import createDebug from 'debug';
+
 import { HttpClient } from '../http';
+import { URLHelper } from '../utilities';
 
 import { AuthProviderFactory } from './factory';
 import { ApiTokenAuthProvider, UsersPermissionsAuthProvider } from './providers';
@@ -8,6 +11,8 @@ import type {
   AuthProvider,
   UsersPermissionsAuthProviderOptions,
 } from './providers';
+
+const debug = createDebug('sdk:auth:manager');
 
 /**
  * Manages authentication by using different authentication providers and strategies.
@@ -26,6 +31,8 @@ export class AuthManager {
     // Dependencies
     authProviderFactory: AuthProviderFactory = new AuthProviderFactory()
   ) {
+    debug('initializing a new auth manager');
+
     // Initialization
     this._authProviderFactory = authProviderFactory;
 
@@ -62,6 +69,8 @@ export class AuthManager {
    * ```
    */
   handleUnauthorizedError() {
+    debug('unauthorized error encountered, resetting authentication status');
+
     this._isAuthenticated = false;
   }
 
@@ -77,6 +86,8 @@ export class AuthManager {
    * ```
    */
   setStrategy(strategy: string, options: unknown) {
+    debug('setting strategy to %o', strategy);
+
     this._authProvider = this._authProviderFactory.create(strategy, options);
   }
 
@@ -96,16 +107,21 @@ export class AuthManager {
    */
   async authenticate(http: HttpClient) {
     if (this._authProvider === undefined) {
+      debug('no auth provider is set, skipping authentication');
       this._isAuthenticated = false;
-
       return;
     }
 
     try {
+      debug('trying to authenticate with %s', this._authProvider.name);
+
       await this._authProvider.authenticate(http);
 
       this._isAuthenticated = true;
+
+      debug('authentication successful');
     } catch {
+      debug('authentication failed');
       this._isAuthenticated = false;
     }
   }
@@ -130,7 +146,14 @@ export class AuthManager {
 
       for (const [key, value] of Object.entries(headers)) {
         request.headers.set(key, value);
+
+        debug('added %o header to %o query', key, URLHelper.toReadablePath(request.url));
       }
+    } else {
+      debug(
+        'no auth provider is set. skipping headers for %s query',
+        URLHelper.toReadablePath(request.url)
+      );
     }
   }
 
@@ -144,6 +167,8 @@ export class AuthManager {
    * @note This method is called internally during initialization to set up the available strategies.
    */
   protected registerDefaultProviders() {
+    debug('registering default authentication providers');
+
     this._authProviderFactory
       // API Token
       .register(
@@ -155,5 +180,7 @@ export class AuthManager {
         UsersPermissionsAuthProvider.identifier,
         (options: UsersPermissionsAuthProviderOptions) => new UsersPermissionsAuthProvider(options)
       );
+
+    debug('default authentication providers registered successfully');
   }
 }

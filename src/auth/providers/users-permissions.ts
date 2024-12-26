@@ -1,7 +1,11 @@
+import createDebug from 'debug';
+
 import { StrapiSDKValidationError } from '../../errors';
 import { HttpClient } from '../../http';
 
 import { AbstractAuthProvider } from './abstract';
+
+const debug = createDebug('sdk:auth:provider:users-permissions');
 
 const USERS_PERMISSIONS_AUTH_STRATEGY_IDENTIFIER = 'users-permissions';
 
@@ -54,11 +58,15 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
   }
 
   preflightValidation() {
+    debug('validating provider configuration');
+
     if (
       this._options === undefined ||
       this._options === null ||
       typeof this._options !== 'object'
     ) {
+      debug('invalid options provided: %s (%s)', this._options, typeof this._options);
+
       throw new StrapiSDKValidationError(
         'Missing valid options for initializing the Users & Permissions auth provider.'
       );
@@ -67,16 +75,22 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
     const { identifier, password } = this._options;
 
     if ((typeof identifier as unknown) !== 'string') {
+      debug('invalid identifier provided: %s (%s)', identifier, typeof identifier);
+
       throw new StrapiSDKValidationError(
         `The "identifier" option must be a string, but got "${typeof identifier}"`
       );
     }
 
     if ((typeof password as unknown) !== 'string') {
+      debug('invalid password provided: %s (%s)', password, typeof password);
+
       throw new StrapiSDKValidationError(
         `The "password" option must be a string, but got "${typeof password}"`
       );
     }
+
+    debug('provider configuration validated successfully');
   }
 
   get headers(): Record<string, string> {
@@ -89,17 +103,24 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
 
   async authenticate(httpClient: HttpClient): Promise<void> {
     const { baseURL } = httpClient;
+    const { identifier, password } = this.credentials;
+
     const localAuthURL = `${baseURL}/auth/local`;
+
+    debug('trying to authenticate with %o as %o at %o ', this.name, identifier, localAuthURL);
 
     const request = new Request(localAuthURL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(this.credentials),
+      body: JSON.stringify({ identifier, password }),
     });
 
     // Make sure to use the HttpClient's "_fetch" method to not perform authentication in an infinite loop.
     const response = await httpClient._fetch(request);
     const data = await response.json();
+
+    const obfuscatedToken = data.jwt.slice(0, 5) + '...' + data.jwt.slice(-5);
+    debug('authentication successful for %o (%o)', identifier, obfuscatedToken);
 
     this._token = data.jwt;
   }

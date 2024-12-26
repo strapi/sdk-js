@@ -1,6 +1,10 @@
+import createDebug from 'debug';
+
 import { StrapiSDKValidationError } from '../../errors';
 
 import { AbstractAuthProvider } from './abstract';
+
+const debug = createDebug('sdk:auth:provider:api-token');
 
 const API_TOKEN_AUTH_STRATEGY_IDENTIFIER = 'api-token';
 
@@ -32,14 +36,21 @@ export class ApiTokenAuthProvider extends AbstractAuthProvider<ApiTokenAuthProvi
   }
 
   preflightValidation(): void {
+    debug('validating provider configuration');
+
     if ((typeof this.token as unknown) !== 'string' || this.token.trim().length === 0) {
+      debug('invalid api token provided: %o (%o)', this.token, typeof this.token);
+
       throw new StrapiSDKValidationError(
         `A valid API token is required when using the api-token auth strategy. Got "${this.token}"`
       );
     }
+
+    debug('provider configuration validated successfully');
   }
 
   authenticate(): Promise<void> {
+    debug('no authentication step is required for the %o auth strategy, skipping', this.name);
     return Promise.resolve(); // does nothing
   }
 

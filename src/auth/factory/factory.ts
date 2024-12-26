@@ -1,7 +1,11 @@
+import createDebug from 'debug';
+
 import { StrapiSDKError } from '../../errors';
 
 import type { AuthProviderCreator, AuthProviderMap, CreateAuthProviderParams } from './types';
 import type { AuthProvider } from '../providers';
+
+const debug = createDebug('sdk:auth:factory');
 
 /**
  * A factory class responsible for creating and managing authentication providers.
@@ -43,10 +47,15 @@ export class AuthProviderFactory<T_Providers extends AuthProviderMap = {}> {
     const creator = this._registry.get(authStrategy);
 
     if (!creator) {
+      debug('the %o auth strategy is not registered, skipping', authStrategy);
       throw new StrapiSDKError(`Auth strategy "${authStrategy}" is not supported.`);
     }
 
-    return creator(options);
+    const instance = creator(options);
+
+    debug('successfully instantiated a new %o provider', authStrategy);
+
+    return instance;
   }
 
   /**
@@ -77,6 +86,8 @@ export class AuthProviderFactory<T_Providers extends AuthProviderMap = {}> {
     creator: T_Creator
   ) {
     this._registry.set(strategy, creator);
+
+    debug('registered a new auth strategy: %o', strategy);
 
     return this as AuthProviderFactory<T_Providers & { [key in T_Strategy]: typeof creator }>;
   }
