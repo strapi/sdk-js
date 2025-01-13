@@ -73,7 +73,7 @@ export class CollectionTypeManager {
       url = URLHelper.appendQueryParams(url, queryParams);
     }
 
-    const response = await this._httpClient.fetch(url, { method: 'GET' });
+    const response = await this._httpClient.get(url);
     const json = await response.json();
 
     debug('found %o %o documents', Number(json?.data?.length), this._pluralName);
@@ -115,7 +115,7 @@ export class CollectionTypeManager {
       url = URLHelper.appendQueryParams(url, queryParams);
     }
 
-    const response = await this._httpClient.fetch(url, { method: 'GET' });
+    const response = await this._httpClient.get(url);
 
     debug('found the %o document with document id %o', this._pluralName, documentID);
 
@@ -152,10 +152,7 @@ export class CollectionTypeManager {
       url = URLHelper.appendQueryParams(url, queryParams);
     }
 
-    const response = await this._httpClient.fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({ data }),
-    });
+    const response = await this._httpClient.post(url, JSON.stringify({ data }));
 
     debug('created the %o document', this._pluralName);
 
@@ -201,10 +198,7 @@ export class CollectionTypeManager {
       url = URLHelper.appendQueryParams(url, queryParams);
     }
 
-    const response = await this._httpClient.fetch(url, {
-      method: 'PUT',
-      body: JSON.stringify({ data }),
-    });
+    const response = await this._httpClient.put(url, JSON.stringify({ data }));
 
     debug('updated the %o document with id %o', this._pluralName, documentID);
 
@@ -243,7 +237,7 @@ export class CollectionTypeManager {
       url = URLHelper.appendQueryParams(url, queryParams);
     }
 
-    await this._httpClient.fetch(url, { method: 'DELETE' });
+    await this._httpClient.delete(url);
 
     debug('deleted the %o document with id %o', this._pluralName, documentID);
   }
