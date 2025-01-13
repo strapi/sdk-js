@@ -1,10 +1,10 @@
 import createDebug from 'debug';
 
-import { StrapiSDKValidationError } from '../../errors';
+import { StrapiValidationError } from '../../errors';
 
 import { AbstractAuthProvider } from './abstract';
 
-const debug = createDebug('sdk:auth:provider:api-token');
+const debug = createDebug('strapi:auth:provider:api-token');
 
 const API_TOKEN_AUTH_STRATEGY_IDENTIFIER = 'api-token';
 
@@ -41,7 +41,7 @@ export class ApiTokenAuthProvider extends AbstractAuthProvider<ApiTokenAuthProvi
     if ((typeof this._token as unknown) !== 'string' || this._token.trim().length === 0) {
       debug('invalid api token provided: %o (%o)', this._token, typeof this._token);
 
-      throw new StrapiSDKValidationError(
+      throw new StrapiValidationError(
         `A valid API token is required when using the api-token auth strategy. Got "${this._token}"`
       );
     }

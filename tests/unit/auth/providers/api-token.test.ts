@@ -1,4 +1,4 @@
-import { StrapiSDKValidationError } from '../../../../src';
+import { StrapiValidationError } from '../../../../src';
 import { ApiTokenAuthProvider, ApiTokenAuthProviderOptions } from '../../../../src/auth';
 
 describe('ApiTokenAuthProvider', () => {
@@ -32,7 +32,7 @@ describe('ApiTokenAuthProvider', () => {
       const token = '    ';
 
       // Act & Assert
-      expect(() => new ApiTokenAuthProvider({ token })).toThrow(StrapiSDKValidationError);
+      expect(() => new ApiTokenAuthProvider({ token })).toThrow(StrapiValidationError);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -50,7 +50,7 @@ describe('ApiTokenAuthProvider', () => {
       const options = { token: null } as unknown as ApiTokenAuthProviderOptions;
 
       // Act & Assert
-      expect(() => new ApiTokenAuthProvider(options)).toThrow(StrapiSDKValidationError);
+      expect(() => new ApiTokenAuthProvider(options)).toThrow(StrapiValidationError);
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });

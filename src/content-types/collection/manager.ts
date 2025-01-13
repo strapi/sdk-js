@@ -8,7 +8,7 @@ import {
 } from '../../types/content-api';
 import { URLHelper } from '../../utilities';
 
-const debug = createDebug('sdk:ct:collection');
+const debug = createDebug('strapi:ct:collection');
 
 /**
  * A service class designed for interacting with a collection-type resource in a Strapi app.

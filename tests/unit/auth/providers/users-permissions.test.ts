@@ -1,4 +1,4 @@
-import { HTTPBadRequestError, StrapiSDKValidationError } from '../../../../src';
+import { HTTPBadRequestError, StrapiValidationError } from '../../../../src';
 import {
   UsersPermissionsAuthProvider,
   UsersPermissionsAuthProviderOptions,
@@ -74,7 +74,7 @@ describe('UsersPermissionsAuthProvider', () => {
           new UsersPermissionsAuthProvider(
             options as unknown as UsersPermissionsAuthProviderOptions
           )
-      ).toThrow(StrapiSDKValidationError);
+      ).toThrow(StrapiValidationError);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 

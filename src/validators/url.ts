@@ -2,7 +2,7 @@ import createDebug from 'debug';
 
 import { URLParsingError } from '../errors';
 
-const debug = createDebug('sdk:validators:url');
+const debug = createDebug('strapi:validators:url');
 
 /**
  * Class representing a URLValidator.

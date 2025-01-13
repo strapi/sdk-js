@@ -2,16 +2,16 @@ import createDebug from 'debug';
 
 import { AuthManager } from './auth';
 import { CollectionTypeManager, SingleTypeManager } from './content-types';
-import { StrapiSDKInitializationError } from './errors';
+import { StrapiInitializationError } from './errors';
 import { HttpClient } from './http';
 import { AuthInterceptors, HttpInterceptors } from './interceptors';
-import { StrapiSDKValidator } from './validators';
+import { StrapiConfigValidator } from './validators';
 
 import type { HttpClientConfig } from './http';
 
-const debug = createDebug('sdk:core');
+const debug = createDebug('strapi:core');
 
-export interface StrapiSDKConfig {
+export interface StrapiConfig {
   /** The base URL of the Strapi content API, required for all SDK operations. */
   baseURL: string;
 
@@ -42,12 +42,12 @@ export interface AuthConfig<T = unknown> {
  *
  * @template T_Config - Configuration type inferred from the user-provided SDK configuration
  */
-export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig> {
+export class Strapi<const T_Config extends StrapiConfig = StrapiConfig> {
   /** @internal */
   private readonly _config: T_Config;
 
   /** @internal */
-  private readonly _validator: StrapiSDKValidator;
+  private readonly _validator: StrapiConfigValidator;
 
   /** @internal */
   private readonly _authManager: AuthManager;
@@ -61,7 +61,7 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
     config: T_Config,
 
     // Dependencies
-    validator: StrapiSDKValidator = new StrapiSDKValidator(),
+    validator: StrapiConfigValidator = new StrapiConfigValidator(),
     authManager: AuthManager = new AuthManager(),
 
     // Lazy dependencies
@@ -100,10 +100,10 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    * internal SDK validator. It is invoked during the initialization process to confirm that
    * all necessary parts are correctly configured before effectively using the SDK.
    *
-   * @throws {StrapiSDKInitializationError} If the configuration validation fails, indicating an issue with the SDK initialization process.
+   * @throws {StrapiInitializationError} If the configuration validation fails, indicating an issue with the SDK initialization process.
    *
    * @example
-   * // Creating a new instance of StrapiSDK which triggers preflightValidation
+   * // Creating a new instance of the SDK which triggers preflightValidation
    * const config = {
    *   baseURL: 'https://example.com',
    *   auth: {
@@ -111,7 +111,7 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    *     options: { token: 'your-token-here' }
    *   }
    * };
-   * const sdk = new StrapiSDK(config);
+   * const sdk = new Strapi(config);
    *
    * // The preflightValidation is automatically called within the constructor
    * // to ensure the provided config is valid prior to any further setup.
@@ -125,7 +125,7 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
       debug('validating the configuration');
       this._validator.validateConfig(this._config);
     } catch (e) {
-      throw new StrapiSDKInitializationError(e);
+      throw new StrapiInitializationError(e);
     }
   }
 
@@ -226,7 +226,7 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    *
    * @example
    * const config = { baseURL: 'http://localhost:1337/api' };
-   * const sdk = new StrapiSDK(config);
+   * const sdk = new Strapi(config);
    *
    * console.log(sdk.baseURL); // Output: http://localhost:1337
    */
@@ -245,7 +245,8 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    * @example
    * ```typescript
    * // Create the SDK instance
-   * const sdk = strapiSDK({ baseURL: 'http://localhost:1337/api' );
+   * const config = { baseURL: 'http://localhost:1337/api' };
+   * const sdk = new Strapi(config);
    *
    * // Perform a custom fetch query
    * const response = await sdk.fetch('/categories');
@@ -279,7 +280,8 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    * @example
    * ```typescript
    * // Initialize the SDK with required configuration
-   * const sdk = new StrapiSDK({ baseURL: 'http://localhost:1337/api' });
+   * const config = { baseURL: 'http://localhost:1337/api' };
+   * const sdk = new Strapi(config);
    *
    * // Retrieve a CollectionTypeManager for the 'articles' resource
    * const articles = sdk.collection('articles');
@@ -301,7 +303,7 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    * ```
    *
    * @see CollectionTypeManager
-   * @see StrapiSDK
+   * @see Strapi
    */
   collection(resource: string) {
     return new CollectionTypeManager(resource, this._httpClient);
@@ -336,7 +338,7 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    * ```
    *
    * @see SingleTypeManager
-   * @see StrapiSDK
+   * @see Strapi
    */
   single(resource: string) {
     return new SingleTypeManager(resource, this._httpClient);

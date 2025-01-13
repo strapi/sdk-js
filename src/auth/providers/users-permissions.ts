@@ -1,11 +1,11 @@
 import createDebug from 'debug';
 
-import { StrapiSDKValidationError } from '../../errors';
+import { StrapiValidationError } from '../../errors';
 import { HttpClient } from '../../http';
 
 import { AbstractAuthProvider } from './abstract';
 
-const debug = createDebug('sdk:auth:provider:users-permissions');
+const debug = createDebug('strapi:auth:provider:users-permissions');
 
 const USERS_PERMISSIONS_AUTH_STRATEGY_IDENTIFIER = 'users-permissions';
 const LOCAL_AUTH_ENDPOINT = '/auth/local';
@@ -68,7 +68,7 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
     ) {
       debug('invalid options provided: %s (%s)', this._options, typeof this._options);
 
-      throw new StrapiSDKValidationError(
+      throw new StrapiValidationError(
         'Missing valid options for initializing the Users & Permissions auth provider.'
       );
     }
@@ -78,7 +78,7 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
     if ((typeof identifier as unknown) !== 'string') {
       debug('invalid identifier provided: %s (%s)', identifier, typeof identifier);
 
-      throw new StrapiSDKValidationError(
+      throw new StrapiValidationError(
         `The "identifier" option must be a string, but got "${typeof identifier}"`
       );
     }
@@ -86,7 +86,7 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
     if ((typeof password as unknown) !== 'string') {
       debug('invalid password provided: %s (%s)', password, typeof password);
 
-      throw new StrapiSDKValidationError(
+      throw new StrapiValidationError(
         `The "password" option must be a string, but got "${typeof password}"`
       );
     }
