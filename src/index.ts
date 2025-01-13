@@ -1,7 +1,7 @@
-import { StrapiSDK } from './sdk';
-import { StrapiSDKValidator } from './validators';
+import { Strapi } from './sdk';
+import { StrapiConfigValidator } from './validators';
 
-import type { StrapiSDKConfig } from './sdk';
+import type { StrapiConfig } from './sdk';
 
 export * from './errors';
 
@@ -23,7 +23,7 @@ export * from './errors';
  * @example
  * ```typescript
  * // Basic configuration using API token auth
- * const sdkConfig = {
+ * const config = {
  *   baseURL: 'https://api.example.com',
  *   auth: {
  *     strategy: 'api-token',
@@ -32,25 +32,25 @@ export * from './errors';
  * };
  *
  * // Create the SDK instance
- * const strapiSDK = strapiSDK(sdkConfig);
+ * const sdk = strapi(config);
  *
  * // Using the SDK to fetch content from a custom endpoint
- * const response = await strapiSDK.fetch('/content-endpoint');
+ * const response = await sdk.fetch('/content-endpoint');
  * const data = await response.json();
  *
  * console.log(data);
  * ```
  *
- * @throws {StrapiSDKInitializationError} If the provided baseURL does not conform to a valid HTTP or HTTPS URL,
+ * @throws {StrapiInitializationError} If the provided baseURL doesn't conform to a valid HTTP or HTTPS URL,
  *                                        or if the auth configuration is invalid.
  */
-export const strapiSDK = (config: StrapiSDKConfig) => {
-  const sdkValidator = new StrapiSDKValidator();
+export const strapi = (config: StrapiConfig) => {
+  const configValidator = new StrapiConfigValidator();
 
-  return new StrapiSDK<typeof config>(
+  return new Strapi<typeof config>(
     // Properties
     config,
     // Dependencies
-    sdkValidator
+    configValidator
   );
 };

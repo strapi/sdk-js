@@ -1,5 +1,5 @@
+import { StrapiError } from '../../../src';
 import { AuthProviderFactory } from '../../../src/auth';
-import { StrapiSDKError } from '../../../src/errors';
 import { MockAuthProvider } from '../mocks';
 
 describe('AuthProviderFactory', () => {
@@ -16,7 +16,7 @@ describe('AuthProviderFactory', () => {
     // Act & Assert
     expect(() => {
       factory.create(invalidStrategyName, {});
-    }).toThrow(StrapiSDKError);
+    }).toThrow(StrapiError);
   });
 
   it('should create a valid instance for registered providers', () => {

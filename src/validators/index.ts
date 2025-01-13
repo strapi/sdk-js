@@ -1,2 +1,2 @@
-export { StrapiSDKValidator } from './sdk';
+export { StrapiConfigValidator } from './sdk';
 export { URLValidator } from './url';

@@ -11,7 +11,7 @@ import type {
   UsersPermissionsAuthProviderOptions,
 } from './providers';
 
-const debug = createDebug('sdk:auth:manager');
+const debug = createDebug('strapi:auth:manager');
 
 /**
  * Manages authentication by using different authentication providers and strategies.

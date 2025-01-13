@@ -18,7 +18,7 @@ import { HttpInterceptorManager } from './interceptor-manager';
 
 import type { HttpClientConfig, InterceptorManagerMap } from './types';
 
-const debug = createDebug('sdk:http');
+const debug = createDebug('strapi:http');
 
 /**
  * Strapi SDK's HTTP Client

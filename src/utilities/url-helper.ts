@@ -2,7 +2,7 @@ import createDebug from 'debug';
 
 import type { BaseQueryParams } from '../types/content-api';
 
-const debug = createDebug('sdk:utils:url-helper');
+const debug = createDebug('strapi:utils:url-helper');
 
 export class URLHelper {
   /**
