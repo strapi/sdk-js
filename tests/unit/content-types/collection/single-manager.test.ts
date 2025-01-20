@@ -2,14 +2,14 @@ import { SingleTypeManager } from '../../../../src/content-types';
 import { MockHttpClient } from '../../mocks';
 
 describe('SingleTypeManager CRUD Methods', () => {
-  const mockHttpClientFactory = (url: string) => new MockHttpClient(url);
+  const mockHttpClientFactory = (url: string) => new MockHttpClient({ baseURL: url });
   const config = { baseURL: 'http://localhost:1337/api' };
   const httpClient = mockHttpClientFactory(config.baseURL);
   const singleTypeManager = new SingleTypeManager('homepage', httpClient);
 
   beforeEach(() => {
     jest
-      .spyOn(MockHttpClient.prototype, '_fetch')
+      .spyOn(MockHttpClient.prototype, 'request')
       .mockImplementation(() =>
         Promise.resolve(
           new Response(JSON.stringify({ data: { id: 1 }, meta: {} }), { status: 200 })
@@ -31,7 +31,7 @@ describe('SingleTypeManager CRUD Methods', () => {
     // Arrange
     const expected =
       '/homepage?locale=en&populate=sections&fields%5B0%5D=title&fields%5B1%5D=content';
-    const fetchSpy = jest.spyOn(MockHttpClient.prototype, 'fetch');
+    const requestSpy = jest.spyOn(MockHttpClient.prototype, 'request');
 
     // Act
     await singleTypeManager.find({
@@ -41,19 +41,19 @@ describe('SingleTypeManager CRUD Methods', () => {
     });
 
     // Assert
-    expect(fetchSpy).toHaveBeenCalledWith(expected, { method: 'GET' });
+    expect(requestSpy).toHaveBeenCalledWith(expected, { method: 'GET' });
   });
 
   it('should update an existing document with update method', async () => {
     // Arrange
     const payload = { title: 'Updated Title' };
-    const fetchSpy = jest.spyOn(MockHttpClient.prototype, 'fetch');
+    const requestSpy = jest.spyOn(MockHttpClient.prototype, 'request');
 
     // Act
     await singleTypeManager.update(payload, { locale: 'en' });
 
     // Assert
-    expect(fetchSpy).toHaveBeenCalledWith('/homepage?locale=en', {
+    expect(requestSpy).toHaveBeenCalledWith('/homepage?locale=en', {
       method: 'PUT',
       body: JSON.stringify({ data: payload }),
     });
@@ -61,12 +61,12 @@ describe('SingleTypeManager CRUD Methods', () => {
 
   it('should delete a document with delete method', async () => {
     // Arrange
-    const fetchSpy = jest.spyOn(MockHttpClient.prototype, 'fetch');
+    const requestSpy = jest.spyOn(MockHttpClient.prototype, 'request');
 
     // Act
     await singleTypeManager.delete({ locale: 'en' });
 
     // Assert
-    expect(fetchSpy).toHaveBeenCalledWith('/homepage?locale=en', { method: 'DELETE' });
+    expect(requestSpy).toHaveBeenCalledWith('/homepage?locale=en', { method: 'DELETE' });
   });
 });

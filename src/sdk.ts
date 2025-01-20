@@ -1,20 +1,34 @@
 import createDebug from 'debug';
 
+import { AuthManager } from './auth';
 import { CollectionTypeManager, SingleTypeManager } from './content-types';
 import { StrapiSDKInitializationError } from './errors';
 import { HttpClient } from './http';
+import { AuthInterceptors, HttpInterceptors } from './interceptors';
 import { StrapiSDKValidator } from './validators';
+
+import type { HttpClientConfig } from './http';
 
 const debug = createDebug('sdk:core');
 
 export interface StrapiSDKConfig {
+  /** The base URL of the Strapi content API, required for all SDK operations. */
   baseURL: string;
+
+  /** Optional authentication configuration, which specifies a strategy and its details. */
   auth?: AuthConfig;
 }
 
+/**
+ * Describes an authentication strategy used in the SDK configuration.
+ *
+ * @template T The type of options for the authentication strategy.
+ */
 export interface AuthConfig<T = unknown> {
+  /** The identifier of the authentication method */
   strategy: string;
-  options: T;
+  /** Configuration details for the specified strategy */
+  options?: T;
 }
 
 /**
@@ -36,6 +50,9 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
   private readonly _validator: StrapiSDKValidator;
 
   /** @internal */
+  private readonly _authManager: AuthManager;
+
+  /** @internal */
   private readonly _httpClient: HttpClient;
 
   /** @internal */
@@ -45,11 +62,17 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
 
     // Dependencies
     validator: StrapiSDKValidator = new StrapiSDKValidator(),
-    httpClientFactory?: (url: string) => HttpClient
+    authManager: AuthManager = new AuthManager(),
+
+    // Lazy dependencies
+    httpClientFactory?: (config: HttpClientConfig) => HttpClient
   ) {
     // Properties
     this._config = config;
+
+    // Dependencies
     this._validator = validator;
+    this._authManager = authManager;
 
     debug('started the initialization process');
 
@@ -61,7 +84,9 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
     // The HTTP client depends on the preflightValidation for the baseURL validity.
     // It could be instantiated before but would throw an invalid URL error
     // instead of the SDK itself throwing an initialization exception.
-    this._httpClient = httpClientFactory?.(config.baseURL) ?? new HttpClient(config.baseURL);
+    this._httpClient = httpClientFactory
+      ? httpClientFactory({ baseURL: config.baseURL })
+      : new HttpClient({ baseURL: config.baseURL });
 
     this.init();
 
@@ -107,26 +132,75 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
   /**
    * Initializes the configuration settings for the SDK.
    *
-   * Sets up the necessary parts required for the SDK's operation,
-   * including setting up an authentication strategy if provided.
-   *
-   * @throws {StrapiSDKValidationError} From the _httpClient if the baseURL is invalid.
-   *
-   * @note
-   * - This method is private and internally invoked only during SDK initialization.
-   * - Although this method technically -can- throw a validation error, the baseURL
-   *       should already have been validated during the SDK preflight validation.
-   *
    * @internal
    */
   private init() {
+    debug('init modules');
+
+    this.initHttp();
+    this.initAuth();
+  }
+
+  /**
+   * Initializes the HTTP client configuration for the SDK.
+   *
+   * Sets up necessary HTTP interceptors to ensure consistent behavior:
+   * - Adds default HTTP request headers.
+   * - Configures error handling for HTTP responses.
+   *
+   * It basically ensures that all outgoing HTTP requests include standard headers
+   * and that errors are properly converted into meaningful exceptions for easier debugging.
+   *
+   * @note
+   * This method is private and should only be invoked internally during the SDK initialization process.
+   *
+   * @internal
+   */
+  private initHttp() {
+    debug('init http module');
+
+    // Automatically sets default headers for all HTTP requests.
+    this._httpClient.interceptors.request.use(HttpInterceptors.setDefaultHeaders());
+
+    // Handle HTTP response errors and transform them into
+    // more specific and meaningful exceptions (subclasses of `HTTPError`)
+    this._httpClient.interceptors.response.use(HttpInterceptors.transformErrors());
+  }
+
+  /**
+   * Initializes the authentication configuration for the SDK.
+   *
+   * Sets up authentication strategies and required HTTP interceptors to:
+   * - Handle user authentication through the configured strategy.
+   * - Automatically attach authentication data (for example, tokens) to outgoing HTTP requests.
+   * - Handle authentication errors (for example, unauthorized responses) consistently.
+   *
+   * @note
+   * This method is private and should only be invoked internally during the SDK initialization process.
+   *
+   * @internal
+   */
+  private initAuth() {
+    debug('init auth module');
+
+    // If an auth configuration is defined, use it to configure the auth manager
     if (this.auth) {
       const { strategy, options } = this.auth;
 
-      debug('setting up the http auth strategy using %o', strategy);
+      debug('setting up the auth strategy using %o', strategy);
 
-      this._httpClient.setAuthStrategy(strategy, options);
+      this._authManager.setStrategy(strategy, options);
     }
+
+    this._httpClient.interceptors.request
+      // Ensures the "user" is pre-authenticated before an HTTP request is sent.
+      .use(AuthInterceptors.ensurePreAuthentication(this._authManager, this._httpClient))
+      // Authenticates outgoing HTTP requests by injecting authentication-specific headers.
+      .use(AuthInterceptors.authenticateRequests(this._authManager));
+
+    this._httpClient.interceptors.response
+      // Notifies the authentication manager upon receiving an unauthorized HTTP response or error.
+      .use(...AuthInterceptors.notifyOnUnauthorizedResponse(this._authManager));
   }
 
   /**
@@ -188,7 +262,7 @@ export class StrapiSDK<const T_Config extends StrapiSDKConfig = StrapiSDKConfig>
    * - The base URL is prepended to the provided endpoint path.
    */
   fetch(url: string, init?: RequestInit) {
-    return this._httpClient.fetch(url, init);
+    return this._httpClient.request(url, init);
   }
 
   /**
