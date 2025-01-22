@@ -2,7 +2,7 @@ import { ApiTokenAuthProvider, AuthManager, UsersPermissionsAuthProvider } from 
 import { MockAuthProvider, MockAuthProviderFactory, MockHttpClient } from '../mocks';
 
 describe('AuthManager', () => {
-  const mockHttpClient = new MockHttpClient('https://example.com');
+  const mockHttpClient = new MockHttpClient({ baseURL: 'https://example.com' });
 
   describe('Default Registered Strategies', () => {
     it.each([
@@ -110,17 +110,39 @@ describe('AuthManager', () => {
     expect(authManager.isAuthenticated).toBe(false);
   });
 
-  it('should authenticate request correctly', () => {
-    // Arrange
-    const authManager = new AuthManager(new MockAuthProviderFactory());
-    const mockRequest = new Request('https://example.com', { headers: new Headers() });
+  describe('Authenticate Request', () => {
+    it.each([
+      ['an Headers instance', new Headers()],
+      ['a string record', {}],
+      ['an array', []],
+    ])('should authenticate request correctly with headers initialized as %s', (_, headers) => {
+      // Arrange
+      const authManager = new AuthManager(new MockAuthProviderFactory());
+      const mockRequest = new Request('https://example.com', { headers });
 
-    authManager.setStrategy(MockAuthProvider.identifier, {});
+      authManager.setStrategy(MockAuthProvider.identifier, {});
 
-    // Act
-    authManager.authenticateRequest(mockRequest);
+      // Act
+      authManager.authenticateRequest(mockRequest);
 
-    // Assert
-    expect(mockRequest.headers.get('Authorization')).toBe('Bearer <token>');
+      // Assert
+      expect(mockRequest.headers.get('Authorization')).toBe('Bearer <token>');
+    });
+
+    it('should throw an error if the request headers are not a valid Headers instance', async () => {
+      // Arrange
+      const expectedError = new Error(
+        'Invalid request headers, headers must be an instance of Headers but found "string"'
+      );
+      const authManager = new AuthManager(new MockAuthProviderFactory());
+
+      authManager.setStrategy(MockAuthProvider.identifier, {});
+
+      // @ts-expect-error the "headers" value is purposefully invalid to make the request's authentication fail
+      const action = () => authManager.authenticateRequest({ headers: '<invalid_headers>' });
+
+      // Act & Assert
+      expect(action).toThrow(expectedError);
+    });
   });
 });
