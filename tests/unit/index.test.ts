@@ -1,27 +1,27 @@
-import { strapiSDK, StrapiSDKInitializationError, StrapiSDKValidationError } from '../../src';
-import { StrapiSDK } from '../../src/sdk';
+import { strapi, StrapiInitializationError, StrapiValidationError } from '../../src';
+import { Strapi } from '../../src/sdk';
 
-import type { StrapiSDKConfig } from '../../src/sdk';
+import type { StrapiConfig } from '../../src/sdk';
 
-describe('strapiSDK', () => {
+describe('strapi', () => {
   it('should create an SDK instance with valid configuration', () => {
     // Arrange
-    const config = { baseURL: 'https://api.example.com' } satisfies StrapiSDKConfig;
+    const config = { baseURL: 'https://api.example.com' } satisfies StrapiConfig;
 
     // Act
-    const sdkInstance = strapiSDK(config);
+    const sdk = strapi(config);
 
     // Assert
-    expect(sdkInstance).toBeInstanceOf(StrapiSDK);
-    expect(sdkInstance).toHaveProperty('baseURL', config.baseURL);
+    expect(sdk).toBeInstanceOf(Strapi);
+    expect(sdk).toHaveProperty('baseURL', config.baseURL);
   });
 
   it('should throw an error for an invalid baseURL', () => {
     // Arrange
-    const config = { baseURL: 'invalid-url' } satisfies StrapiSDKConfig;
+    const config = { baseURL: 'invalid-url' } satisfies StrapiConfig;
 
     // Act & Assert
-    expect(() => strapiSDK(config)).toThrow(StrapiSDKInitializationError);
+    expect(() => strapi(config)).toThrow(StrapiInitializationError);
   });
 
   it('should throw an error if auth configuration is invalid', () => {
@@ -32,9 +32,9 @@ describe('strapiSDK', () => {
         strategy: 'api-token',
         options: { token: '' }, // Invalid token
       },
-    } satisfies StrapiSDKConfig;
+    } satisfies StrapiConfig;
 
     // Act & Assert
-    expect(() => strapiSDK(config)).toThrow(StrapiSDKValidationError);
+    expect(() => strapi(config)).toThrow(StrapiValidationError);
   });
 });

@@ -1,11 +1,11 @@
 import createDebug from 'debug';
 
-import { StrapiSDKError } from '../../errors';
+import { StrapiError } from '../../errors';
 
 import type { AuthProviderCreator, AuthProviderMap, CreateAuthProviderParams } from './types';
 import type { AuthProvider } from '../providers';
 
-const debug = createDebug('sdk:auth:factory');
+const debug = createDebug('strapi:auth:factory');
 
 /**
  * A factory class responsible for creating and managing authentication providers.
@@ -26,7 +26,7 @@ export class AuthProviderFactory<T_Providers extends AuthProviderMap = {}> {
    *
    * @returns An instance of an AuthProvider initialized with the given options.
    *
-   * @throws {StrapiSDKError} Throws an error if the specified strategy is not registered in the factory.
+   * @throws {StrapiError} Throws an error if the specified strategy is not registered in the factory.
    *
    * @example
    * ```typescript
@@ -48,7 +48,7 @@ export class AuthProviderFactory<T_Providers extends AuthProviderMap = {}> {
 
     if (!creator) {
       debug('the %o auth strategy is not registered, skipping', authStrategy);
-      throw new StrapiSDKError(`Auth strategy "${authStrategy}" is not supported.`);
+      throw new StrapiError(`Auth strategy "${authStrategy}" is not supported.`);
     }
 
     const instance = creator(options);

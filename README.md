@@ -83,9 +83,9 @@ pnpm add @strapi/sdk-js
 To interact with your Strapi backend, initialize the SDK with your Strapi API base URL:
 
 ```typescript
-import { strapiSDK } from '@strapi/sdk-js';
+import { strapi } from '@strapi/sdk-js';
 
-const sdk = strapiSDK({ baseURL: 'http://localhost:1337/api' });
+const sdk = strapi({ baseURL: 'http://localhost:1337/api' });
 ```
 
 Alternatively, use a `<script>` tag in a browser environment:
@@ -94,7 +94,7 @@ Alternatively, use a `<script>` tag in a browser environment:
 <script src="https://cdn.jsdelivr.net/npm/@strapi/sdk-js"></script>
 
 <script>
-  const sdk = strapi.strapiSDK({ baseURL: 'http://localhost:1337/api' });
+  const sdk = strapi.strapi({ baseURL: 'http://localhost:1337/api' });
 </script>
 ```
 
@@ -107,7 +107,7 @@ The SDK supports multiple authentication strategies for accessing authenticated 
 If your Strapi instance uses API tokens, configure the SDK like this:
 
 ```typescript
-const sdk = strapiSDK({
+const sdk = strapi({
   baseURL: 'http://localhost:1337/api',
   auth: {
     strategy: 'api-token',
@@ -230,25 +230,25 @@ For **browser environments**, debug capabilities are intentionally turned off to
 The `debug` tool allows you to control logs using wildcard patterns (`*`):
 
 - `*`: enable all logs.
-- `sdk:module`: enable logs for a specific module.
-- `sdk:module1,sdk:module2`: enable logs for multiple modules.
-- `sdk:*`: match all namespaces under `sdk`.
-- `sdk:*,-sdk:module2`: enable all logs except those from `sdk:module2`.
+- `strapi:module`: enable logs for a specific module.
+- `strapi:module1,sdk:module2`: enable logs for multiple modules.
+- `strapi:*`: match all namespaces under `strapi`.
+- `strapi:*,-strapi:module2`: enable all logs except those from `strapi:module2`.
 
 ### Namespaces
 
 Below is a list of available namespaces to use:
 
-| Namespace                             | Description                                                                               |
-| ------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `sdk:core`                            | Logs SDK initialization, configuration validation, and HTTP client setup.                 |
-| `sdk:validators:sdk`                  | Logs details related to SDK configuration validation.                                     |
-| `sdk:validators:url`                  | Logs URL validation processes.                                                            |
-| `sdk:http`                            | Logs HTTP client setup, request processing, and response/error handling.                  |
-| `sdk:auth:factory`                    | Logs the registration and creation of authentication providers.                           |
-| `sdk:auth:manager`                    | Logs authentication lifecycle management.                                                 |
-| `sdk:auth:provider:api-token`         | Logs operations related to API token authentication.                                      |
-| `sdk:auth:provider:users-permissions` | Logs operations related to user and permissions-based authentication.                     |
-| `sdk:ct:collection`                   | Logs interactions with collection-type content managers.                                  |
-| `sdk:ct:single`                       | Logs interactions with single-type content managers.                                      |
-| `sdk:utils:url-helper`                | Logs URL helper utility operations (e.g., appending query parameters or formatting URLs). |
+| Namespace                                | Description                                                                               |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `strapi:core`                            | Logs SDK initialization, configuration validation, and HTTP client setup.                 |
+| `strapi:validators:config`               | Logs details related to SDK configuration validation.                                     |
+| `strapi:validators:url`                  | Logs URL validation processes.                                                            |
+| `strapi:http`                            | Logs HTTP client setup, request processing, and response/error handling.                  |
+| `strapi:auth:factory`                    | Logs the registration and creation of authentication providers.                           |
+| `strapi:auth:manager`                    | Logs authentication lifecycle management.                                                 |
+| `strapi:auth:provider:api-token`         | Logs operations related to API token authentication.                                      |
+| `strapi:auth:provider:users-permissions` | Logs operations related to user and permissions-based authentication.                     |
+| `strapi:ct:collection`                   | Logs interactions with collection-type content managers.                                  |
+| `strapi:ct:single`                       | Logs interactions with single-type content managers.                                      |
+| `strapi:utils:url-helper`                | Logs URL helper utility operations (e.g., appending query parameters or formatting URLs). |

@@ -4,7 +4,7 @@ import { HttpClient } from '../../http';
 import { BaseQueryParams, GenericDocumentResponse } from '../../types/content-api';
 import { URLHelper } from '../../utilities';
 
-const debug = createDebug('sdk:ct:single');
+const debug = createDebug('strapi:ct:single');
 
 /**
  * A service class designed for interacting with a single-type resource in a Strapi app.

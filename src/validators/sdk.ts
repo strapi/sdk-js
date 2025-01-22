@@ -1,19 +1,19 @@
 import createDebug from 'debug';
 
-import { StrapiSDKValidationError, URLValidationError } from '../errors';
+import { StrapiValidationError, URLValidationError } from '../errors';
 
 import { URLValidator } from './url';
 
-import type { StrapiSDKConfig } from '../sdk';
+import type { StrapiConfig } from '../sdk';
 
-const debug = createDebug('sdk:validators:sdk');
+const debug = createDebug('strapi:validators:config');
 
 /**
  * Provides the ability to validate the configuration used for initializing the Strapi SDK.
  *
  * This includes URL validation to ensure compatibility with Strapi's API endpoints.
  */
-export class StrapiSDKValidator {
+export class StrapiConfigValidator {
   private readonly _urlValidator: URLValidator;
 
   constructor(
@@ -29,9 +29,9 @@ export class StrapiSDKValidator {
    *
    * @param config - The configuration object for the Strapi SDK. Must include a `baseURL` property indicating the API's endpoint.
    *
-   * @throws {StrapiSDKValidationError} If the configuration is invalid, or if the baseURL is invalid.
+   * @throws {StrapiValidationError} If the configuration is invalid, or if the baseURL is invalid.
    */
-  validateConfig(config: StrapiSDKConfig) {
+  validateConfig(config: StrapiConfig) {
     debug('validating sdk config');
 
     if (
@@ -42,7 +42,7 @@ export class StrapiSDKValidator {
     ) {
       debug(`provided sdk configuration is not a valid object: %o (%s)`, config, typeof config);
 
-      throw new StrapiSDKValidationError(
+      throw new StrapiValidationError(
         new TypeError('The provided configuration is not a valid object.')
       );
     }
@@ -57,7 +57,7 @@ export class StrapiSDKValidator {
    *
    * @param url - The base URL string to validate.
    *
-   * @throws {StrapiSDKValidationError} If the URL is invalid or if it fails through the URLValidator checks.
+   * @throws {StrapiValidationError} If the URL is invalid or if it fails through the URLValidator checks.
    */
   private validateBaseURL(url: unknown) {
     try {
@@ -66,7 +66,7 @@ export class StrapiSDKValidator {
     } catch (e) {
       if (e instanceof URLValidationError) {
         debug('failed to validate sdk config, invalid base url %o', url);
-        throw new StrapiSDKValidationError(e);
+        throw new StrapiValidationError(e);
       }
 
       throw e;
