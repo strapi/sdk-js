@@ -12,6 +12,7 @@ export const mockResponse = (status: number, statusText: string): Response => ({
   text: jest.fn().mockResolvedValue(''),
   json: jest.fn().mockResolvedValue({}),
   blob: jest.fn().mockResolvedValue(new Blob()),
+  bytes: jest.fn().mockResolvedValue(new Uint8Array()),
   formData: jest.fn().mockResolvedValue(new FormData()),
   arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(0)),
 });
