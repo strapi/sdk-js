@@ -240,7 +240,7 @@ The `debug` tool allows you to control logs using wildcard patterns (`*`):
 Below is a list of available namespaces to use:
 
 | Namespace                             | Description                                                                               |
-|---------------------------------------|-------------------------------------------------------------------------------------------|
+| ------------------------------------- | ----------------------------------------------------------------------------------------- |
 | `sdk:core`                            | Logs SDK initialization, configuration validation, and HTTP client setup.                 |
 | `sdk:validators:sdk`                  | Logs details related to SDK configuration validation.                                     |
 | `sdk:validators:url`                  | Logs URL validation processes.                                                            |
