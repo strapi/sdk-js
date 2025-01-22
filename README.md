@@ -9,7 +9,7 @@
 
 <h2 align="center">Manage Your Strapi Content From Anywhere 🚀</h2>
 <p align="center">Connect your JavaScript/TypeScript apps to a flexible and fully customizable Strapi backend with ease.</p>
-<p align="center"><a href="https://github.com/strapi/strapi">CMS Repository</a> - <a href="https://strapi.io">Website</a></p>
+<p align="center"><a href="https://github.com/strapi/strapi">CMS Repository</a> - <a href="https://strapi.io">Website</a> - <a href="https://www.notion.so/strapi/Strapi-JavaScript-SDK-plan-15f8f35980748046b7f8fb207b29c64b">SDK Roadmap</a></p>
 <br />
 
 <p align="center">
