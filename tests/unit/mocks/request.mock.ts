@@ -17,6 +17,7 @@ export const mockRequest = (method: string, url: string): Request => ({
   signal: AbortSignal.any([]),
   arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(0)),
   blob: jest.fn().mockResolvedValue(new Blob()),
+  bytes: jest.fn().mockResolvedValue(new Uint8Array()),
   formData: jest.fn().mockResolvedValue(new FormData()),
   text: jest.fn().mockResolvedValue(''),
   json: jest.fn().mockResolvedValue({}),
