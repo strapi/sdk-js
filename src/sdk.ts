@@ -322,7 +322,7 @@ export class Strapi<const T_Config extends StrapiConfig = StrapiConfig> {
    * @example
    * ```typescript
    * // Initialize the SDK with required configuration
-   * const sdk = new StrapiSDK({ baseURL: 'http://localhost:1337/api' });
+   * const sdk = new Strapi({ baseURL: 'http://localhost:1337/api' });
    *
    * // Retrieve a SingleTypeManager for the 'homepage' resource
    * const homepage = sdk.single('homepage');
