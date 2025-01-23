@@ -1,13 +1,14 @@
 import createDebug from 'debug';
 
-import { StrapiSDKValidationError } from '../../errors';
+import { StrapiValidationError } from '../../errors';
 import { HttpClient } from '../../http';
 
 import { AbstractAuthProvider } from './abstract';
 
-const debug = createDebug('sdk:auth:provider:users-permissions');
+const debug = createDebug('strapi:auth:provider:users-permissions');
 
 const USERS_PERMISSIONS_AUTH_STRATEGY_IDENTIFIER = 'users-permissions';
+const LOCAL_AUTH_ENDPOINT = '/auth/local';
 
 /**
  * Configuration options for Users & Permissions authentication.
@@ -50,7 +51,7 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
     return UsersPermissionsAuthProvider.identifier;
   }
 
-  private get credentials(): UsersPermissionsAuthPayload {
+  private get _credentials(): UsersPermissionsAuthPayload {
     return {
       identifier: this._options.identifier,
       password: this._options.password,
@@ -67,7 +68,7 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
     ) {
       debug('invalid options provided: %s (%s)', this._options, typeof this._options);
 
-      throw new StrapiSDKValidationError(
+      throw new StrapiValidationError(
         'Missing valid options for initializing the Users & Permissions auth provider.'
       );
     }
@@ -77,7 +78,7 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
     if ((typeof identifier as unknown) !== 'string') {
       debug('invalid identifier provided: %s (%s)', identifier, typeof identifier);
 
-      throw new StrapiSDKValidationError(
+      throw new StrapiValidationError(
         `The "identifier" option must be a string, but got "${typeof identifier}"`
       );
     }
@@ -85,7 +86,7 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
     if ((typeof password as unknown) !== 'string') {
       debug('invalid password provided: %s (%s)', password, typeof password);
 
-      throw new StrapiSDKValidationError(
+      throw new StrapiValidationError(
         `The "password" option must be a string, but got "${typeof password}"`
       );
     }
@@ -102,21 +103,27 @@ export class UsersPermissionsAuthProvider extends AbstractAuthProvider<UsersPerm
   }
 
   async authenticate(httpClient: HttpClient): Promise<void> {
-    const { baseURL } = httpClient;
-    const { identifier, password } = this.credentials;
+    const { identifier, password } = this._credentials;
 
-    const localAuthURL = `${baseURL}/auth/local`;
+    debug(
+      'trying to authenticate with %o as %o at %o ',
+      this.name,
+      identifier,
+      LOCAL_AUTH_ENDPOINT
+    );
 
-    debug('trying to authenticate with %o as %o at %o ', this.name, identifier, localAuthURL);
+    const response = await httpClient.post(
+      LOCAL_AUTH_ENDPOINT,
+      JSON.stringify({ identifier, password }),
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
 
-    const request = new Request(localAuthURL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ identifier, password }),
-    });
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
 
-    // Make sure to use the HttpClient's "_fetch" method to not perform authentication in an infinite loop.
-    const response = await httpClient._fetch(request);
     const data = await response.json();
 
     const obfuscatedToken = data.jwt.slice(0, 5) + '...' + data.jwt.slice(-5);

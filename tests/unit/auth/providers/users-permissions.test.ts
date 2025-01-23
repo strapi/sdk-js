@@ -1,9 +1,8 @@
+import { HTTPBadRequestError, StrapiValidationError } from '../../../../src';
 import {
   UsersPermissionsAuthProvider,
   UsersPermissionsAuthProviderOptions,
 } from '../../../../src/auth';
-import { HTTPBadRequestError, StrapiSDKValidationError } from '../../../../src/errors';
-import { HttpClient } from '../../../../src/http';
 import { MockHttpClient, mockRequest, mockResponse } from '../../mocks';
 
 const FAKE_TOKEN = '<token>';
@@ -13,13 +12,13 @@ const FAKE_VALID_CONFIG: UsersPermissionsAuthProviderOptions = {
 };
 
 class ValidFakeHttpClient extends MockHttpClient {
-  async _fetch() {
+  async request() {
     return new Response(JSON.stringify({ jwt: FAKE_TOKEN }), { status: 200 });
   }
 }
 
-class FaultyFakeHttpClient extends HttpClient {
-  async _fetch(): Promise<Response> {
+class FaultyFakeHttpClient extends MockHttpClient {
+  async request(): Promise<Response> {
     const response = mockResponse(400, 'Bad Request');
     const request = mockRequest('GET', 'https://example.com');
 
@@ -28,8 +27,8 @@ class FaultyFakeHttpClient extends HttpClient {
 }
 
 describe('UsersPermissionsAuthProvider', () => {
-  const fakeHttpClient = new ValidFakeHttpClient('https://example.com');
-  const faultyHttpClient = new FaultyFakeHttpClient('https://example.com');
+  const fakeHttpClient = new ValidFakeHttpClient({ baseURL: 'https://example.com' });
+  const faultyHttpClient = new FaultyFakeHttpClient({ baseURL: 'https://example.com' });
 
   describe('Name', () => {
     it('should return the static provider name from the instance', () => {
@@ -75,7 +74,7 @@ describe('UsersPermissionsAuthProvider', () => {
           new UsersPermissionsAuthProvider(
             options as unknown as UsersPermissionsAuthProviderOptions
           )
-      ).toThrow(StrapiSDKValidationError);
+      ).toThrow(StrapiValidationError);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -95,6 +94,8 @@ describe('UsersPermissionsAuthProvider', () => {
       const provider = new UsersPermissionsAuthProvider(FAKE_VALID_CONFIG);
 
       // Act & Assert
+      await provider.authenticate(fakeHttpClient);
+
       await expect(provider.authenticate(fakeHttpClient)).resolves.not.toThrow();
     });
 
@@ -109,7 +110,24 @@ describe('UsersPermissionsAuthProvider', () => {
       expect(provider.headers).toEqual({ Authorization: `Bearer ${FAKE_TOKEN}` });
     });
 
-    it('should throw if it fails to authenticate', async () => {
+    it('should throw an error if the request fails', async () => {
+      // Arrange
+      const client = fakeHttpClient.create(undefined, false);
+      const statusText = 'Internal Server Error';
+
+      const provider = new UsersPermissionsAuthProvider(FAKE_VALID_CONFIG);
+
+      jest
+        .spyOn(client, 'request')
+        .mockImplementationOnce(() =>
+          Promise.resolve(new Response(null, { status: 500, statusText }))
+        );
+
+      // Act & Assert
+      await expect(provider.authenticate(client)).rejects.toThrow(new Error(statusText));
+    });
+
+    it('should propagate the error if it fails to authenticate', async () => {
       // Arrange
       const provider = new UsersPermissionsAuthProvider(FAKE_VALID_CONFIG);
 

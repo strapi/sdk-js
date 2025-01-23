@@ -1,7 +1,6 @@
 import createDebug from 'debug';
 
 import { HttpClient } from '../http';
-import { URLHelper } from '../utilities';
 
 import { AuthProviderFactory } from './factory';
 import { ApiTokenAuthProvider, UsersPermissionsAuthProvider } from './providers';
@@ -12,7 +11,7 @@ import type {
   UsersPermissionsAuthProviderOptions,
 } from './providers';
 
-const debug = createDebug('sdk:auth:manager');
+const debug = createDebug('strapi:auth:manager');
 
 /**
  * Manages authentication by using different authentication providers and strategies.
@@ -115,13 +114,16 @@ export class AuthManager {
     try {
       debug('trying to authenticate with %s', this._authProvider.name);
 
-      await this._authProvider.authenticate(http);
+      // Create and use a client free of any custom interceptor to avoid infinite auth loop
+      const client = http.create(undefined, false);
+
+      await this._authProvider.authenticate(client);
 
       this._isAuthenticated = true;
 
       debug('authentication successful');
-    } catch {
-      debug('authentication failed');
+    } catch (e) {
+      debug(`authentication failed: ${e}`);
       this._isAuthenticated = false;
     }
   }
@@ -140,20 +142,22 @@ export class AuthManager {
    * console.log(request.headers.get('Authorization')) // 'Bearer <token>'
    * ```
    */
-  authenticateRequest(request: Request) {
-    if (this._authProvider) {
-      const { headers } = this._authProvider;
+  authenticateRequest(request: RequestInit) {
+    // If no auth provider is set, skip
+    if (!this._authProvider) {
+      return;
+    }
 
-      for (const [key, value] of Object.entries(headers)) {
-        request.headers.set(key, value);
+    const { headers } = request;
 
-        debug('added %o header to %o query', key, URLHelper.toReadablePath(request.url));
-      }
-    } else {
-      debug(
-        'no auth provider is set. skipping headers for %s query',
-        URLHelper.toReadablePath(request.url)
+    if (!(headers instanceof Headers)) {
+      throw new Error(
+        `Invalid request headers, headers must be an instance of Headers but found "${typeof headers}"`
       );
+    }
+
+    for (const [key, value] of Object.entries(this._authProvider.headers)) {
+      headers.set(key, value);
     }
   }
 

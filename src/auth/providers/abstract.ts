@@ -51,7 +51,7 @@ export abstract class AbstractAuthProvider<T = unknown> implements AuthProvider 
    * It is called within the constructor to ensure that all required options adhere
    * to the expected format or values before proceeding with operational methods.
    *
-   * @throws {StrapiSDKValidationError} If the validation fails due to invalid or missing options.
+   * @throws {StrapiValidationError} If the validation fails due to invalid or missing options.
    */
   protected abstract preflightValidation(): void;
 

@@ -58,34 +58,33 @@
     "prepack": "pnpm exec ./scripts/pre-pack.sh"
   },
   "devDependencies": {
-    "@commitlint/cli": "19.6.0",
+    "@commitlint/cli": "19.6.1",
     "@commitlint/config-conventional": "19.6.0",
     "@commitlint/types": "19.5.0",
-    "@rollup/plugin-commonjs": "28.0.1",
-    "@rollup/plugin-node-resolve": "15.3.0",
+    "@rollup/plugin-commonjs": "28.0.2",
+    "@rollup/plugin-node-resolve": "16.0.0",
     "@rollup/plugin-replace": "6.0.2",
     "@rollup/plugin-terser": "0.4.4",
-    "@rollup/plugin-typescript": "12.1.1",
+    "@rollup/plugin-typescript": "12.1.2",
     "@strapi/eslint-config": "0.2.1",
     "@types/debug": "4.1.12",
     "@types/jest": "29.5.14",
-    "@typescript-eslint/eslint-plugin": "8.15.0",
-    "@typescript-eslint/parser": "8.15.0",
+    "@typescript-eslint/eslint-plugin": "8.21.0",
+    "@typescript-eslint/parser": "8.21.0",
     "eslint": "8.57.1",
     "eslint-plugin-import": "2.31.0",
     "husky": "9.1.7",
     "jest": "29.7.0",
-    "lint-staged": "15.2.10",
-    "prettier": "3.3.3",
+    "lint-staged": "15.4.1",
+    "prettier": "3.4.2",
     "rimraf": "6.0.1",
-    "rollup": "4.27.3",
+    "rollup": "4.31.0",
     "ts-jest": "29.2.5",
-    "typescript": "5.6.3"
+    "typescript": "5.7.3"
   },
   "packageManager": "pnpm@9.1.0",
   "engines": {
-    "node": ">=18.0.0 <=22.x.x",
-    "npm": ">=6.0.0"
+    "node": ">=20.18.2 <=22.x.x"
   },
   "dependencies": {
     "debug": "4.4.0"

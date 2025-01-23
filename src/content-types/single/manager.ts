@@ -4,7 +4,7 @@ import { HttpClient } from '../../http';
 import { BaseQueryParams, GenericDocumentResponse } from '../../types/content-api';
 import { URLHelper } from '../../utilities';
 
-const debug = createDebug('sdk:ct:single');
+const debug = createDebug('strapi:ct:single');
 
 /**
  * A service class designed for interacting with a single-type resource in a Strapi app.
@@ -69,7 +69,7 @@ export class SingleTypeManager {
       path = URLHelper.appendQueryParams(path, queryParams);
     }
 
-    const response = await this._httpClient.fetch(path, { method: 'GET' });
+    const response = await this._httpClient.get(path);
 
     debug('the %o document has been fetched', this._singularName);
 
@@ -113,10 +113,7 @@ export class SingleTypeManager {
       url = URLHelper.appendQueryParams(url, queryParams);
     }
 
-    const response = await this._httpClient.fetch(url, {
-      method: 'PUT',
-      body: JSON.stringify({ data }),
-    });
+    const response = await this._httpClient.put(url, JSON.stringify({ data }));
 
     debug('the %o document has been updated', this._singularName);
 
@@ -156,7 +153,7 @@ export class SingleTypeManager {
       url = URLHelper.appendQueryParams(url, queryParams);
     }
 
-    await this._httpClient.fetch(url, { method: 'DELETE' });
+    await this._httpClient.delete(url);
 
     debug('the %o document has been deleted', this._singularName);
   }
