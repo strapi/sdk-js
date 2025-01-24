@@ -67,9 +67,10 @@ export interface BaseQueryParams {
    *
    * Can be:
    * - a `string` to specify relation paths as `populate=name`
+   * - an `array` of strings to specify multiple relation paths
    * - an `object` to enable deeper population configurations
    */
-  populate?: string | Record<string, unknown>;
+  populate?: string | string[] | Record<string, unknown>;
 
   /**
    * Specifies the fields of documents to include in the response.
