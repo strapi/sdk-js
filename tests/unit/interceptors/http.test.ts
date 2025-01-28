@@ -30,6 +30,21 @@ describe('HTTP Interceptors', () => {
       // Assert
       expect(request.headers.get('Content-Type')).toBe('text/plain');
     });
+
+    it('should perform case insensitive checks on headers', async () => {
+      // Arrange
+      const request = new Request('https://example.com', {
+        headers: { 'content-type': 'text/plain' },
+      });
+
+      const interceptor = HttpInterceptors.setDefaultHeaders();
+
+      // Act
+      await interceptor({ request });
+
+      // Assert
+      expect(request.headers.get('Content-Type')).toBe('text/plain');
+    });
   });
 
   describe('transformErrors', () => {
