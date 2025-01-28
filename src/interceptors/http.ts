@@ -26,8 +26,16 @@ export class HttpInterceptors {
    *```
    */
   public static setDefaultHeaders(): RequestInterceptor {
+    const DEFAULT_HEADERS = new Map([['Content-Type', 'application/json']]);
+
     return ({ request }) => {
-      request.headers.set('Content-Type', 'application/json');
+      for (const [key, value] of DEFAULT_HEADERS.entries()) {
+        const hasHeader = request.headers.has(key);
+
+        if (!hasHeader) {
+          request.headers.set(key, value);
+        }
+      }
 
       return { request };
     };
