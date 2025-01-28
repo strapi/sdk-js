@@ -16,7 +16,7 @@ describe('HTTP Interceptors', () => {
       expect(request.headers.get('Content-Type')).toBe('application/json');
     });
 
-    it('should override the headers in the given request', async () => {
+    it('should not override the headers if a value is already set', async () => {
       // Arrange
       const request = new Request('https://example.com', {
         headers: { 'Content-Type': 'text/plain' },
@@ -28,7 +28,7 @@ describe('HTTP Interceptors', () => {
       await interceptor({ request });
 
       // Assert
-      expect(request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.headers.get('Content-Type')).toBe('text/plain');
     });
   });
 
