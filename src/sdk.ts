@@ -2,7 +2,7 @@ import createDebug from 'debug';
 
 import { AuthManager } from './auth';
 import { CollectionTypeManager, SingleTypeManager } from './content-types';
-import { StrapiInitializationError } from './errors';
+import { StrapiError, StrapiInitializationError } from './errors';
 import { HttpClient } from './http';
 import { AuthInterceptors, HttpInterceptors } from './interceptors';
 import { StrapiConfigValidator } from './validators';
@@ -39,12 +39,10 @@ export interface AuthConfig<T = unknown> {
  *
  * It serves as the main interface through which users interact with
  * their Strapi installation programmatically.
- *
- * @template T_Config - Configuration type inferred from the user-provided SDK configuration
  */
-export class Strapi<const T_Config extends StrapiConfig = StrapiConfig> {
+export class Strapi {
   /** @internal */
-  private readonly _config: T_Config;
+  private readonly _config: StrapiConfig;
 
   /** @internal */
   private readonly _validator: StrapiConfigValidator;
@@ -58,7 +56,7 @@ export class Strapi<const T_Config extends StrapiConfig = StrapiConfig> {
   /** @internal */
   constructor(
     // Properties
-    config: T_Config,
+    config: StrapiConfig,
 
     // Dependencies
     validator: StrapiConfigValidator = new StrapiConfigValidator(),
@@ -189,7 +187,14 @@ export class Strapi<const T_Config extends StrapiConfig = StrapiConfig> {
 
       debug('setting up the auth strategy using %o', strategy);
 
-      this._authManager.setStrategy(strategy, options);
+      try {
+        this._authManager.setStrategy(strategy, options);
+      } catch (e) {
+        throw new StrapiInitializationError(
+          e,
+          `Failed to initialize the SDK auth manager: ${e instanceof StrapiError ? e.cause : e}`
+        );
+      }
     }
 
     this._httpClient.interceptors.request

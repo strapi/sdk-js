@@ -6,7 +6,9 @@ import {
   HTTPInternalServerError,
   HTTPNotFoundError,
   HTTPTimeoutError,
+  StrapiError,
   StrapiInitializationError,
+  StrapiValidationError,
 } from '../../src';
 import { CollectionTypeManager, SingleTypeManager } from '../../src/content-types';
 import { HttpClient, StatusCode } from '../../src/http';
@@ -46,7 +48,7 @@ describe('Strapi', () => {
       // Arrange
       const config = {
         baseURL: 'https://localhost:1337/api',
-        auth: { strategy: MockAuthProvider.identifier, options: {} },
+        auth: { strategy: MockAuthProvider.identifier },
       } satisfies StrapiConfig;
 
       const mockValidator = new MockStrapiConfigValidator();
@@ -62,7 +64,7 @@ describe('Strapi', () => {
 
       expect(sdk).toBeInstanceOf(Strapi);
       expect(validatorSpy).toHaveBeenCalledWith(config);
-      expect(authSetStrategySpy).toHaveBeenCalledWith(MockAuthProvider.identifier, {});
+      expect(authSetStrategySpy).toHaveBeenCalledWith(MockAuthProvider.identifier, undefined);
     });
 
     it('should not set the auth strategy if no auth config is provided', () => {
@@ -81,6 +83,37 @@ describe('Strapi', () => {
       expect(sdk).toBeInstanceOf(Strapi);
       expect(authSetStrategySpy).not.toHaveBeenCalled();
     });
+
+    it.each([
+      ['common error', new Error('unexpected error')],
+      ['strapi error', new StrapiError(new StrapiValidationError('invalid auth configuration'))],
+    ])(
+      'should throw an initialization error if a %s error occurs during the auth strategy init',
+      async (_title, error) => {
+        // Arrange
+        const config = {
+          baseURL: 'https://localhost:1337/api',
+          auth: { strategy: MockAuthProvider.identifier },
+        } satisfies StrapiConfig;
+
+        const mockValidator = new MockStrapiConfigValidator();
+        const mockAuthManager = new MockAuthManager();
+
+        jest.spyOn(mockAuthManager, 'setStrategy').mockImplementationOnce(() => {
+          throw error;
+        });
+
+        // Act
+        expect(
+          () => new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory)
+        ).toThrow(StrapiInitializationError);
+
+        expect(mockAuthManager.setStrategy).toHaveBeenCalledWith(
+          MockAuthProvider.identifier,
+          undefined
+        );
+      }
+    );
 
     it('should throw an error on invalid baseURL', () => {
       // Arrange
