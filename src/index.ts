@@ -82,7 +82,7 @@ export const strapi = (config: Config) => {
 
   const sdkConfig: StrapiConfig = { baseURL };
 
-  // In this factory, to keep things simple, users can't manually set the strategy options.
+  // In this factory, while there is only one auth strategy available, users can't manually set the strategy options.
   // Since the SDK constructor needs to define a proper strategy,
   // it is handled here if the auth property is provided
   if (auth !== undefined) {
