@@ -108,11 +108,10 @@ If your Strapi instance uses API tokens, configure the SDK like this:
 
 ```typescript
 const sdk = strapi({
+  // Endpoint configuration
   baseURL: 'http://localhost:1337/api',
-  auth: {
-    strategy: 'api-token',
-    options: { token: 'your-api-token-here' },
-  },
+  // Auth configuration
+  auth: 'your-api-token-here',
 });
 ```
 
@@ -248,7 +247,6 @@ Below is a list of available namespaces to use:
 | `strapi:auth:factory`                    | Logs the registration and creation of authentication providers.                           |
 | `strapi:auth:manager`                    | Logs authentication lifecycle management.                                                 |
 | `strapi:auth:provider:api-token`         | Logs operations related to API token authentication.                                      |
-| `strapi:auth:provider:users-permissions` | Logs operations related to user and permissions-based authentication.                     |
 | `strapi:ct:collection`                   | Logs interactions with collection-type content managers.                                  |
 | `strapi:ct:single`                       | Logs interactions with single-type content managers.                                      |
 | `strapi:utils:url-helper`                | Logs URL helper utility operations (e.g., appending query parameters or formatting URLs). |
