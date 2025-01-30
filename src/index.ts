@@ -1,9 +1,45 @@
+import { ApiTokenAuthProvider } from './auth';
 import { Strapi } from './sdk';
-import { StrapiConfigValidator } from './validators';
 
 import type { StrapiConfig } from './sdk';
 
 export * from './errors';
+
+export interface Config {
+  /**
+   * The base URL of the Strapi content API.
+   *
+   * This specifies where the SDK should send requests.
+   *
+   * The URL must include the protocol (`http` or `https`) and serve
+   * as the root path for all later API operations.
+   *
+   * @example
+   * 'https://api.example.com'
+   *
+   * @remarks
+   * Failing to provide a valid HTTP or HTTPS URL results in a
+   * `StrapiInitializationError`.
+   */
+  baseURL: string;
+
+  /**
+   * API token to authenticate requests (optional).
+   *
+   * When provided, this token is included in the `Authorization` header
+   * of every request to the Strapi API.
+   *
+   * @remarks
+   * - A valid token must be a non-empty string.
+   *
+   * - If the token is invalid or improperly formatted, the SDK
+   * throws a `StrapiValidationError` during initialization.
+   *
+   * - If excluded, the SDK operates without authentication.
+   */
+
+  auth?: string;
+}
 
 /**
  * Creates a new instance of the Strapi SDK with a specified configuration.
@@ -25,10 +61,7 @@ export * from './errors';
  * // Basic configuration using API token auth
  * const config = {
  *   baseURL: 'https://api.example.com',
- *   auth: {
- *     strategy: 'api-token',
- *     options: { token: 'your_token_here' }
- *   }
+ *   auth: 'your_token_here',
  * };
  *
  * // Create the SDK instance
@@ -44,13 +77,20 @@ export * from './errors';
  * @throws {StrapiInitializationError} If the provided baseURL doesn't conform to a valid HTTP or HTTPS URL,
  *                                        or if the auth configuration is invalid.
  */
-export const strapi = (config: StrapiConfig) => {
-  const configValidator = new StrapiConfigValidator();
+export const strapi = (config: Config) => {
+  const { baseURL, auth } = config;
 
-  return new Strapi<typeof config>(
-    // Properties
-    config,
-    // Dependencies
-    configValidator
-  );
+  const sdkConfig: StrapiConfig = { baseURL };
+
+  // In this factory, while there is only one auth strategy available, users can't manually set the strategy options.
+  // Since the SDK constructor needs to define a proper strategy,
+  // it is handled here if the auth property is provided
+  if (auth !== undefined) {
+    sdkConfig.auth = {
+      strategy: ApiTokenAuthProvider.identifier,
+      options: { token: auth },
+    };
+  }
+
+  return new Strapi(sdkConfig);
 };

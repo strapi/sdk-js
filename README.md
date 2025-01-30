@@ -108,11 +108,10 @@ If your Strapi instance uses API tokens, configure the SDK like this:
 
 ```typescript
 const sdk = strapi({
+  // Endpoint configuration
   baseURL: 'http://localhost:1337/api',
-  auth: {
-    strategy: 'api-token',
-    options: { token: 'your-api-token-here' },
-  },
+  // Auth configuration
+  auth: 'your-api-token-here',
 });
 ```
 
@@ -239,16 +238,15 @@ The `debug` tool allows you to control logs using wildcard patterns (`*`):
 
 Below is a list of available namespaces to use:
 
-| Namespace                                | Description                                                                               |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `strapi:core`                            | Logs SDK initialization, configuration validation, and HTTP client setup.                 |
-| `strapi:validators:config`               | Logs details related to SDK configuration validation.                                     |
-| `strapi:validators:url`                  | Logs URL validation processes.                                                            |
-| `strapi:http`                            | Logs HTTP client setup, request processing, and response/error handling.                  |
-| `strapi:auth:factory`                    | Logs the registration and creation of authentication providers.                           |
-| `strapi:auth:manager`                    | Logs authentication lifecycle management.                                                 |
-| `strapi:auth:provider:api-token`         | Logs operations related to API token authentication.                                      |
-| `strapi:auth:provider:users-permissions` | Logs operations related to user and permissions-based authentication.                     |
-| `strapi:ct:collection`                   | Logs interactions with collection-type content managers.                                  |
-| `strapi:ct:single`                       | Logs interactions with single-type content managers.                                      |
-| `strapi:utils:url-helper`                | Logs URL helper utility operations (e.g., appending query parameters or formatting URLs). |
+| Namespace                        | Description                                                                               |
+| -------------------------------- | ----------------------------------------------------------------------------------------- |
+| `strapi:core`                    | Logs SDK initialization, configuration validation, and HTTP client setup.                 |
+| `strapi:validators:config`       | Logs details related to SDK configuration validation.                                     |
+| `strapi:validators:url`          | Logs URL validation processes.                                                            |
+| `strapi:http`                    | Logs HTTP client setup, request processing, and response/error handling.                  |
+| `strapi:auth:factory`            | Logs the registration and creation of authentication providers.                           |
+| `strapi:auth:manager`            | Logs authentication lifecycle management.                                                 |
+| `strapi:auth:provider:api-token` | Logs operations related to API token authentication.                                      |
+| `strapi:ct:collection`           | Logs interactions with collection-type content managers.                                  |
+| `strapi:ct:single`               | Logs interactions with single-type content managers.                                      |
+| `strapi:utils:url-helper`        | Logs URL helper utility operations (e.g., appending query parameters or formatting URLs). |
