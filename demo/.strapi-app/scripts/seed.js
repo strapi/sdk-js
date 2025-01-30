@@ -266,6 +266,11 @@ async function createApiTokens(app) {
     { name: 'Read Only Token', type: 'read-only' },
   ];
 
+  const envPaths = [
+    path.join(__dirname, '../../demo-node-javascript/.env'),
+    path.join(__dirname, '../../demo-node-typescript/.env'),
+  ];
+
   for (const tokenType of tokenTypes) {
     const tokenDetails = {
       name: tokenType.name,
@@ -282,7 +287,33 @@ async function createApiTokens(app) {
     console.log(
       `Created API Token ${token.name} (${token.type}) with access key: ${token.accessKey}`
     );
+
+    // Update .env files
+    const envKey = tokenType.type.toUpperCase().replace('-', '_') + '_TOKEN';
+    for (const envPath of envPaths) {
+      updateEnvFile(envPath, envKey, token.accessKey);
+    }
   }
+}
+
+function updateEnvFile(filePath, key, value) {
+  let envContent = '';
+  if (fs.existsSync(filePath)) {
+    envContent = fs.readFileSync(filePath, 'utf8');
+  }
+
+  const envLines = envContent.split('\n');
+  const keyIndex = envLines.findIndex((line) => line.startsWith(`${key}=`));
+
+  if (keyIndex !== -1) {
+    // Update existing key
+    envLines[keyIndex] = `${key}=${value}`;
+  } else {
+    // Add new key
+    envLines.push(`${key}=${value}`);
+  }
+
+  fs.writeFileSync(filePath, envLines.join('\n'), 'utf8');
 }
 
 async function main() {

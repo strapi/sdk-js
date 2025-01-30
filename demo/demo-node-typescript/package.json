@@ -12,7 +12,8 @@
     "debug": "DEBUG=* node dist/index.js"
   },
   "dependencies": {
-    "@strapi/sdk-js": "link:../.."
+    "@strapi/sdk-js": "link:../..",
+    "@types/node": "^22.12.0"
   },
   "devDependencies": {
     "typescript": "5.7.3"
