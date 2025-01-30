@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "allowSyntheticDefaultImports": true,
+
+    /* Modules */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "NodeNext",
+
+    /* Emit */
+    "moduleResolution": "NodeNext",
+
+    /* Interop Constraints */
+
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "skipLibCheck": false,
+
+    /* Type Checking */
+    "strict": true,
+
+    /* Completeness */
+    "target": "ESNext"
+  }
+}
