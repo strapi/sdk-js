@@ -34,6 +34,6 @@
     "npm": ">=6.0.0"
   },
   "strapi": {
-    "uuid": "72804b4e-1794-45ab-aec0-b38a3d505e58"
+    "uuid": "getstarted"
   }
 }
