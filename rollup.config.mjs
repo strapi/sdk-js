@@ -35,14 +35,14 @@ const node_build = {
   output: [
     // CommonJS build
     {
-      file: 'dist/bundle.cjs.js',
+      file: 'dist/bundle.cjs',
       format: 'cjs',
       sourcemap: isProduction ? 'hidden' : true,
       exports: 'named',
     },
     // ESM build
     {
-      file: 'dist/bundle.esm.js',
+      file: 'dist/bundle.mjs',
       format: 'esm',
       sourcemap: isProduction ? 'hidden' : true,
       exports: 'named',
