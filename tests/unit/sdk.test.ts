@@ -192,6 +192,34 @@ describe('Strapi', () => {
         expect((headers as Headers).get('Content-Type')).toBe('application/json');
       });
 
+      it('should not set the application/json Content-Type header if it has been manually set', async () => {
+        // Arrange
+        const path = '/upload';
+        const contentType = 'multipart/form-data';
+
+        const config = { baseURL: 'https://localhost:1337/api' } satisfies StrapiConfig;
+        const init = {
+          method: 'POST',
+          headers: { 'Content-Type': contentType },
+        } satisfies RequestInit;
+
+        const mockValidator = new MockStrapiConfigValidator();
+        const mockAuthManager = new MockAuthManager();
+
+        const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+
+        const fetchSpy = jest.spyOn(MockHttpClient.prototype, 'fetch');
+
+        // Act
+        await sdk.fetch(path, init);
+        const headers = fetchSpy.mock.lastCall?.[1]?.headers;
+
+        // Assert
+        expect(headers).toBeDefined();
+        expect(headers).toBeInstanceOf(Headers);
+        expect((headers as Headers).get('Content-Type')).toBe(contentType);
+      });
+
       it.each([
         ['Bad Request', StatusCode.BAD_REQUEST, HTTPBadRequestError],
         ['Unauthorized', StatusCode.UNAUTHORIZED, HTTPAuthorizationError],
