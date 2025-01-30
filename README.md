@@ -43,6 +43,7 @@
    - [`.collection()`](#collectionresource)
    - [`.single()`](#singleresource)
 5. [Debug](#-debug)
+6. [Demo Projects](#-demo-projects)
 
 ## 🛠 Getting started
 
@@ -250,3 +251,48 @@ Below is a list of available namespaces to use:
 | `strapi:ct:collection`           | Logs interactions with collection-type content managers.                                  |
 | `strapi:ct:single`               | Logs interactions with single-type content managers.                                      |
 | `strapi:utils:url-helper`        | Logs URL helper utility operations (e.g., appending query parameters or formatting URLs). |
+
+## 🚀 Demo Projects
+
+This repository includes demo projects located in the `/demo` directory to help you get started with using the Strapi SDK. The actual Strapi application is located in the `.strapi-app` directory.
+
+### Demo Structure
+
+- **`.strapi-app`**: This is the main Strapi application used for the demo projects.
+- **`demo/demo-node-typescript`**: A Node.js project using TypeScript.
+- **`demo/demo-node-javascript`**: A Node.js project using JavaScript.
+
+### Using Demo Scripts
+
+The `package.json` includes several scripts to help you manage and run the demo projects:
+
+- **`demo:seed`**: Seeds the Strapi application with example data. This script also generates `.env` files with API tokens for the `demo-node-typescript` and `demo-node-javascript` projects.
+  
+  ```bash
+  pnpm run demo:seed
+  ```
+
+- **`demo:seed:clean`**: Cleans the existing data and re-seeds the Strapi application.
+
+  ```bash
+  pnpm run demo:seed:clean
+  ```
+
+- **`demo:run`**: Starts the Strapi application in development mode.
+
+  ```bash
+  pnpm run demo:run
+  ```
+
+### Adding New Projects
+
+If you add new projects to the `/demo` directory, you will need to update the seed script located at `/demo/.strapi-app/scripts/seed.js` with the new project paths to ensure they are properly configured and seeded.
+
+### Future Plans
+
+We plan to expand the demo projects to include:
+
+- A basic HTML project.
+- A Next.js project.
+
+These additions will provide more examples of how to integrate the Strapi SDK into different types of applications.
