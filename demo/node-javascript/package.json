@@ -1,0 +1,15 @@
+{
+  "name": "node-js",
+  "version": "1.0.0",
+  "description": "Example node project with the SDK",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@strapi/sdk-js": "link:../../dist"
+  }
+}

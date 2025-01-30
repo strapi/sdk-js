@@ -53,6 +53,9 @@
     "prettier:write": "prettier --write .",
     "test": "jest --verbose",
     "test:cov": "jest --verbose --coverage",
+    "demo:seed": "(cd demo/.strapi-app && pnpm seed:example)",
+    "demo:seed:clean": "rm demo/.strapi-app/.tmp/data.db ; pnpm run demo:seed",
+    "demo:run": "(cd demo/.strapi-app && pnpm develop)",
     "ts:check": "tsc -p tsconfig.build.json --noEmit",
     "watch": "rollup --config rollup.config.mjs --watch --failAfterWarnings",
     "prepack": "pnpm exec ./scripts/pre-pack.sh"
