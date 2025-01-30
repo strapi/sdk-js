@@ -13,11 +13,11 @@ const isProduction = process.env.NODE_ENV === 'production';
  * system, ensuring compatibility with a wide range of tools and runtimes.
  *
  * Outputs:
- * - CommonJS (dist/bundle.cjs.js): for environments using `require`.
+ * - CommonJS (dist/bundle.cjs): for environments using `require`.
  * Compatible with older tools and Node.js versions.
  * Includes source maps for debugging.
  *
- * - ES Module (dist/bundle.esm.js): for modern import/export environments.
+ * - ES Module (dist/bundle.esm): for modern import/export environments.
  * Supports tree-shaking for smaller builds and also includes source maps.
  *
  * Plugins Used:
