@@ -1,0 +1,27 @@
+{
+  "name": "demo-node-typescript",
+  "version": "1.0.0",
+  "description": "A Strapi SDK demo using a Node x TypeScript application",
+  "main": "dist/index.js",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -p tsconfig.json -w",
+    "start": "node dist/index.js",
+    "debug": "DEBUG=* node dist/index.js"
+  },
+  "dependencies": {
+    "@strapi/sdk-js": "link:../.."
+  },
+  "devDependencies": {
+    "typescript": "5.7.3"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Strapi Solutions SAS",
+    "email": "hi@strapi.io",
+    "url": "https://strapi.io"
+  },
+  "license": "ISC"
+}

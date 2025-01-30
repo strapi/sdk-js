@@ -1,0 +1,20 @@
+{
+  "name": "demo-node-javascript",
+  "version": "1.0.0",
+  "description": "A Strapi SDK demo using a Node x JavaScript application",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "debug": "DEBUG=* node index.js"
+  },
+  "dependencies": {
+    "@strapi/sdk-js": "link:../.."
+  },
+  "keywords": [],
+  "author": {
+    "name": "Strapi Solutions SAS",
+    "email": "hi@strapi.io",
+    "url": "https://strapi.io"
+  },
+  "license": "ISC"
+}

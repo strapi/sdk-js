@@ -28,8 +28,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/bundle.cjs.js",
-      "import": "./dist/bundle.esm.js",
+      "require": "./dist/bundle.cjs",
+      "import": "./dist/bundle.mjs",
       "browser": {
         "import": "./dist/bundle.browser.min.js",
         "require": "./dist/bundle.browser.min.js"
