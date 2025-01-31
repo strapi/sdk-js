@@ -22,6 +22,16 @@ const config: UserConfig = {
       ],
     ],
   },
+  // ignore commit messages github uses on their PR buttons, "Update" or "Merge branch"
+  ignores: [
+    (commitMessage) => {
+      // add an exception for github
+      return (
+        commitMessage.startsWith('Update ') ||
+        /^Merge branch '.*' into [a-zA-Z0-9\/\-_]+$/.test(commitMessage)
+      );
+    },
+  ],
 };
 
 export default config;
