@@ -267,7 +267,7 @@ This repository includes demo projects located in the `/demo` directory to help 
 The `package.json` includes several scripts to help you manage and run the demo projects:
 
 - **`demo:seed`**: Seeds the Strapi application with example data. This script also generates `.env` files with API tokens for the `demo-node-typescript` and `demo-node-javascript` projects.
-  
+
   ```bash
   pnpm run demo:seed
   ```
