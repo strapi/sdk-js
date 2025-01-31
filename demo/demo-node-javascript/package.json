@@ -4,8 +4,8 @@
   "description": "A Strapi SDK demo using a Node x JavaScript application",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "debug": "DEBUG=* node index.js"
+    "start": "node src/index.js",
+    "debug": "DEBUG=* node src/index.js"
   },
   "dependencies": {
     "@strapi/sdk-js": "link:../.."
