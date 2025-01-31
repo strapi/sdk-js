@@ -264,24 +264,52 @@ This repository includes demo projects located in the `/demo` directory to help 
 
 ### Using Demo Scripts
 
-The `package.json` includes several scripts to help you manage and run the demo projects:
+The `package.json` includes several scripts to help you manage and run the demo projects. These scripts are designed to streamline the process of setting up and running the demo projects, making it easier for developers to test and interact with the SDK.
 
-- **`demo:seed`**: Seeds the Strapi application with example data. This script also generates `.env` files with API tokens for the `demo-node-typescript` and `demo-node-javascript` projects.
+The most important basic commands to get started are:
+
+- **`demo:setup`**: A comprehensive setup command that installs dependencies, sets up the environment, builds the projects, and seeds the demo application. This is a one-stop command to prepare everything needed to run the demos.
 
   ```bash
-  pnpm run demo:seed
+  pnpm run demo:setup
   ```
 
-- **`demo:seed:clean`**: Cleans the existing data and re-seeds the Strapi application.
+- **`demo:run`**: Runs the Strapi application server in development mode. This command is useful for testing and developing.
+
+  ```bash
+  pnpm run demo:run
+  ```
+
+- **`demo:seed:clean`**: Cleans the existing data and re-seeds the Strapi demo application. This command is helpful for resetting the demo data to its initial state.
 
   ```bash
   pnpm run demo:seed:clean
   ```
 
-- **`demo:run`**: Starts the Strapi application in development mode.
+The following scripts shouldn't need to be used generally, but are also available to run individual parts of the setup or reset process:
+
+- **`demo:build`**: Builds the main project and the TypeScript and JavaScript demo projects. This command ensures that all necessary build steps are completed for the demo projects to run.
 
   ```bash
-  pnpm run demo:run
+  pnpm run demo:build
+  ```
+
+- **`demo:install`**: Installs all dependencies for the main project and all demo projects, including TypeScript, JavaScript, HTML, and Next.js demos. This command is essential to prepare the environment for running the demos.
+
+  ```bash
+  pnpm run demo:install
+  ```
+
+- **`demo:env`**: Sets up the environment for the Strapi demo application by copying the example environment file if it doesn't already exist.
+
+  ```bash
+  pnpm run demo:env
+  ```
+
+- **`demo:seed`**: Seeds the Strapi application with example data. This script also generates `.env` files with API tokens for the `demo-node-typescript` and `demo-node-javascript` projects.
+
+  ```bash
+  pnpm run demo:seed
   ```
 
 ### Adding New Projects
