@@ -274,7 +274,7 @@ The most important basic commands to get started are:
   pnpm run demo:setup
   ```
 
-- **`demo:run`**: Runs the Strapi application server in development mode and starts the HTML and Next.js demo projects. This command is useful for testing and developing with live reloading.
+- **`demo:run`**: Runs the Strapi application server in development mode. This command is useful for testing and developing.
 
   ```bash
   pnpm run demo:run
