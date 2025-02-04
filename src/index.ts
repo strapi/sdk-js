@@ -3,8 +3,6 @@ import { Strapi } from './sdk';
 
 import type { StrapiConfig } from './sdk';
 
-export * from './errors';
-
 export interface Config {
   /**
    * The base URL of the Strapi content API.
@@ -94,3 +92,10 @@ export const strapi = (config: Config) => {
 
   return new Strapi(sdkConfig);
 };
+
+// Error classes
+export * from './errors';
+
+// Public types and interfaces
+export type { StrapiConfig, Strapi } from './sdk';
+export type { CollectionTypeManager, SingleTypeManager } from './content-types';
