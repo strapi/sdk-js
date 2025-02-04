@@ -76,6 +76,7 @@
     "@strapi/eslint-config": "0.2.1",
     "@types/debug": "4.1.12",
     "@types/jest": "29.5.14",
+    "@types/qs": "6.9.18",
     "@typescript-eslint/eslint-plugin": "8.21.0",
     "@typescript-eslint/parser": "8.21.0",
     "eslint": "8.57.1",
@@ -94,6 +95,7 @@
     "node": ">=20.18.2 <=22.x.x"
   },
   "dependencies": {
-    "debug": "4.4.0"
+    "debug": "4.4.0",
+    "qs": "6.14.0"
   }
 }

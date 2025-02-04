@@ -10,6 +10,9 @@ importers:
       debug:
         specifier: 4.4.0
         version: 4.4.0
+      qs:
+        specifier: 6.14.0
+        version: 6.14.0
     devDependencies:
       '@commitlint/cli':
         specifier: 19.6.1
@@ -44,6 +47,9 @@ importers:
       '@types/jest':
         specifier: 29.5.14
         version: 29.5.14
+      '@types/qs':
+        specifier: 6.9.18
+        version: 6.9.18
       '@typescript-eslint/eslint-plugin':
         specifier: 8.21.0
         version: 8.21.0(@typescript-eslint/parser@8.21.0(eslint@8.57.1)(typescript@5.7.3))(eslint@8.57.1)(typescript@5.7.3)
@@ -1128,6 +1134,12 @@ packages:
     resolution:
       {
         integrity: sha512-Xxr6BBRCAOQixvonOye19wnzyDiUtTeqldOOmj3CkeblonbccA12PFwlufvRdrpjXxqnmUaeiU5EOA+7s5diUQ==,
+      }
+
+  '@types/qs@6.9.18':
+    resolution:
+      {
+        integrity: sha512-kK7dgTYDyGqS+e2Q4aK9X3D7q234CIZ1Bv0q/7Z5IwRDoADNU81xXJK/YVyLbLTZCoIwUoDoffFeF+p/eIklAA==,
       }
 
   '@types/resolve@1.20.2':
@@ -4320,6 +4332,13 @@ packages:
         integrity: sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==,
       }
 
+  qs@6.14.0:
+    resolution:
+      {
+        integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==,
+      }
+    engines: { node: '>=0.6' }
+
   queue-microtask@1.2.3:
     resolution:
       {
@@ -6009,6 +6028,8 @@ snapshots:
   '@types/node@22.10.2':
     dependencies:
       undici-types: 6.20.0
+
+  '@types/qs@6.9.18': {}
 
   '@types/resolve@1.20.2': {}
 
@@ -8341,6 +8362,10 @@ snapshots:
   punycode@2.3.1: {}
 
   pure-rand@6.1.0: {}
+
+  qs@6.14.0:
+    dependencies:
+      side-channel: 1.1.0
 
   queue-microtask@1.2.3: {}
 
