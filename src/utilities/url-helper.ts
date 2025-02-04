@@ -1,4 +1,5 @@
 import createDebug from 'debug';
+import qs from 'qs';
 
 import type { BaseQueryParams } from '../types/content-api';
 
@@ -53,42 +54,58 @@ export class URLHelper {
       return url;
     }
 
-    const params = new URLSearchParams();
+    const queryString = URLHelper.stringifyQueryParams(queryParams);
 
-    const appendParam = (key: string, value: unknown) => {
-      // vals=[1, 2, 3] -> vals[0]='1', vals[1]='2', vals[3]='2'
-      if (Array.isArray(value)) {
-        value
-          .filter((item) => typeof item !== 'undefined')
-          .forEach((item, index) => params.append(`${key}[${index}]`, String(item)));
-      }
-
-      // vals={ foo: 'bar', bar: 40 } -> vals[foo]='bar', vals[bar]='40'
-      else if (typeof value === 'object' && value !== null) {
-        for (const [subKey, subValue] of Object.entries(value)) {
-          appendParam(`${key}[${subKey}]`, subValue);
-        }
-      }
-
-      // val=40 -> val='40'
-      else if (typeof value !== 'undefined') {
-        params.append(key, String(value));
-      }
-    };
-
-    for (const [key, value] of Object.entries(queryParams)) {
-      if (value !== undefined) {
-        appendParam(key, value);
-      }
+    if (!queryString) {
+      debug('generated an empty query string, skipping...');
+      return url;
     }
 
-    const queryString = params.toString();
+    // If a URL already contains a search query, use `&` instead of `?` to append the new search terms
+    return URL.canParse(url) && new URL(url).search
+      ? `${url}&${queryString}`
+      : `${url}?${queryString}`;
+  }
 
-    const qs = queryString ? `${url}?${queryString}` : url;
-
-    debug('query params appended to url: %o', qs);
-
-    return qs;
+  /**
+   * Converts an object of query parameters into a URL-encoded query string.
+   *
+   * Takes an object containing query parameters, transforms it into a properly formatted
+   * query string, and returns the result.
+   *
+   * Uses the `qs` library for serialization, ensuring support for nested objects and arrays in query parameters.
+   *
+   * @param queryParams - An object containing key-value pairs to be serialized into a query string.
+   *
+   * @returns The serialized query string representing the provided query parameters.
+   *
+   * @example
+   * ```typescript
+   * // Example 1: simple key-value pair
+   * const queryString1 = URLHelper.stringifyQueryParams({ locale: 'en' });
+   * console.log(queryString1); // Output: 'locale=en'
+   *
+   * // Example 2: array as a parameter
+   * const queryString2 = URLHelper.stringifyQueryParams({ tags: ['news', 'tech'] });
+   * console.log(queryString2); // Output: 'tags[0]=news&tags[1]=tech'
+   *
+   * // Example 3: nested object
+   * const queryString3 = URLHelper.stringifyQueryParams({ filters: { category: 'news', status: 'published' } });
+   * console.log(queryString3); // Output: 'filters[category]=news&filters[status]=published'
+   * ```
+   *
+   * @remarks
+   * - This method relies on the `qs` library for query string serialization.
+   * - The option `addQueryPrefix` is set to `false`, meaning the resulting string doesn't include leading `?`.
+   *
+   * @see
+   * - {@link BaseQueryParams} for details on query parameter data structure.
+   * - {@link https://github.com/ljharb/qs#stringifying qs.stringify documentation} for more about supported options and formats.
+   *
+   * @todo - replace usage of qs with a more lightweight version, the current one doubles the bundles size although we don't use much features
+   */
+  static stringifyQueryParams(queryParams: BaseQueryParams): string {
+    return qs.stringify(queryParams, { addQueryPrefix: false, allowEmptyArrays: true });
   }
 
   /**
