@@ -56,6 +56,9 @@ describe('SingleTypeManager CRUD Methods', () => {
     expect(requestSpy).toHaveBeenCalledWith('/homepage?locale=en', {
       method: 'PUT',
       body: JSON.stringify({ data: payload }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   });
 
