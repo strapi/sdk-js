@@ -84,6 +84,9 @@ describe('CollectionTypeManager CRUD Methods', () => {
     expect(requestSpy).toHaveBeenCalledWith('/articles?locale=en', {
       method: 'POST',
       body: JSON.stringify({ data: payload }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   });
 
@@ -99,6 +102,9 @@ describe('CollectionTypeManager CRUD Methods', () => {
     expect(requestSpy).toHaveBeenCalledWith('/articles/1?locale=en', {
       method: 'PUT',
       body: JSON.stringify({ data: payload }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   });
 

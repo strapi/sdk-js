@@ -152,7 +152,13 @@ export class CollectionTypeManager {
       url = URLHelper.appendQueryParams(url, queryParams);
     }
 
-    const response = await this._httpClient.post(url, JSON.stringify({ data }));
+    const response = await this._httpClient.post(
+      url,
+      // Wrap the payload in a data object
+      JSON.stringify({ data }),
+      // By default POST requests sets the content-type to text/plain
+      { headers: { 'Content-Type': 'application/json' } }
+    );
 
     debug('created the %o document', this._pluralName);
 
@@ -198,7 +204,13 @@ export class CollectionTypeManager {
       url = URLHelper.appendQueryParams(url, queryParams);
     }
 
-    const response = await this._httpClient.put(url, JSON.stringify({ data }));
+    const response = await this._httpClient.put(
+      url,
+      // Wrap the payload in a data object
+      JSON.stringify({ data }),
+      // By default PUT requests sets the content-type to text/plain
+      { headers: { 'Content-Type': 'application/json' } }
+    );
 
     debug('updated the %o document with id %o', this._pluralName, documentID);
 
