@@ -1,4 +1,6 @@
 import { strapi } from '@strapi/sdk-js';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 // Create the SDK instance
 const sdk = strapi({ baseURL: 'http://localhost:1337/api', auth: process.env.FULL_ACCESS_TOKEN }); // READ_ONLY_TOKEN is also available
