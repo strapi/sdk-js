@@ -8,7 +8,8 @@
     "debug": "DEBUG=* node src/index.js"
   },
   "dependencies": {
-    "@strapi/sdk-js": "link:../.."
+    "@strapi/sdk-js": "link:../..",
+    "dotenv": "16.4.7"
   },
   "keywords": [],
   "author": {
