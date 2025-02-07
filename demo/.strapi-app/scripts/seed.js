@@ -267,8 +267,8 @@ async function createApiTokens(app) {
   ];
 
   const envPaths = [
-    path.join(__dirname, '../../demo-node-javascript/.env'),
-    path.join(__dirname, '../../demo-node-typescript/.env'),
+    path.join(__dirname, '../../node-javascript/.env'),
+    path.join(__dirname, '../../node-typescript/.env'),
   ];
 
   for (const tokenType of tokenTypes) {

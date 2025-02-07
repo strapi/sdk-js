@@ -259,8 +259,8 @@ This repository includes demo projects located in the `/demo` directory to help 
 ### Demo Structure
 
 - **`.strapi-app`**: This is the main Strapi application used for the demo projects.
-- **`demo/demo-node-typescript`**: A Node.js project using TypeScript.
-- **`demo/demo-node-javascript`**: A Node.js project using JavaScript.
+- **`demo/node-typescript`**: A Node.js project using TypeScript.
+- **`demo/node-javascript`**: A Node.js project using JavaScript.
 
 ### Using Demo Scripts
 
@@ -306,7 +306,7 @@ The following scripts shouldn't need to be used generally, but are also availabl
   pnpm run demo:env
   ```
 
-- **`demo:seed`**: Seeds the Strapi application with example data. This script also generates `.env` files with API tokens for the `demo-node-typescript` and `demo-node-javascript` projects.
+- **`demo:seed`**: Seeds the Strapi application with example data. This script also generates `.env` files with API tokens for the `node-typescript` and `node-javascript` projects.
 
   ```bash
   pnpm run demo:seed
