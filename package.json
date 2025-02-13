@@ -1,7 +1,7 @@
 {
   "name": "@strapi/client",
   "version": "1.0.0",
-  "description": "The official client SDK to easily interface with Strapi from your JavaScript/TypeScript project",
+  "description": "The official client library to easily interface with Strapi from your JavaScript/TypeScript project",
   "keywords": [
     "strapi",
     "sdk",
