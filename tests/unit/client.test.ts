@@ -128,7 +128,7 @@ describe('Strapi', () => {
       expect(validateConfigSpy).toHaveBeenCalledWith(config);
     });
 
-    it('should fail to create and SDK instance if there is an unexpected error', () => {
+    it('should fail to create and client instance if there is an unexpected error', () => {
       // Arrange
       let client!: Strapi;
 

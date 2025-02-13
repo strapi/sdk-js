@@ -101,7 +101,7 @@ Alternatively, use a `<script>` tag in a browser environment:
 
 ### Authentication
 
-The SDK supports multiple authentication strategies for accessing authenticated content in your Strapi backend.
+The client library supports multiple authentication strategies for accessing authenticated content in your Strapi backend.
 
 #### API-Token authentication
 
@@ -118,7 +118,7 @@ const client = strapi({
 
 ## 📚 API Reference
 
-The Strapi Client SDK instance provides key properties and utility methods for content and API interaction:
+The Strapi client library instance provides key properties and utility methods for content and API interaction:
 
 - **`baseURL`**: base URL of your Strapi backend.
 - **`fetch`**: perform generic requests to the Strapi Content API using fetch-like syntax.

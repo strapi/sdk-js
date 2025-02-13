@@ -5,7 +5,7 @@ import { Strapi } from '../../src/client';
 import type { Config } from '../../src';
 
 describe('strapi', () => {
-  it('should create an SDK instance with valid http configuration', () => {
+  it('should create an client instance with valid http configuration', () => {
     // Arrange
     const config = { baseURL: 'https://api.example.com' } satisfies Config;
 
@@ -17,7 +17,7 @@ describe('strapi', () => {
     expect(client).toHaveProperty('baseURL', config.baseURL);
   });
 
-  it('should create an SDK instance with valid auth configuration', () => {
+  it('should create an client instance with valid auth configuration', () => {
     // Arrange
     const token = '<token>';
     const config = { baseURL: 'https://api.example.com', auth: token } satisfies Config;

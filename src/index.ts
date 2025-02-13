@@ -7,7 +7,7 @@ export interface Config {
   /**
    * The base URL of the Strapi content API.
    *
-   * This specifies where the SDK should send requests.
+   * This specifies where the client should send requests.
    *
    * The URL must include the protocol (`http` or `https`) and serve
    * as the root path for all later API operations.
@@ -30,10 +30,10 @@ export interface Config {
    * @remarks
    * - A valid token must be a non-empty string.
    *
-   * - If the token is invalid or improperly formatted, the SDK
+   * - If the token is invalid or improperly formatted, the client
    * throws a `StrapiValidationError` during initialization.
    *
-   * - If excluded, the SDK operates without authentication.
+   * - If excluded, the client operates without authentication.
    */
 
   auth?: string;
@@ -48,7 +48,7 @@ export interface Config {
  * request dispatch, and response parsing for content management.
  *
  * @param config - The configuration for initializing the client. This should include the base URL
- *                 of the Strapi content API that the SDK communicates with. The baseURL
+ *                 of the Strapi content API that the client communicates with. The baseURL
  *                 must be formatted with one of the supported protocols: `http` or `https`.
  *                 Additionally, optional authentication details can be specified within the config.
  *
@@ -62,10 +62,10 @@ export interface Config {
  *   auth: 'your_token_here',
  * };
  *
- * // Create the SDK instance
+ * // Create the client instance
  * const client = strapi(config);
  *
- * // Using the SDK to fetch content from a custom endpoint
+ * // Using the client to fetch content from a custom endpoint
  * const response = await client.fetch('/content-endpoint');
  * const data = await response.json();
  *
@@ -78,19 +78,19 @@ export interface Config {
 export const strapi = (config: Config) => {
   const { baseURL, auth } = config;
 
-  const sdkConfig: StrapiConfig = { baseURL };
+  const clientConfig: StrapiConfig = { baseURL };
 
   // In this factory, while there is only one auth strategy available, users can't manually set the strategy options.
-  // Since the SDK constructor needs to define a proper strategy,
+  // Since the client constructor needs to define a proper strategy,
   // it is handled here if the auth property is provided
   if (auth !== undefined) {
-    sdkConfig.auth = {
+    clientConfig.auth = {
       strategy: ApiTokenAuthProvider.identifier,
       options: { token: auth },
     };
   }
 
-  return new Strapi(sdkConfig);
+  return new Strapi(clientConfig);
 };
 
 // Error classes
