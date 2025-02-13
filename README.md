@@ -215,7 +215,7 @@ You can turn on or off debug logs using the `DEBUG` environment variable:
 DEBUG=*
 
 # Enable logs for a specific namespace
-DEBUG=sdk:http
+DEBUG=strapi:http
 
 # Turn off logs
 unset DEBUG
