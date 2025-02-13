@@ -4,12 +4,12 @@ import { StrapiValidationError, URLValidationError } from '../errors';
 
 import { URLValidator } from './url';
 
-import type { StrapiConfig } from '../sdk';
+import type { StrapiConfig } from '../client';
 
 const debug = createDebug('strapi:validators:config');
 
 /**
- * Provides the ability to validate the configuration used for initializing the Strapi SDK.
+ * Provides the ability to validate the configuration used for initializing the Strapi client.
  *
  * This includes URL validation to ensure compatibility with Strapi's API endpoints.
  */
@@ -27,7 +27,7 @@ export class StrapiConfigValidator {
    * Validates the provided SDK configuration, ensuring that all values are
    * suitable for the SDK operations..
    *
-   * @param config - The configuration object for the Strapi SDK. Must include a `baseURL` property indicating the API's endpoint.
+   * @param config - The configuration object for the Strapi client. Must include a `baseURL` property indicating the API's endpoint.
    *
    * @throws {StrapiValidationError} If the configuration is invalid, or if the baseURL is invalid.
    */

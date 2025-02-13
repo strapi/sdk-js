@@ -10,11 +10,11 @@ describe('strapi', () => {
     const config = { baseURL: 'https://api.example.com' } satisfies Config;
 
     // Act
-    const sdk = strapi(config);
+    const client = strapi(config);
 
     // Assert
-    expect(sdk).toBeInstanceOf(Strapi);
-    expect(sdk).toHaveProperty('baseURL', config.baseURL);
+    expect(client).toBeInstanceOf(Strapi);
+    expect(client).toHaveProperty('baseURL', config.baseURL);
   });
 
   it('should create an SDK instance with valid auth configuration', () => {
@@ -23,11 +23,11 @@ describe('strapi', () => {
     const config = { baseURL: 'https://api.example.com', auth: token } satisfies Config;
 
     // Act
-    const sdk = strapi(config);
+    const client = strapi(config);
 
     // Assert
-    expect(sdk).toBeInstanceOf(Strapi);
-    expect(sdk).toHaveProperty('auth', {
+    expect(client).toBeInstanceOf(Strapi);
+    expect(client).toHaveProperty('auth', {
       strategy: ApiTokenAuthProvider.identifier, // default auth strategy
       options: { token },
     });

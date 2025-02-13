@@ -8,7 +8,7 @@ describe('Strapi Errors', () => {
 
       // Assert
       expect(error.message).toBe(
-        'An error occurred in the Strapi SDK. Please check the logs for more information.'
+        'An error occurred in the Strapi client. Please check the logs for more information.'
       );
       expect(error.cause).toBeUndefined();
     });
@@ -75,7 +75,7 @@ describe('Strapi Errors', () => {
       const error = new StrapiInitializationError();
 
       // Assert
-      expect(error.message).toBe('Could not initialize the Strapi SDK');
+      expect(error.message).toBe('Could not initialize the Strapi Client');
       expect(error.cause).toBeUndefined();
     });
 

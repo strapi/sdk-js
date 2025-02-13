@@ -1,7 +1,7 @@
 import { ApiTokenAuthProvider } from './auth';
-import { Strapi } from './sdk';
+import { Strapi } from './client';
 
-import type { StrapiConfig } from './sdk';
+import type { StrapiConfig } from './client';
 
 export interface Config {
   /**
@@ -40,19 +40,19 @@ export interface Config {
 }
 
 /**
- * Creates a new instance of the Strapi SDK with a specified configuration.
+ * Creates a new instance of the Strapi Client with a specified configuration.
  *
- * The Strapi SDK functions as a client library to interface with the Strapi content API.
+ * The Strapi Client functions as a client library to interface with the Strapi content API.
  *
  * It facilitates reliable and secure interactions with Strapi's APIs by handling URL validation,
  * request dispatch, and response parsing for content management.
  *
- * @param config - The configuration for initializing the SDK. This should include the base URL
+ * @param config - The configuration for initializing the client. This should include the base URL
  *                 of the Strapi content API that the SDK communicates with. The baseURL
  *                 must be formatted with one of the supported protocols: `http` or `https`.
  *                 Additionally, optional authentication details can be specified within the config.
  *
- * @returns An instance of the Strapi SDK configured with the specified baseURL and auth settings.
+ * @returns An instance of the Strapi Client configured with the specified baseURL and auth settings.
  *
  * @example
  * ```typescript
@@ -63,10 +63,10 @@ export interface Config {
  * };
  *
  * // Create the SDK instance
- * const sdk = strapi(config);
+ * const client = strapi(config);
  *
  * // Using the SDK to fetch content from a custom endpoint
- * const response = await sdk.fetch('/content-endpoint');
+ * const response = await client.fetch('/content-endpoint');
  * const data = await response.json();
  *
  * console.log(data);
@@ -97,5 +97,5 @@ export const strapi = (config: Config) => {
 export * from './errors';
 
 // Public types and interfaces
-export type { StrapiConfig, Strapi } from './sdk';
+export type { StrapiConfig, Strapi } from './client';
 export type { CollectionTypeManager, SingleTypeManager } from './content-types';

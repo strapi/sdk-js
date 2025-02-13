@@ -32,7 +32,7 @@ export interface AuthConfig<T = unknown> {
 }
 
 /**
- * Class representing the Strapi SDK to interface with a Strapi backend.
+ * Class representing the Strapi Client to interface with a Strapi backend.
  *
  * This class integrates setting up configuration, validation, and handling
  * HTTP requests with authentication.
@@ -96,7 +96,7 @@ export class Strapi {
    *
    * This method ensures that the provided configuration for the SDK is valid by using the
    * internal SDK validator. It is invoked during the initialization process to confirm that
-   * all necessary parts are correctly configured before effectively using the SDK.
+   * all necessary parts are correctly configured before effectively using the client.
    *
    * @throws {StrapiInitializationError} If the configuration validation fails, indicating an issue with the SDK initialization process.
    *
@@ -109,7 +109,7 @@ export class Strapi {
    *     options: { token: 'your-token-here' }
    *   }
    * };
-   * const sdk = new Strapi(config);
+   * const client = new Strapi(config);
    *
    * // The preflightValidation is automatically called within the constructor
    * // to ensure the provided config is valid prior to any further setup.
@@ -128,7 +128,7 @@ export class Strapi {
   }
 
   /**
-   * Initializes the configuration settings for the SDK.
+   * Initializes the configuration settings for the client.
    *
    * @internal
    */
@@ -140,7 +140,7 @@ export class Strapi {
   }
 
   /**
-   * Initializes the HTTP client configuration for the SDK.
+   * Initializes the HTTP client configuration for the client.
    *
    * Sets up necessary HTTP interceptors to ensure consistent behavior:
    * - Adds default HTTP request headers.
@@ -166,7 +166,7 @@ export class Strapi {
   }
 
   /**
-   * Initializes the authentication configuration for the SDK.
+   * Initializes the authentication configuration for the client.
    *
    * Sets up authentication strategies and required HTTP interceptors to:
    * - Handle user authentication through the configured strategy.
@@ -209,7 +209,7 @@ export class Strapi {
   }
 
   /**
-   * Retrieves the authentication configuration for the Strapi SDK.
+   * Retrieves the authentication configuration for the Strapi client.
    *
    * @note This is a private property used internally within the SDK for configuring authentication in the HTTP layer.
    *
@@ -220,20 +220,20 @@ export class Strapi {
   }
 
   /**
-   * Retrieves the base URL of the Strapi SDK instance.
+   * Retrieves the base URL of the Strapi Client instance.
    *
    * This getter returns the `baseURL` property stored within the SDK's configuration object.
    *
-   * The base URL is used as the starting point for all HTTP requests initiated through the SDK.
+   * The base URL is used as the starting point for all HTTP requests initiated through the client.
    *
-   * @returns The current base URL configured in the SDK.
+   * @returns The current base URL configured in the client.
    *          This URL typically represents the root endpoint of the Strapi service the SDK interfaces with.
    *
    * @example
    * const config = { baseURL: 'http://localhost:1337/api' };
-   * const sdk = new Strapi(config);
+   * const client = new Strapi(config);
    *
-   * console.log(sdk.baseURL); // Output: http://localhost:1337
+   * console.log(client.baseURL); // Output: http://localhost:1337
    */
   public get baseURL(): string {
     return this._config.baseURL;
@@ -244,17 +244,17 @@ export class Strapi {
    *
    * This method ensures authentication is handled before issuing requests and sets the necessary headers.
    *
-   * @param url - The endpoint to fetch from, appended to the base URL of the SDK.
+   * @param url - The endpoint to fetch from, appended to the base URL of the client.
    * @param [init] - Optional initialization options for the request, such as headers or method type.
    *
    * @example
    * ```typescript
    * // Create the SDK instance
    * const config = { baseURL: 'http://localhost:1337/api' };
-   * const sdk = new Strapi(config);
+   * const client = new Strapi(config);
    *
    * // Perform a custom fetch query
-   * const response = await sdk.fetch('/categories');
+   * const response = await client.fetch('/categories');
    *
    * // Parse the categories into a readable JSON object
    * const categories = await response.json();
@@ -286,10 +286,10 @@ export class Strapi {
    * ```typescript
    * // Initialize the SDK with required configuration
    * const config = { baseURL: 'http://localhost:1337/api' };
-   * const sdk = new Strapi(config);
+   * const client = new Strapi(config);
    *
    * // Retrieve a CollectionTypeManager for the 'articles' resource
-   * const articles = sdk.collection('articles');
+   * const articles = client.collection('articles');
    *
    * // Example: find all articles
    * const allArticles = await articles.find();
@@ -327,10 +327,10 @@ export class Strapi {
    * @example
    * ```typescript
    * // Initialize the SDK with required configuration
-   * const sdk = new Strapi({ baseURL: 'http://localhost:1337/api' });
+   * const client = new Strapi({ baseURL: 'http://localhost:1337/api' });
    *
    * // Retrieve a SingleTypeManager for the 'homepage' resource
-   * const homepage = sdk.single('homepage');
+   * const homepage = client.single('homepage');
    *
    * // Example: fetch the homepage content in Spanish
    * const homepageContent = await homepage.find({ locale: 'es' });

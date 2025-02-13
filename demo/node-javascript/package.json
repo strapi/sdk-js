@@ -1,7 +1,7 @@
 {
   "name": "demo-node-javascript",
   "version": "1.0.0",
-  "description": "A Strapi SDK demo using a Node x JavaScript application",
+  "description": "A Strapi Client demo using a Node x JavaScript application",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",

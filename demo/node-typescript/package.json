@@ -1,7 +1,7 @@
 {
   "name": "demo-node-typescript",
   "version": "1.0.0",
-  "description": "A Strapi SDK demo using a Node x TypeScript application",
+  "description": "A Strapi Client demo using a Node x TypeScript application",
   "main": "dist/index.js",
   "private": true,
   "type": "module",

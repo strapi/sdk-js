@@ -6,8 +6,8 @@ body:
   - type: textarea
     attributes:
       label: Bug Description
-      description: Provide a clear and concise description of the issue or unexpected behavior related to the Strapi SDK client.
-      placeholder: Using the SDK client to fetch data from the "articles" collection does not return the expected results.
+      description: Provide a clear and concise description of the issue or unexpected behavior related to the Strapi Client.
+      placeholder: Using the Strapi client to fetch data from the "articles" collection does not return the expected results.
     validations:
       required: true
 
@@ -18,8 +18,8 @@ body:
       placeholder: |
         Example:
           1. Initialize a new Strapi project with an "article" collection type defined as "...".
-          2. Configure the SDK client with your Strapi API URL and authentication token.
-          3. Perform a query to fetch entries from a collection: `sdk.collection('articles').find()`.
+          2. Configure the Strapi client with your Strapi API URL and authentication token.
+          3. Perform a query to fetch entries from a collection: `client.collection('articles').find()`.
           4. Observe the unexpected behavior or error in the response/output.
     validations:
       required: true
@@ -35,7 +35,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: The version of the SDK that was used.
+      description: The version of the Strapi Client that was used.
       placeholder: 1.0.0
     validations:
       required: true
@@ -73,7 +73,7 @@ body:
     id: logs
     attributes:
       label: Logs
-      description: If available, please provide the logs generated while using the SDK.
+      description: If available, please provide the logs generated while using the client.
       render: shell
 
   - type: textarea

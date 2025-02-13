@@ -34,7 +34,7 @@
 1. [Getting Started](#-getting-started)
    - [Prerequisites](#pre-requisites)
    - [Installation](#installation)
-2. [Creating and Configuring an SDK Instance](#-creating-and-configuring-the-sdk-instance)
+2. [Creating and Configuring a Client Instance](#-creating-and-configuring-the-sdk-instance)
    - [Basic Configuration](#basic-configuration)
    - [Authentication](#authentication)
      - [API Token Authentication](#api-token-authentication)
@@ -57,7 +57,7 @@ Before you begin, ensure you have the following:
 
 ### Installation
 
-Install the SDK as a dependency in your project:
+Install the client as a dependency in your project:
 
 **NPM**
 
@@ -77,16 +77,16 @@ yarn add @strapi/client
 pnpm add @strapi/client
 ```
 
-## ⚙️ Creating and configuring the SDK Instance
+## ⚙️ Creating and configuring the client Instance
 
 ### Basic configuration
 
-To interact with your Strapi backend, initialize the SDK with your Strapi API base URL:
+To interact with your Strapi backend, initialize the client with your Strapi API base URL:
 
 ```typescript
 import { strapi } from '@strapi/client';
 
-const sdk = strapi({ baseURL: 'http://localhost:1337/api' });
+const client = strapi({ baseURL: 'http://localhost:1337/api' });
 ```
 
 Alternatively, use a `<script>` tag in a browser environment:
@@ -95,7 +95,7 @@ Alternatively, use a `<script>` tag in a browser environment:
 <script src="https://cdn.jsdelivr.net/npm/@strapi/client"></script>
 
 <script>
-  const sdk = strapi.strapi({ baseURL: 'http://localhost:1337/api' });
+  const client = strapi.strapi({ baseURL: 'http://localhost:1337/api' });
 </script>
 ```
 
@@ -105,10 +105,10 @@ The SDK supports multiple authentication strategies for accessing authenticated 
 
 #### API-Token authentication
 
-If your Strapi instance uses API tokens, configure the SDK like this:
+If your Strapi instance uses API tokens, configure the client like this:
 
 ```typescript
-const sdk = strapi({
+const client = strapi({
   // Endpoint configuration
   baseURL: 'http://localhost:1337/api',
   // Auth configuration
@@ -118,7 +118,7 @@ const sdk = strapi({
 
 ## 📚 API Reference
 
-The Strapi SDK instance provides key properties and utility methods for content and API interaction:
+The Strapi Client SDK instance provides key properties and utility methods for content and API interaction:
 
 - **`baseURL`**: base URL of your Strapi backend.
 - **`fetch`**: perform generic requests to the Strapi Content API using fetch-like syntax.
@@ -145,7 +145,7 @@ which can have multiple entries.
 #### Examples:
 
 ```typescript
-const articles = sdk.collection('articles');
+const articles = client.collection('articles');
 
 // Fetch all english articles sorted by title
 const allArticles = await articles.find({
@@ -181,7 +181,7 @@ The `.single()` method provides a manager for working with single-type resources
 #### Examples:
 
 ```typescript
-const homepage = sdk.single('homepage');
+const homepage = client.single('homepage');
 
 // Fetch the default version of the homepage
 const defaultHomepage = await homepage.find();
@@ -254,7 +254,7 @@ Below is a list of available namespaces to use:
 
 ## 🚀 Demo Projects
 
-This repository includes demo projects located in the `/demo` directory to help you get started with using the Strapi SDK. The actual Strapi application is located in the `.strapi-app` directory.
+This repository includes demo projects located in the `/demo` directory to help you get started with using the client. The actual Strapi application is located in the `.strapi-app` directory.
 
 ### Demo Structure
 
@@ -264,7 +264,7 @@ This repository includes demo projects located in the `/demo` directory to help 
 
 ### Using Demo Scripts
 
-The `package.json` includes several scripts to help you manage and run the demo projects. These scripts are designed to streamline the process of setting up and running the demo projects, making it easier for developers to test and interact with the SDK.
+The `package.json` includes several scripts to help you manage and run the demo projects. These scripts are designed to streamline the process of setting up and running the demo projects, making it easier for developers to test and interact with the client.
 
 The most important basic commands to get started are:
 
@@ -323,4 +323,4 @@ We plan to expand the demo projects to include:
 - A basic HTML project.
 - A Next.js project.
 
-These additions will provide more examples of how to integrate the Strapi SDK into different types of applications.
+These additions will provide more examples of how to integrate the client into different types of applications.

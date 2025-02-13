@@ -21,7 +21,7 @@ import type { HttpClientConfig, InterceptorManagerMap } from './types';
 const debug = createDebug('strapi:http');
 
 /**
- * Strapi SDK's HTTP Client
+ * Strapi Client's HTTP Client
  *
  * Provides methods for configuring the base URL, timeout, interceptors, headers,
  * and for performing HTTP requests with automatic URL validation.
