@@ -1,4 +1,4 @@
-const { strapi } = require('@strapi/sdk-js');
+const { strapi } = require('@strapi/client');
 require('dotenv').config();
 
 const api_token = process.env.FULL_ACCESS_TOKEN; // READ_ONLY_TOKEN is also available
@@ -6,11 +6,11 @@ const api_token = process.env.FULL_ACCESS_TOKEN; // READ_ONLY_TOKEN is also avai
 console.log('Running with api token ' + api_token);
 
 async function main() {
-  // Create the SDK instance
-  const sdk = strapi({ baseURL: 'http://localhost:1337/api', auth: api_token });
+  // Create the Strapi client instance
+  const client = strapi({ baseURL: 'http://localhost:1337/api', auth: api_token });
 
   // Create a collection type query manager for the categories
-  const categories = sdk.collection('categories');
+  const categories = client.collection('categories');
 
   // Fetch the list of all categories
   const docs = await categories.find();

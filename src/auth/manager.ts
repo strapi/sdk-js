@@ -162,7 +162,7 @@ export class AuthManager {
   }
 
   /**
-   * Registers the SDK default authentication providers in the factory so that they can be later selected.
+   * Registers the client default authentication providers in the factory so that they can be later selected.
    *
    * The default authentication providers are:
    * - API Token ({@link ApiTokenAuthProvider})

@@ -10,9 +10,9 @@ import {
   StrapiInitializationError,
   StrapiValidationError,
 } from '../../src';
+import { Strapi } from '../../src/client';
 import { CollectionTypeManager, SingleTypeManager } from '../../src/content-types';
 import { HttpClient, StatusCode } from '../../src/http';
-import { Strapi } from '../../src/sdk';
 import { StrapiConfigValidator } from '../../src/validators';
 
 import {
@@ -23,8 +23,8 @@ import {
   MockFlakyURLValidator,
 } from './mocks';
 
+import type { StrapiConfig } from '../../src/client';
 import type { HttpClientConfig } from '../../src/http';
-import type { StrapiConfig } from '../../src/sdk';
 
 describe('Strapi', () => {
   const mockHttpClientFactory = (config: HttpClientConfig) => new MockHttpClient(config);
@@ -58,11 +58,11 @@ describe('Strapi', () => {
       const authSetStrategySpy = jest.spyOn(MockAuthManager.prototype, 'setStrategy');
 
       // Act
-      const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+      const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
       // Assert
 
-      expect(sdk).toBeInstanceOf(Strapi);
+      expect(client).toBeInstanceOf(Strapi);
       expect(validatorSpy).toHaveBeenCalledWith(config);
       expect(authSetStrategySpy).toHaveBeenCalledWith(MockAuthProvider.identifier, undefined);
     });
@@ -77,10 +77,10 @@ describe('Strapi', () => {
       const authSetStrategySpy = jest.spyOn(MockAuthManager.prototype, 'setStrategy');
 
       // Act
-      const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+      const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
       // Assert
-      expect(sdk).toBeInstanceOf(Strapi);
+      expect(client).toBeInstanceOf(Strapi);
       expect(authSetStrategySpy).not.toHaveBeenCalled();
     });
 
@@ -128,9 +128,9 @@ describe('Strapi', () => {
       expect(validateConfigSpy).toHaveBeenCalledWith(config);
     });
 
-    it('should fail to create and SDK instance if there is an unexpected error', () => {
+    it('should fail to create and client instance if there is an unexpected error', () => {
       // Arrange
-      let sdk!: Strapi;
+      let client!: Strapi;
 
       const baseURL = 'https://example.com';
       const config: StrapiConfig = { baseURL } satisfies StrapiConfig;
@@ -139,14 +139,14 @@ describe('Strapi', () => {
       const validateSpy = jest.spyOn(MockFlakyURLValidator.prototype, 'validate');
 
       // Act
-      const instantiateSDK = () => {
-        sdk = new Strapi(config, new StrapiConfigValidator(new MockFlakyURLValidator()));
+      const instantiateClient = () => {
+        client = new Strapi(config, new StrapiConfigValidator(new MockFlakyURLValidator()));
       };
 
       // Assert
-      expect(instantiateSDK).toThrow(expectedError);
+      expect(instantiateClient).toThrow(expectedError);
 
-      expect(sdk).toBeUndefined();
+      expect(client).toBeUndefined();
 
       expect(validateSpy).toHaveBeenCalledTimes(1);
       expect(validateSpy).toHaveBeenCalledWith(baseURL);
@@ -154,10 +154,10 @@ describe('Strapi', () => {
 
     it('should initialize correctly with the default validator', () => {
       // Arrange
-      const sdk = new Strapi({ baseURL: 'https://localhost:1337/api' });
+      const client = new Strapi({ baseURL: 'https://localhost:1337/api' });
 
       // Act & Assert
-      expect(sdk).toBeInstanceOf(Strapi);
+      expect(client).toBeInstanceOf(Strapi);
     });
   });
 
@@ -170,10 +170,10 @@ describe('Strapi', () => {
       const mockValidator = new MockStrapiConfigValidator();
       const mockAuthManager = new MockAuthManager();
 
-      const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+      const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
       // Act
-      const collection = sdk.collection(resource);
+      const collection = client.collection(resource);
 
       // Assert
       expect(collection).toBeInstanceOf(CollectionTypeManager);
@@ -190,10 +190,10 @@ describe('Strapi', () => {
       const mockValidator = new MockStrapiConfigValidator();
       const mockAuthManager = new MockAuthManager();
 
-      const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+      const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
       // Act
-      const single = sdk.single(resource);
+      const single = client.single(resource);
 
       // Assert
       expect(single).toBeInstanceOf(SingleTypeManager);
@@ -211,12 +211,12 @@ describe('Strapi', () => {
         const mockValidator = new MockStrapiConfigValidator();
         const mockAuthManager = new MockAuthManager();
 
-        const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+        const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
         const fetchSpy = jest.spyOn(MockHttpClient.prototype, 'fetch');
 
         // Act
-        await sdk.fetch(path);
+        await client.fetch(path);
         const headers = fetchSpy.mock.lastCall?.[1]?.headers;
 
         // Assert
@@ -239,12 +239,12 @@ describe('Strapi', () => {
         const mockValidator = new MockStrapiConfigValidator();
         const mockAuthManager = new MockAuthManager();
 
-        const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+        const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
         const fetchSpy = jest.spyOn(MockHttpClient.prototype, 'fetch');
 
         // Act
-        await sdk.fetch(path, init);
+        await client.fetch(path, init);
         const headers = fetchSpy.mock.lastCall?.[1]?.headers;
 
         // Assert
@@ -269,7 +269,7 @@ describe('Strapi', () => {
         const mockValidator = new MockStrapiConfigValidator();
         const mockAuthManager = new MockAuthManager();
 
-        const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+        const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
         jest
           .spyOn(MockHttpClient.prototype, 'fetch')
@@ -277,7 +277,7 @@ describe('Strapi', () => {
           .mockImplementationOnce(() => Promise.resolve(new Response(null, { status })));
 
         // Act & Assert
-        await expect(sdk.fetch(path)).rejects.toThrow(error);
+        await expect(client.fetch(path)).rejects.toThrow(error);
       });
     });
 
@@ -294,10 +294,10 @@ describe('Strapi', () => {
 
         const authenticateSpy = jest.spyOn(MockAuthManager.prototype, 'authenticate');
 
-        const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+        const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
         // Act
-        await sdk.fetch('/');
+        await client.fetch('/');
 
         // Assert
         expect(authenticateSpy).toHaveBeenCalledWith(expect.any(HttpClient));
@@ -315,10 +315,10 @@ describe('Strapi', () => {
 
         const authenticateRequestSpy = jest.spyOn(MockAuthManager.prototype, 'authenticateRequest');
 
-        const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+        const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
         // Act
-        await sdk.fetch('/');
+        await client.fetch('/');
 
         // Assert
         expect(authenticateRequestSpy).toHaveBeenCalledWith(expect.any(Request));
@@ -339,10 +339,10 @@ describe('Strapi', () => {
 
         const authenticateRequestSpy = jest.spyOn(MockAuthManager.prototype, 'authenticateRequest');
 
-        const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+        const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
         // Act
-        await sdk.fetch('/');
+        await client.fetch('/');
 
         // Assert
         expect(authenticateRequestSpy).toHaveBeenCalledWith(expect.any(Request));
@@ -364,7 +364,7 @@ describe('Strapi', () => {
         const mockValidator = new MockStrapiConfigValidator();
         const mockAuthManager = new MockAuthManager();
 
-        const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+        const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
         const spies = {
           authenticate: jest.spyOn(MockAuthManager.prototype, 'authenticate'),
@@ -378,7 +378,7 @@ describe('Strapi', () => {
           .mockImplementation(() => Promise.resolve(new Response('Unauthorized', { status: 401 })));
 
         // Act & Assert
-        await expect(sdk.fetch('/')).rejects.toThrow(HTTPAuthorizationError);
+        await expect(client.fetch('/')).rejects.toThrow(HTTPAuthorizationError);
 
         expect(spies.authenticate).toHaveBeenCalledWith(expect.any(HttpClient));
         expect(spies.authenticateRequest).toHaveBeenCalledWith(expect.any(Request));
@@ -399,10 +399,10 @@ describe('Strapi', () => {
 
     const mockValidator = new MockStrapiConfigValidator();
     const mockAuthManager = new MockAuthManager();
-    const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+    const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
     // Act
-    const response = await sdk.fetch('/data');
+    const response = await client.fetch('/data');
 
     // Assert
     expect(requestSpy).toHaveBeenCalledWith('/data', undefined);
@@ -416,10 +416,10 @@ describe('Strapi', () => {
     const mockValidator = new MockStrapiConfigValidator();
     const mockAuthManager = new MockAuthManager();
 
-    const sdk = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
+    const client = new Strapi(config, mockValidator, mockAuthManager, mockHttpClientFactory);
 
     // Act
-    const { baseURL } = sdk;
+    const { baseURL } = client;
 
     // Assert
     expect(baseURL).toBe(config.baseURL);

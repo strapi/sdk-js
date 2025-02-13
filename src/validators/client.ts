@@ -4,12 +4,12 @@ import { StrapiValidationError, URLValidationError } from '../errors';
 
 import { URLValidator } from './url';
 
-import type { StrapiConfig } from '../sdk';
+import type { StrapiConfig } from '../client';
 
 const debug = createDebug('strapi:validators:config');
 
 /**
- * Provides the ability to validate the configuration used for initializing the Strapi SDK.
+ * Provides the ability to validate the configuration used for initializing the Strapi client.
  *
  * This includes URL validation to ensure compatibility with Strapi's API endpoints.
  */
@@ -24,15 +24,15 @@ export class StrapiConfigValidator {
   }
 
   /**
-   * Validates the provided SDK configuration, ensuring that all values are
-   * suitable for the SDK operations..
+   * Validates the provided client configuration, ensuring that all values are
+   * suitable for the client operations..
    *
-   * @param config - The configuration object for the Strapi SDK. Must include a `baseURL` property indicating the API's endpoint.
+   * @param config - The configuration object for the Strapi client. Must include a `baseURL` property indicating the API's endpoint.
    *
    * @throws {StrapiValidationError} If the configuration is invalid, or if the baseURL is invalid.
    */
   validateConfig(config: StrapiConfig) {
-    debug('validating sdk config');
+    debug('validating client config');
 
     if (
       config === undefined ||
@@ -40,7 +40,7 @@ export class StrapiConfigValidator {
       Array.isArray(config) ||
       typeof config !== 'object'
     ) {
-      debug(`provided sdk configuration is not a valid object: %o (%s)`, config, typeof config);
+      debug(`provided client configuration is not a valid object: %o (%s)`, config, typeof config);
 
       throw new StrapiValidationError(
         new TypeError('The provided configuration is not a valid object.')
@@ -49,7 +49,7 @@ export class StrapiConfigValidator {
 
     this.validateBaseURL(config.baseURL);
 
-    debug('validated sdk config successfully');
+    debug('validated client config successfully');
   }
 
   /**
@@ -65,7 +65,7 @@ export class StrapiConfigValidator {
       this._urlValidator.validate(url);
     } catch (e) {
       if (e instanceof URLValidationError) {
-        debug('failed to validate sdk config, invalid base url %o', url);
+        debug('failed to validate client config, invalid base url %o', url);
         throw new StrapiValidationError(e);
       }
 

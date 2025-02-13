@@ -1,14 +1,14 @@
 {
   "name": "demo-node-javascript",
   "version": "1.0.0",
-  "description": "A Strapi SDK demo using a Node x JavaScript application",
+  "description": "A Strapi Client demo using a Node x JavaScript application",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
     "debug": "DEBUG=* node src/index.js"
   },
   "dependencies": {
-    "@strapi/sdk-js": "link:../..",
+    "@strapi/client": "link:../..",
     "dotenv": "16.4.7"
   },
   "keywords": [],

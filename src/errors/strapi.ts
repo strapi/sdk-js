@@ -1,7 +1,7 @@
 export class StrapiError extends Error {
   constructor(
     cause: unknown = undefined,
-    message: string = 'An error occurred in the Strapi SDK. Please check the logs for more information.'
+    message: string = 'An error occurred in the Strapi client. Please check the logs for more information.'
   ) {
     super(message);
 
@@ -19,7 +19,10 @@ export class StrapiValidationError extends StrapiError {
 }
 
 export class StrapiInitializationError extends StrapiError {
-  constructor(cause: unknown = undefined, message: string = 'Could not initialize the Strapi SDK') {
+  constructor(
+    cause: unknown = undefined,
+    message: string = 'Could not initialize the Strapi Client'
+  ) {
     super(cause, message);
   }
 }

@@ -7,7 +7,7 @@ import terser from '@rollup/plugin-terser';
 const isProduction = process.env.NODE_ENV === 'production';
 
 /**
- * This configuration is designed to bundle the Strapi SDK for Node.js environments.
+ * This configuration is designed to bundle the Strapi Client for Node.js environments.
  *
  * It produces two outputs: one for the older CommonJS module system and one for the modern ES Module
  * system, ensuring compatibility with a wide range of tools and runtimes.
@@ -69,7 +69,7 @@ const node_build = {
 };
 
 /**
- * This configuration is designed to bundle the Strapi SDK for browser environments.
+ * This configuration is designed to bundle the Strapi Client for browser environments.
  *
  * It outputs using the IIFE format, which is suitable for use in web browsers.
  *
