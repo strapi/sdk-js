@@ -1,7 +1,7 @@
 import { StrapiValidationError, URLValidationError } from '../../../src';
 import { StrapiConfigValidator, URLValidator } from '../../../src/validators';
 
-import type { StrapiConfig } from '../../../src/sdk';
+import type { StrapiConfig } from '../../../src/client';
 
 describe('Strapi Config Validator', () => {
   let urlValidatorMock: jest.Mocked<URLValidator>;
