@@ -34,7 +34,7 @@
 1. [Getting Started](#-getting-started)
    - [Prerequisites](#pre-requisites)
    - [Installation](#installation)
-2. [Creating and Configuring a Client Instance](#-creating-and-configuring-the-sdk-instance)
+2. [Creating and Configuring a Strapi Client Instance](#-creating-and-configuring-the-sdk-instance)
    - [Basic Configuration](#basic-configuration)
    - [Authentication](#authentication)
      - [API Token Authentication](#api-token-authentication)
