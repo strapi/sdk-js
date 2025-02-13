@@ -1,4 +1,4 @@
-const { strapi } = require('@strapi/sdk-js');
+const { strapi } = require('@strapi/client');
 require('dotenv').config();
 
 const api_token = process.env.FULL_ACCESS_TOKEN; // READ_ONLY_TOKEN is also available

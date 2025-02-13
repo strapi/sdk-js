@@ -1,15 +1,17 @@
 {
-  "name": "@strapi/sdk-js",
+  "name": "@strapi/client",
   "version": "1.0.0",
-  "description": "An SDK you can use the easily interface with Strapi from your javascript project",
+  "description": "A client SDK to easily interface with Strapi from your javascript/typescript project",
   "keywords": [
     "strapi",
     "sdk",
-    "js"
+    "client",
+    "js",
+    "ts"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/strapi/sdk-js.git"
+    "url": "https://github.com/strapi/client.git"
   },
   "license": "SEE LICENSE IN LICENSE",
   "author": {

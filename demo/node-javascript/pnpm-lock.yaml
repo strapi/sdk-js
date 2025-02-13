@@ -8,7 +8,7 @@ importers:
 
   .:
     dependencies:
-      '@strapi/sdk-js':
+      '@strapi/client':
         specifier: link:../..
         version: link:../..
       dotenv:

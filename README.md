@@ -13,14 +13,14 @@
 <br />
 
 <p align="center">
-  <a href="https://www.npmjs.org/package/@strapi/sdk-js">
-    <img src="https://img.shields.io/npm/v/@strapi/sdk-js/latest.svg" alt="NPM Version" />
+  <a href="https://www.npmjs.org/package/@strapi/client">
+    <img src="https://img.shields.io/npm/v/@strapi/client/latest.svg" alt="NPM Version" />
   </a>
-  <a href="https://www.npmjs.com/package/@strapi/sdk-js" target="_blank">
-   <img src="https://img.shields.io/npm/dm/@strapi/sdk-js" alt="NPM downloads" />
+  <a href="https://www.npmjs.com/package/@strapi/client" target="_blank">
+   <img src="https://img.shields.io/npm/dm/@strapi/client" alt="NPM downloads" />
   </a>
-  <a href="https://github.com/strapi/sdk-js/actions/workflows/tests.yml">
-    <img src="https://github.com/strapi/sdk-js/actions/workflows/tests.yml/badge.svg?branch=main" alt="Tests" />
+  <a href="https://github.com/strapi/client/actions/workflows/tests.yml">
+    <img src="https://github.com/strapi/client/actions/workflows/tests.yml/badge.svg?branch=main" alt="Tests" />
   </a>
   <a href="https://discord.strapi.io">
     <img src="https://img.shields.io/discord/811989166782021633?label=Discord" alt="Strapi on Discord" />
@@ -62,19 +62,19 @@ Install the SDK as a dependency in your project:
 **NPM**
 
 ```bash
-npm install @strapi/sdk-js
+npm install @strapi/client
 ```
 
 **Yarn**
 
 ```bash
-yarn add @strapi/sdk-js
+yarn add @strapi/client
 ```
 
 **pnpm**
 
 ```bash
-pnpm add @strapi/sdk-js
+pnpm add @strapi/client
 ```
 
 ## ⚙️ Creating and configuring the SDK Instance
@@ -84,7 +84,7 @@ pnpm add @strapi/sdk-js
 To interact with your Strapi backend, initialize the SDK with your Strapi API base URL:
 
 ```typescript
-import { strapi } from '@strapi/sdk-js';
+import { strapi } from '@strapi/client';
 
 const sdk = strapi({ baseURL: 'http://localhost:1337/api' });
 ```
@@ -92,7 +92,7 @@ const sdk = strapi({ baseURL: 'http://localhost:1337/api' });
 Alternatively, use a `<script>` tag in a browser environment:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@strapi/sdk-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@strapi/client"></script>
 
 <script>
   const sdk = strapi.strapi({ baseURL: 'http://localhost:1337/api' });

@@ -1,4 +1,4 @@
-import { strapi } from '@strapi/sdk-js';
+import { strapi } from '@strapi/client';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
