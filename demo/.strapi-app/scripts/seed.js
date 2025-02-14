@@ -267,6 +267,7 @@ async function createApiTokens(app) {
   ];
 
   const envPaths = [
+    path.join(__dirname, '../../next-server-components/.env'),
     path.join(__dirname, '../../node-javascript/.env'),
     path.join(__dirname, '../../node-typescript/.env'),
   ];

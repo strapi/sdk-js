@@ -4,3 +4,7 @@ dist
 build
 pnpm-lock.yaml
 .strapi
+.next
+.idea
+node_modules
+

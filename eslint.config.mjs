@@ -6,7 +6,17 @@ export default [
   {
     // the "ignores" patterns have to be defined as the only key of a config object
     // see: https://eslint.org/docs/latest/use/configure/ignore#ignoring-directories
-    ignores: ['dist', '.coverage', '.vscode', '.idea'],
+    ignores: [
+      // Configuration
+      '.coverage',
+      '.vscode',
+      '.idea',
+      // Common directories
+      '**/dist',
+      '**/node_modules',
+      // Demo-related directories
+      'demo/**/.next',
+    ],
   },
   {
     languageOptions: {

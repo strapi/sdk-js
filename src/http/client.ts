@@ -234,7 +234,7 @@ export class HttpClient {
 
     try {
       // Make the network call
-      const response = await this.fetch(url, request);
+      const response = await this.fetch(request);
 
       clearTimeout(timeoutId);
 
