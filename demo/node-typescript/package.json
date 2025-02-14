@@ -9,7 +9,7 @@
     "build": "tsc -p tsconfig.json",
     "watch": "tsc -p tsconfig.json -w",
     "start": "node dist/index.js",
-    "debug": "DEBUG=* node dist/index.js"
+    "debug": "DEBUG=strapi:* node dist/index.js"
   },
   "dependencies": {
     "@strapi/client": "link:../..",

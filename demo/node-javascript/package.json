@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "debug": "DEBUG=* node src/index.js"
+    "debug": "DEBUG=strapi:* node src/index.js"
   },
   "dependencies": {
     "@strapi/client": "link:../..",
