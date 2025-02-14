@@ -217,11 +217,15 @@ describe('Strapi', () => {
 
         // Act
         await client.fetch(path);
-        const headers = fetchSpy.mock.lastCall?.[1]?.headers;
+        const requestInfo = fetchSpy.mock.lastCall?.[0];
 
         // Assert
+        expect(requestInfo).toBeInstanceOf(Request);
+        expect(requestInfo).toHaveProperty('headers', expect.any(Headers));
+
+        const { headers } = requestInfo as Request;
+
         expect(headers).toBeDefined();
-        expect(headers).toBeInstanceOf(Headers);
         expect((headers as Headers).get('Content-Type')).toBe('application/json');
       });
 
@@ -245,11 +249,15 @@ describe('Strapi', () => {
 
         // Act
         await client.fetch(path, init);
-        const headers = fetchSpy.mock.lastCall?.[1]?.headers;
+        const requestInfo = fetchSpy.mock.lastCall?.[0];
 
         // Assert
+        expect(requestInfo).toBeInstanceOf(Request);
+        expect(requestInfo).toHaveProperty('headers', expect.any(Headers));
+
+        const { headers } = requestInfo as Request;
+
         expect(headers).toBeDefined();
-        expect(headers).toBeInstanceOf(Headers);
         expect((headers as Headers).get('Content-Type')).toBe(contentType);
       });
 

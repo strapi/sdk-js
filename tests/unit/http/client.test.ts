@@ -397,13 +397,11 @@ describe('HttpClient', () => {
       expect(fetchSpy).toHaveBeenCalled();
       expect(response).toBe(mockResponse);
 
-      const [url, requestInit] = fetchSpy.mock.lastCall ?? [];
+      const [request] = fetchSpy.mock.lastCall ?? [];
 
-      expect(url).toBeInstanceOf(URL);
-      expect(url?.toString()).toBe(expectedURL);
-
-      expect(requestInit).toBeInstanceOf(Request);
-      expect(requestInit).toHaveProperty('method', 'GET');
+      expect(request).toBeInstanceOf(Request);
+      expect(request).toHaveProperty('url', expectedURL);
+      expect(request).toHaveProperty('method', 'GET');
     });
 
     it('should process request and response interceptors', async () => {
@@ -453,12 +451,10 @@ describe('HttpClient', () => {
         // Assert
         expect(fetchSpy).toHaveBeenCalled();
 
-        const [url, request] = fetchSpy.mock.lastCall ?? [];
-
-        expect(url).toBeInstanceOf(URL);
-        expect(url?.toString()).toBe(expectedURL);
+        const [request] = fetchSpy.mock.lastCall ?? [];
 
         expect(request).toBeInstanceOf(Request);
+        expect(request).toHaveProperty('url', expectedURL);
       }
     );
 
@@ -471,7 +467,9 @@ describe('HttpClient', () => {
       jest.spyOn(globalThis, 'setTimeout');
       jest.spyOn(AbortController.prototype, 'abort');
 
-      jest.spyOn(globalThis, 'fetch').mockImplementationOnce((_, request) => {
+      jest.spyOn(globalThis, 'fetch').mockImplementationOnce((input, init) => {
+        const request = input instanceof Request ? input : init;
+
         if (!request?.signal) {
           // Make the test fail by resolving with a response in case no signal is defined in the request
           return Promise.resolve(new Response());
